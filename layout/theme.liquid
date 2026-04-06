@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html
+  lang="{{ request.locale.iso_code }}"
+  dir="{{ settings.text_direction | default: 'ltr' }}"
+  class="no-js"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  {%- comment -%} ============================================================
+    TITLE & META DESCRIPTION
+  ============================================================ {%- endcomment -%}
+  <title>
+    {%- if page_title -%}
+      {{ page_title }}{% unless page_title contains shop.name %} {{ settings.meta_title_suffix }}{% endunless %}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- elsif settings.meta_description_default != blank -%}
+    <meta name="description" content="{{ settings.meta_description_default | escape }}">
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    CANONICAL & PAGINATION
+  ============================================================ {%- endcomment -%}
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if current_page != 1 -%}
+    <link rel="prev" href="{{ current_url | prepend: '&page=' | prepend: current_page | minus: 1 }}">
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    FAVICON
+  ============================================================ {%- endcomment -%}
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+  {%- else -%}
+    <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    OPEN GRAPH / SOCIAL META
+  ============================================================ {%- endcomment -%}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:locale" content="{{ request.locale.iso_code | replace: '-', '_' }}">
+
+  {%- if template.name == 'product' -%}
+    <meta property="og:type" content="product">
+    <meta property="og:title" content="{{ product.title | escape }}">
+    <meta property="og:description" content="{{ product.description | strip_html | truncate: 200 | escape }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    {%- if product.featured_image -%}
+      <meta property="og:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+    {%- endif -%}
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  {%- elsif template.name == 'collection' -%}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ collection.title | escape }}">
+    <meta property="og:description" content="{{ collection.description | strip_html | truncate: 200 | escape }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    {%- if collection.image -%}
+      <meta property="og:image" content="{{ collection.image | image_url: width: 1200 }}">
+    {%- endif -%}
+  {%- elsif template.name == 'article' -%}
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ article.title | escape }}">
+    <meta property="og:description" content="{{ article.excerpt_or_content | strip_html | truncate: 200 | escape }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="article:author" content="{{ article.author }}">
+    <meta property="article:published_time" content="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}">
+    {%- if article.image -%}
+      <meta property="og:image" content="{{ article.image | image_url: width: 1200 }}">
+    {%- endif -%}
+  {%- else -%}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ page_title | default: shop.name | escape }}">
+    {%- if page_description -%}
+      <meta property="og:description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    <meta property="og:url" content="{{ canonical_url }}">
+    {%- if settings.og_image_default -%}
+      <meta property="og:image" content="{{ settings.og_image_default | image_url: width: 1200 }}">
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    TWITTER CARD
+  ============================================================ {%- endcomment -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | default: shop.name | escape }}">
+  {%- if page_description -%}
+    <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    PRECONNECT / DNS PREFETCH
+  ============================================================ {%- endcomment -%}
+  {%- if settings.use_google_fonts -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    GOOGLE FONTS
+  ============================================================ {%- endcomment -%}
+  {%- if settings.use_google_fonts -%}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    >
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    CSS CUSTOM PROPERTIES (Design Tokens from Theme Settings)
+  ============================================================ {%- endcomment -%}
+  <style>
+    :root {
+      /* Brand Colors */
+      --color-deep-navy: {{ settings.color_deep_navy }};
+      --color-navy-mid: {{ settings.color_navy_mid }};
+      --color-cream: {{ settings.color_cream }};
+      --color-espresso: {{ settings.color_espresso }};
+      --color-light-gray: {{ settings.color_light_gray }};
+      --color-white: {{ settings.color_white }};
+      --color-near-black: {{ settings.color_near_black }};
+
+      /* Button Colors */
+      --color-btn-primary-bg: {{ settings.color_button_primary_bg }};
+      --color-btn-primary-text: {{ settings.color_button_primary_text }};
+      --color-btn-primary-hover: {{ settings.color_button_primary_hover }};
+      --color-btn-secondary-border: {{ settings.color_button_secondary_border }};
+      --color-btn-secondary-text: {{ settings.color_button_secondary_text }};
+
+      /* UI Colors */
+      --color-link: {{ settings.color_link }};
+      --color-link-hover: {{ settings.color_link_hover }};
+      --color-border: {{ settings.color_border }};
+      --color-error: {{ settings.color_error }};
+      --color-success: {{ settings.color_success }};
+
+      /* Announcement Bar */
+      --color-announcement-bg: {{ settings.announcement_bg }};
+      --color-announcement-text: {{ settings.announcement_text_color }};
+
+      /* Footer */
+      --color-footer-bg: {{ settings.footer_bg_color }};
+      --color-footer-text: {{ settings.footer_text_color }};
+      --color-footer-border: {{ settings.footer_border_color }};
+
+      /* Typography */
+      --font-heading: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+      --font-body-scale: {{ settings.font_body_scale | divided_by: 100.0 }};
+
+      /* Layout */
+      --page-width: {{ settings.page_width }}px;
+      --spacing-sections: {{ settings.spacing_sections }}px;
+      --grid-gutter: {{ settings.spacing_grid_horizontal }}px;
+
+      /* Logo */
+      --logo-width: {{ settings.logo_width }}px;
+    }
+  </style>
+
+  {%- comment -%} ============================================================
+    THEME STYLESHEET
+  ============================================================ {%- endcomment -%}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%} ============================================================
+    CUSTOM CSS FROM THEME SETTINGS
+  ============================================================ {%- endcomment -%}
+  {%- if settings.custom_css != blank -%}
+    <style>{{ settings.custom_css }}</style>
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    SHOPIFY REQUIRED
+  ============================================================ {%- endcomment -%}
+  {{ content_for_header }}
+
+  {%- comment -%} ============================================================
+    SCHEMA.ORG — ORGANIZATION
+  ============================================================ {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "logo": {% if settings.logo %}{{ settings.logo | image_url: width: 400 | prepend: 'https:' | json }}{% else %}""{% endif %},
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "German", "French"]
+    },
+    "sameAs": [
+      {% if settings.social_instagram != blank %}{{ settings.social_instagram | json }}{% endif %}
+      {% if settings.social_facebook != blank %},{{ settings.social_facebook | json }}{% endif %}
+      {% if settings.social_pinterest != blank %},{{ settings.social_pinterest | json }}{% endif %}
+    ]
+  }
+  </script>
+
+  {%- comment -%} ============================================================
+    SCHEMA.ORG — WEBSITE (SITELINKS SEARCHBOX)
+  ============================================================ {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "{{ shop.url }}/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  {%- comment -%} ============================================================
+    PRODUCT SCHEMA (product pages only)
+  ============================================================ {%- endcomment -%}
+  {%- if template.name == 'product' -%}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ canonical_url | json }},
+      "description": {{ product.description | strip_html | json }},
+      "brand": {
+        "@type": "Brand",
+        "name": {{ shop.name | json }}
+      },
+      {%- if product.featured_image -%}
+      "image": {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }},
+      {%- endif -%}
+      {%- if product.selected_or_first_available_variant.sku != blank -%}
+      "sku": {{ product.selected_or_first_available_variant.sku | json }},
+      {%- endif -%}
+      "offers": {
+        "@type": "Offer",
+        "price": {{ product.price | money_without_currency | remove: ',' }},
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "availability": {% if product.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %},
+        "url": {{ canonical_url | json }}
+      }
+    }
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    ANALYTICS — GTM / GA4
+  ============================================================ {%- endcomment -%}
+  {%- if settings.gtm_id != blank -%}
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','{{ settings.gtm_id }}');
+    </script>
+  {%- elsif settings.google_analytics_id != blank -%}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ settings.google_analytics_id }}', { 'anonymize_ip': true });
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} Custom head scripts from settings {%- endcomment -%}
+  {%- if settings.custom_head_scripts != blank -%}
+    {{ settings.custom_head_scripts }}
+  {%- endif -%}
+</head>
+
+<body
+  id="metsie-body"
+  class="template-{{ template.name | handle }} {% if customer %}customer-logged-in{% endif %}"
+  data-cart-type="{{ settings.cart_type }}"
+>
+
+  {%- comment -%} ============================================================
+    GTM NOSCRIPT
+  ============================================================ {%- endcomment -%}
+  {%- if settings.gtm_id != blank -%}
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id={{ settings.gtm_id }}"
+        height="0" width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+  {%- endif -%}
+
+  {%- comment -%} Custom body scripts from settings {%- endcomment -%}
+  {%- if settings.custom_body_scripts != blank -%}
+    {{ settings.custom_body_scripts }}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    SKIP TO CONTENT (ACCESSIBILITY)
+  ============================================================ {%- endcomment -%}
+  {%- if settings.enable_skip_link -%}
+    <a class="skip-to-content-link" href="#MainContent">
+      {{ 'accessibility.skip_to_content' | t }}
+    </a>
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    GEO DETECTION STUB
+    window.__GEO is populated by theme.js on DOMContentLoaded.
+    Downstream sections/scripts can read window.__GEO.country, .currency, .language
+  ============================================================ {%- endcomment -%}
+  <script>
+    window.__GEO = {
+      country: null,
+      currency: null,
+      language: '{{ request.locale.iso_code }}',
+      detected: false
+    };
+    window.__METSIE = {
+      shopCurrency: {{ cart.currency.iso_code | json }},
+      locale: {{ request.locale.iso_code | json }},
+      cartItemCount: {{ cart.item_count | json }},
+      moneyFormat: {{ shop.money_format | json }},
+      routes: {
+        root: '{{ routes.root_url }}',
+        cart: '{{ routes.cart_url }}',
+        cartAdd: '{{ routes.cart_add_url }}',
+        cartChange: '{{ routes.cart_change_url }}',
+        cartUpdate: '{{ routes.cart_update_url }}',
+        search: '{{ routes.search_url }}'
+      },
+      settings: {
+        enableGdprBanner: {{ settings.enable_gdpr_banner | json }},
+        enableGeoRedirect: {{ settings.enable_geo_redirect | json }},
+        cartType: {{ settings.cart_type | json }},
+        lazyLoadImages: {{ settings.lazy_load_images | json }}
+      }
+    };
+  </script>
+
+  {%- comment -%} ============================================================
+    ANNOUNCEMENT BAR
+  ============================================================ {%- endcomment -%}
+  {%- if settings.show_announcement and settings.announcement_text != blank -%}
+    <div
+      class="announcement-bar"
+      role="complementary"
+      aria-label="{{ 'general.announcement_bar' | t }}"
+    >
+      <div class="announcement-bar__inner container">
+        {%- if settings.announcement_link != blank -%}
+          <a href="{{ settings.announcement_link }}" class="announcement-bar__text announcement-bar__text--link">
+            {{ settings.announcement_text }}
+          </a>
+        {%- else -%}
+          <p class="announcement-bar__text">{{ settings.announcement_text }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    HEADER
+  ============================================================ {%- endcomment -%}
+  {% render 'header' %}
+
+  {%- comment -%} ============================================================
+    MAIN CONTENT
+  ============================================================ {%- endcomment -%}
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {%- comment -%} ============================================================
+    FOOTER
+  ============================================================ {%- endcomment -%}
+  {% render 'footer' %}
+
+  {%- comment -%} ============================================================
+    CART DRAWER (if cart type = drawer)
+  ============================================================ {%- endcomment -%}
+  {%- if settings.cart_type == 'drawer' -%}
+    {% render 'cart-drawer' %}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    GDPR COOKIE BANNER
+  ============================================================ {%- endcomment -%}
+  {%- if settings.enable_gdpr_banner -%}
+    {% render 'gdpr-banner' %}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    CURRENCY / LANGUAGE SWITCHER MODAL
+  ============================================================ {%- endcomment -%}
+  {%- if settings.enable_currency_conversion or settings.enable_language_switcher -%}
+    {% render 'localization-form' %}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    SEARCH MODAL
+  ============================================================ {%- endcomment -%}
+  {%- if settings.show_search_icon -%}
+    {% render 'search-modal' %}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
+    THEME JS
+  ============================================================ {%- endcomment -%}
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+  {%- comment -%} Remove no-js class once JS is active {%- endcomment -%}
+  <script>document.documentElement.classList.remove('no-js');</script>
+</body>
+</html>

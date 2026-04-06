@@ -1,0 +1,211 @@
+{
+  "general": {
+    "announcement_bar": "Annonce",
+    "password_page": {
+      "title": "[BIENTÔT DISPONIBLE]",
+      "opening_soon": "[BIENTÔT DISPONIBLE]",
+      "message": "[QUELQUE CHOSE DE CALME ET DE RÉFLÉCHI EST EN COURS DE PRÉPARATION.]",
+      "password_placeholder": "[SAISIR LE MOT DE PASSE]",
+      "submit": "[ENTRER]",
+      "notify_heading": "[SOYEZ PARMI LES PREMIERS À LE SAVOIR]",
+      "notify_text": "[LAISSEZ VOTRE EMAIL ET NOUS VOUS INFORMERONS LORS DU LANCEMENT.]",
+      "notify_submit": "[M'AVERTIR]",
+      "notify_success": "[MERCI. NOUS VOUS CONTACTERONS BIENTÔT.]",
+      "powered_by": ""
+    },
+    "404": {
+      "title": "[PAGE INTROUVABLE]",
+      "subtext": "[LA PAGE QUE VOUS CHERCHEZ N'EXISTE PAS OU A ÉTÉ DÉPLACÉE.]",
+      "link": "[RETOUR À L'ACCUEIL]"
+    },
+    "search": {
+      "placeholder": "[RECHERCHER TAPIS, CARPETTES, COLLECTIONS…]",
+      "submit": "[RECHERCHER]",
+      "no_results": "[AUCUN RÉSULTAT POUR « {{ terms }} »]",
+      "results_with_count": "[{{ count }} RÉSULTATS POUR « {{ terms }} »]",
+      "results_with_count_one": "[1 RÉSULTAT POUR « {{ terms }} »]"
+    },
+    "currency": {
+      "selector_label": "[DEVISE]",
+      "change": "[CHANGER DE DEVISE]"
+    },
+    "language": {
+      "selector_label": "[LANGUE]",
+      "change": "[CHANGER DE LANGUE]"
+    },
+    "newsletter": {
+      "success": "[MERCI POUR VOTRE ABONNEMENT.]",
+      "error": "[UNE ERREUR S'EST PRODUITE. VEUILLEZ RÉESSAYER.]",
+      "email_already_exists": "[CET EMAIL EST DÉJÀ ABONNÉ.]"
+    },
+    "close": "[FERMER]",
+    "back": "[RETOUR]",
+    "continue": "[CONTINUER]",
+    "loading": "[CHARGEMENT…]",
+    "see_all": "[VOIR TOUT]",
+    "view_all": "[VOIR TOUT]",
+    "learn_more": "[EN SAVOIR PLUS]",
+    "read_more": "[LIRE LA SUITE]",
+    "show_more": "[AFFICHER PLUS]",
+    "show_less": "[AFFICHER MOINS]"
+  },
+
+  "accessibility": {
+    "skip_to_content": "[PASSER AU CONTENU]",
+    "skip_to_main": "[PASSER AU CONTENU PRINCIPAL]",
+    "open_menu": "[OUVRIR LE MENU]",
+    "close_menu": "[FERMER LE MENU]",
+    "open_cart": "[OUVRIR LE PANIER]",
+    "close_cart": "[FERMER LE PANIER]",
+    "open_search": "[OUVRIR LA RECHERCHE]",
+    "close_search": "[FERMER LA RECHERCHE]",
+    "logo": "[ACCUEIL {{ shop_name }}]",
+    "cart_count": "[{{ count }} ARTICLES DANS LE PANIER]",
+    "loading": "[CHARGEMENT EN COURS]"
+  },
+
+  "navigation": {
+    "open": "[OUVRIR LA NAVIGATION]",
+    "close": "[FERMER LA NAVIGATION]",
+    "menu": "[MENU]",
+    "new_arrivals": "[NOUVEAUTÉS]",
+    "bestsellers": "[MEILLEURES VENTES]",
+    "collections": "[COLLECTIONS]",
+    "about": "[À PROPOS]",
+    "contact": "[CONTACT]",
+    "journal": "[JOURNAL]"
+  },
+
+  "products": {
+    "product": {
+      "add_to_cart": "[AJOUTER AU PANIER]",
+      "sold_out": "[ÉPUISÉ]",
+      "out_of_stock": "[EN RUPTURE DE STOCK]",
+      "unavailable": "[INDISPONIBLE]",
+      "on_sale": "[SOLDES]",
+      "new": "[NOUVEAU]",
+      "best_seller": "[MEILLEURE VENTE]",
+      "price": "[€{{ price }}]",
+      "regular_price": "[PRIX RÉGULIER]",
+      "sale_price": "[PRIX SOLDÉ]",
+      "from_price_html": "[À PARTIR DE {{ price }}]",
+      "quantity": "[QUANTITÉ]",
+      "sku": "[RÉF. : {{ sku }}]",
+      "description": "[DESCRIPTION]",
+      "details": "[DÉTAILS]",
+      "care_instructions": "[ENTRETIEN]",
+      "dimensions": "[DIMENSIONS]",
+      "materials": "[MATIÈRES]",
+      "in_stock": "[EN STOCK]",
+      "low_stock": "[PLUS QUE {{ quantity }} EN STOCK]",
+      "shipping_info": "[INFORMATIONS DE LIVRAISON]",
+      "free_shipping": "[LIVRAISON GRATUITE POUR CETTE COMMANDE]",
+      "share": "[PARTAGER]",
+      "select_size": "[CHOISIR LA TAILLE]",
+      "select_color": "[CHOISIR LA COULEUR]",
+      "related_products": "[VOUS POURRIEZ AUSSI AIMER]"
+    }
+  },
+
+  "collections": {
+    "title": "[COLLECTIONS]",
+    "all": "[TOUS LES PRODUITS]",
+    "filter_by": "[FILTRER PAR]",
+    "sort_by": "[TRIER PAR]",
+    "sort": {
+      "featured": "[RECOMMANDÉ]",
+      "best_selling": "[MEILLEURES VENTES]",
+      "title_ascending": "[A–Z]",
+      "title_descending": "[Z–A]",
+      "price_ascending": "[PRIX CROISSANT]",
+      "price_descending": "[PRIX DÉCROISSANT]",
+      "created_ascending": "[LES PLUS ANCIENS]",
+      "created_descending": "[LES PLUS RÉCENTS]"
+    },
+    "filter": {
+      "clear": "[EFFACER LES FILTRES]",
+      "clear_all": "[TOUT EFFACER]",
+      "apply": "[APPLIQUER LES FILTRES]",
+      "results_count": "[{{ count }} PRODUITS]",
+      "no_results": "[AUCUN PRODUIT NE CORRESPOND À CES FILTRES.]"
+    }
+  },
+
+  "cart": {
+    "title": "[VOTRE PANIER]",
+    "empty": "[VOTRE PANIER EST VIDE.]",
+    "empty_cta": "[EXPLORER NOS COLLECTIONS]",
+    "items_count": "[{{ count }} ARTICLES]",
+    "items_count_one": "[1 ARTICLE]",
+    "item": {
+      "remove": "[SUPPRIMER]"
+    },
+    "subtotal": "[SOUS-TOTAL]",
+    "tax_and_shipping": "[TAXES ET FRAIS DE LIVRAISON CALCULÉS À LA CAISSE.]",
+    "checkout": "[PROCÉDER AU PAIEMENT]",
+    "continue_shopping": "[CONTINUER LES ACHATS]"
+  },
+
+  "customers": {
+    "login": {
+      "title": "[SE CONNECTER]",
+      "email": "[ADRESSE EMAIL]",
+      "password": "[MOT DE PASSE]",
+      "submit": "[SE CONNECTER]",
+      "forgot_password": "[MOT DE PASSE OUBLIÉ ?]",
+      "no_account": "[PAS ENCORE DE COMPTE ?]",
+      "create_account": "[CRÉER UN COMPTE]"
+    },
+    "register": {
+      "title": "[CRÉER UN COMPTE]",
+      "first_name": "[PRÉNOM]",
+      "last_name": "[NOM]",
+      "email": "[ADRESSE EMAIL]",
+      "password": "[MOT DE PASSE]",
+      "submit": "[CRÉER UN COMPTE]"
+    }
+  },
+
+  "gdpr": {
+    "banner_text": "[NOUS UTILISONS DES COOKIES POUR AMÉLIORER VOTRE EXPÉRIENCE ET ANALYSER LE TRAFIC DU SITE. EN CONTINUANT, VOUS ACCEPTEZ NOTRE POLITIQUE EN MATIÈRE DE COOKIES.]",
+    "accept": "[TOUT ACCEPTER]",
+    "decline": "[GÉRER LES PRÉFÉRENCES]",
+    "learn_more": "[POLITIQUE DE COOKIES]"
+  },
+
+  "sections": {
+    "hero": {
+      "heading": "[LUXE DISCRET POUR UNE VIE RÉFLÉCHIE]",
+      "subheading": "[TAPIS & CARPETTES HAUT DE GAMME — DESIGNÉS EN SCANDINAVIE]",
+      "cta_primary": "[EXPLORER LES COLLECTIONS]",
+      "cta_secondary": "[DÉCOUVRIR LA MARQUE]"
+    },
+    "newsletter": {
+      "heading": "[RESTEZ INFORMÉ]",
+      "subtext": "[NOUVELLES COLLECTIONS, HISTOIRES DE DESIGN ET OFFRES EXCLUSIVES — LIVRÉS EN TOUTE DISCRÉTION.]",
+      "placeholder": "[VOTRE ADRESSE EMAIL]",
+      "submit": "[S'ABONNER]",
+      "success": "[MERCI POUR VOTRE ABONNEMENT.]"
+    },
+    "contact": {
+      "heading": "[NOUS CONTACTER]",
+      "name": "[VOTRE NOM]",
+      "email": "[ADRESSE EMAIL]",
+      "message": "[VOTRE MESSAGE]",
+      "submit": "[ENVOYER LE MESSAGE]",
+      "success": "[MERCI. NOUS VOUS CONTACTERONS SOUS 1 À 2 JOURS OUVRABLES.]"
+    },
+    "announcement": {
+      "text": "[LIVRAISON GRATUITE DÈS €150 | ÉCHANTILLONS OFFERTS AVEC CHAQUE COMMANDE]"
+    }
+  },
+
+  "localization": {
+    "currency_label": "[DEVISE]",
+    "language_label": "[LANGUE]",
+    "country_label": "[PAYS / RÉGION]",
+    "update": "[METTRE À JOUR]",
+    "title": "[RÉGION & LANGUE]",
+    "description": "[SÉLECTIONNEZ VOTRE PAYS ET LA LANGUE SOUHAITÉE. LES PRIX SERONT AFFICHÉS DANS VOTRE DEVISE LOCALE.]"
+  }
+}

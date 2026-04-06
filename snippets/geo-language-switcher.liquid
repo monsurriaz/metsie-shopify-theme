@@ -1,0 +1,479 @@
+{%- comment -%}
+  ================================================================================
+  geo-language-switcher.liquid — Metsie Theme
+  ================================================================================
+  Language switching widget + combined locale bar (language + currency).
+
+  USAGE:
+    Standalone language only:
+      {% render 'geo-language-switcher', context: 'header', show_currency: false %}
+
+    Combined locale bar (language + currency):
+      {% render 'geo-language-switcher', context: 'header', show_currency: true %}
+
+  PARAMETERS:
+    context        (string)  — 'header' | 'footer' | 'mobile'
+    show_currency  (boolean) — whether to include currency switcher inline
+
+  SUPPORTED LANGUAGES:
+    English (en), German (de), French (fr)
+
+  NOTES:
+    - Uses Shopify {% form 'localization' %} for language submission
+    - Auto-detect browser language on first visit (JS layer)
+    - Combined with currency switcher for compact header locale bar
+    - Fully accessible: aria-labels, keyboard navigation, focus management
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign context       = context | default: 'header'
+  assign show_currency = show_currency | default: true
+
+  assign supported_locales = 'en,de,fr' | split: ','
+
+  # Language display names — paired list (code:label)
+  assign locale_names = 'en:[ENGLISH],de:[GERMAN],fr:[FRENCH]' | split: ','
+
+  # Language flag emojis
+  assign locale_flags = 'en:🇬🇧,de:🇩🇪,fr:🇫🇷' | split: ','
+
+  assign current_locale = localization.language.iso_code | downcase | slice: 0, 2
+-%}
+
+<div
+  class="geo-locale-bar geo-locale-bar--{{ context }}"
+  data-locale-bar
+  aria-label="[LANGUAGE AND CURRENCY SELECTION]"
+>
+
+  {%- comment -%} ── Language Switcher ── {%- endcomment -%}
+  {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+
+    {%- comment -%} Resolve current language display data {%- endcomment -%}
+    {%- assign current_lang_label = '[ENGLISH]' -%}
+    {%- assign current_lang_flag  = '🌐' -%}
+    {%- for pair in locale_names -%}
+      {%- assign parts = pair | split: ':' -%}
+      {%- if parts[0] == current_locale -%}
+        {%- assign current_lang_label = parts[1] -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for pair in locale_flags -%}
+      {%- assign parts = pair | split: ':' -%}
+      {%- if parts[0] == current_locale -%}
+        {%- assign current_lang_flag = parts[1] -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div
+      class="geo-language-switcher geo-language-switcher--{{ context }}"
+      data-language-switcher
+    >
+      {%- form 'localization', id: 'LanguageForm-{{ context }}', class: 'geo-language-form' -%}
+
+        <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+
+        <div class="geo-language-dropdown" data-language-dropdown>
+
+          {%- comment -%} Trigger button {%- endcomment -%}
+          <button
+            type="button"
+            class="geo-language-trigger"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="LanguageList-{{ context }}"
+            aria-label="[CURRENT LANGUAGE]: {{ current_lang_label }}"
+            data-language-trigger
+          >
+            <span class="geo-language-flag" aria-hidden="true">{{ current_lang_flag }}</span>
+            <span class="geo-language-label">{{ current_lang_label }}</span>
+            <span class="geo-language-chevron" aria-hidden="true">
+              {%- render 'svg-icons', icon: 'chevron-down', size: 12, class: 'geo-language-chevron-icon' -%}
+            </span>
+          </button>
+
+          {%- comment -%} Language listbox {%- endcomment -%}
+          <ul
+            id="LanguageList-{{ context }}"
+            class="geo-language-list"
+            role="listbox"
+            aria-label="[SELECT LANGUAGE]"
+            data-language-list
+          >
+            {%- for language in localization.available_languages -%}
+              {%- assign lang_code = language.iso_code | downcase | slice: 0, 2 -%}
+              {%- if supported_locales contains lang_code -%}
+
+                {%- assign item_label = lang_code -%}
+                {%- assign item_flag  = '🌐' -%}
+                {%- for pair in locale_names -%}
+                  {%- assign parts = pair | split: ':' -%}
+                  {%- if parts[0] == lang_code -%}
+                    {%- assign item_label = parts[1] -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- for pair in locale_flags -%}
+                  {%- assign parts = pair | split: ':' -%}
+                  {%- if parts[0] == lang_code -%}
+                    {%- assign item_flag = parts[1] -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                <li
+                  class="geo-language-option{% if lang_code == current_locale %} is-active{% endif %}"
+                  role="option"
+                  aria-selected="{% if lang_code == current_locale %}true{% else %}false{% endif %}"
+                >
+                  <button
+                    type="submit"
+                    name="locale_code"
+                    value="{{ language.iso_code }}"
+                    class="geo-language-option-btn"
+                    aria-label="{{ item_label }}{% if lang_code == current_locale %} ([SELECTED]){% endif %}"
+                    lang="{{ lang_code }}"
+                  >
+                    <span class="geo-language-option-flag" aria-hidden="true">{{ item_flag }}</span>
+                    <span class="geo-language-option-label">{{ item_label }}</span>
+                    <span class="geo-language-option-code">{{ lang_code | upcase }}</span>
+                  </button>
+                </li>
+
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+
+        </div>
+
+      {%- endform -%}
+    </div>
+
+    {%- if show_currency -%}
+      <span class="geo-locale-divider" aria-hidden="true"></span>
+    {%- endif -%}
+
+  {%- endif -%}
+
+  {%- comment -%} ── Currency Switcher (inline) ── {%- endcomment -%}
+  {%- if show_currency -%}
+    {%- render 'geo-currency-switcher', context: context -%}
+  {%- endif -%}
+
+</div>
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless geo_language_styles_rendered -%}
+  {%- assign geo_language_styles_rendered = true -%}
+  <style>
+    /* ── geo-locale-bar ── */
+    .geo-locale-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--geo-font-body, 'Inter', sans-serif);
+    }
+
+    .geo-locale-divider {
+      display: block;
+      width: 1px;
+      height: 14px;
+      background: rgba(45, 74, 106, 0.2);
+      margin: 0 2px;
+    }
+
+    .geo-locale-bar--footer .geo-locale-divider {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .geo-locale-bar--mobile {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      gap: 0;
+    }
+
+    .geo-locale-bar--mobile .geo-locale-divider {
+      width: 100%;
+      height: 1px;
+      margin: 0;
+    }
+
+    /* ── Language switcher (mirrors currency switcher styles) ── */
+    .geo-language-switcher {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--geo-font-body, 'Inter', sans-serif);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .geo-language-form { margin: 0; }
+
+    .geo-language-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      background: transparent;
+      border: 1px solid rgba(45, 74, 106, 0.25);
+      border-radius: 2px;
+      cursor: pointer;
+      color: var(--geo-near-black, #1A1A1A);
+      font-family: var(--geo-font-body, 'Inter', sans-serif);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color 200ms ease, background 200ms ease;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .geo-language-trigger:hover {
+      border-color: var(--geo-navy, #2D4A6A);
+      background: rgba(245, 240, 232, 0.5);
+    }
+
+    .geo-language-trigger:focus-visible {
+      outline: 2px solid var(--geo-navy, #2D4A6A);
+      outline-offset: 2px;
+    }
+
+    .geo-language-trigger[aria-expanded="true"] .geo-language-chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .geo-language-chevron-icon {
+      transition: transform 200ms ease;
+    }
+
+    .geo-language-flag {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .geo-language-dropdown { position: relative; }
+
+    .geo-language-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 160px;
+      background: #FFFFFF;
+      border: 1px solid rgba(45, 74, 106, 0.15);
+      border-radius: 2px;
+      box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08), 0 2px 8px rgba(26, 26, 26, 0.04);
+      list-style: none;
+      margin: 0;
+      padding: 4px 0;
+      z-index: 500;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+    }
+
+    .geo-language-list.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .geo-language-option-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: var(--geo-font-body, 'Inter', sans-serif);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--geo-near-black, #1A1A1A);
+      text-align: left;
+      transition: background 200ms ease;
+    }
+
+    .geo-language-option-btn:hover {
+      background: var(--geo-cream, #F5F0E8);
+    }
+
+    .geo-language-option.is-active .geo-language-option-btn {
+      color: var(--geo-navy, #2D4A6A);
+      font-weight: 600;
+    }
+
+    .geo-language-option-code {
+      margin-left: auto;
+      opacity: 0.4;
+      font-size: 10px;
+    }
+
+    /* Footer variant */
+    .geo-locale-bar--footer .geo-language-trigger {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+    }
+
+    .geo-locale-bar--footer .geo-language-trigger:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .geo-locale-bar--footer .geo-language-list {
+      bottom: calc(100% + 4px);
+      top: auto;
+    }
+
+    /* Mobile */
+    .geo-language-switcher--mobile {
+      width: 100%;
+    }
+
+    .geo-language-switcher--mobile .geo-language-dropdown {
+      width: 100%;
+    }
+
+    .geo-language-switcher--mobile .geo-language-trigger {
+      width: 100%;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border: none;
+      border-bottom: 1px solid rgba(45, 74, 106, 0.1);
+    }
+
+    .geo-language-switcher--mobile .geo-language-list {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      border-bottom: 1px solid rgba(45, 74, 106, 0.1);
+      display: none;
+      padding: 0;
+    }
+
+    .geo-language-switcher--mobile .geo-language-list.is-open {
+      display: block;
+    }
+
+    .geo-language-switcher--mobile .geo-language-option-btn {
+      padding: 10px 24px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .geo-language-list,
+      .geo-language-chevron-icon { transition: none; }
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless geo_language_js_rendered -%}
+  {%- assign geo_language_js_rendered = true -%}
+  <script>
+    /**
+     * geo-language-switcher.js
+     * - Handles dropdown open/close, keyboard navigation
+     * - Auto-detects browser language on first visit and suggests switch
+     */
+    (function () {
+      'use strict';
+
+      // ── Auto-detect browser language ──────────────────────────────────────────
+      // Runs once on first visit; stores choice in localStorage
+      (function detectBrowserLanguage() {
+        const STORAGE_KEY = 'metsie_lang_detected';
+        if (localStorage.getItem(STORAGE_KEY)) return;
+        localStorage.setItem(STORAGE_KEY, '1');
+
+        const supported  = ['en', 'de', 'fr'];
+        const browserLang = (navigator.language || navigator.userLanguage || 'en')
+                              .toLowerCase().slice(0, 2);
+
+        if (!supported.includes(browserLang)) return;
+
+        // Get the current Shopify locale from the page URL (/de/..., /fr/..., etc.)
+        const pathLang = window.location.pathname.split('/')[1];
+        const currentLang = supported.includes(pathLang) ? pathLang : 'en';
+
+        if (browserLang !== currentLang) {
+          // Fire event for geo-detector popup to handle
+          document.dispatchEvent(new CustomEvent('geo:lang-suggested', {
+            detail: { lang: browserLang }
+          }));
+        }
+      })();
+
+      // ── Dropdown interaction ──────────────────────────────────────────────────
+      function initLanguageSwitcher(wrapper) {
+        const trigger = wrapper.querySelector('[data-language-trigger]');
+        const list    = wrapper.querySelector('[data-language-list]');
+        if (!trigger || !list) return;
+
+        function open() {
+          trigger.setAttribute('aria-expanded', 'true');
+          list.classList.add('is-open');
+          const active = list.querySelector('.is-active button') || list.querySelector('button');
+          if (active) active.focus();
+        }
+
+        function close() {
+          trigger.setAttribute('aria-expanded', 'false');
+          list.classList.remove('is-open');
+          trigger.focus();
+        }
+
+        function toggle() {
+          trigger.getAttribute('aria-expanded') === 'true' ? close() : open();
+        }
+
+        trigger.addEventListener('click', toggle);
+
+        list.addEventListener('keydown', function (e) {
+          const options = Array.from(list.querySelectorAll('.geo-language-option-btn'));
+          const idx     = options.indexOf(document.activeElement);
+          switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault();
+              if (idx < options.length - 1) options[idx + 1].focus();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              if (idx > 0) options[idx - 1].focus();
+              else close();
+              break;
+            case 'Escape':
+              e.preventDefault();
+              close();
+              break;
+            case 'Tab':
+              close();
+              break;
+          }
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!wrapper.contains(e.target)) close();
+        });
+      }
+
+      function init() {
+        document.querySelectorAll('[data-language-switcher]').forEach(initLanguageSwitcher);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+{%- endunless -%}

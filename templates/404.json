@@ -1,0 +1,49 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "heading": "[PAGE NOT FOUND]",
+        "subheading": "[THE PAGE YOU'RE LOOKING FOR DOESN'T EXIST OR HAS BEEN MOVED]",
+        "button_text": "RETURN HOME",
+        "button_link": "/",
+        "secondary_button_text": "SHOP NOW",
+        "secondary_button_link": "/collections/all",
+        "bg_color": "#F5F0E8",
+        "show_search": true,
+        "search_placeholder": "SEARCH METSIE..."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "footer"
+  ]
+}

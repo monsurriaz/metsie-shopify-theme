@@ -1,0 +1,211 @@
+{
+  "general": {
+    "announcement_bar": "Ankündigung",
+    "password_page": {
+      "title": "[BALD VERFÜGBAR]",
+      "opening_soon": "[BALD VERFÜGBAR]",
+      "message": "[ETWAS RUHIGES UND DURCHDACHTES WIRD VORBEREITET.]",
+      "password_placeholder": "[PASSWORT EINGEBEN]",
+      "submit": "[EINTRETEN]",
+      "notify_heading": "[ALS ERSTE/R ERFAHREN]",
+      "notify_text": "[HINTERLASSEN SIE IHRE E-MAIL UND WIR BENACHRICHTIGEN SIE BEI DER MARKTEINFÜHRUNG.]",
+      "notify_submit": "[BENACHRICHTIGEN]",
+      "notify_success": "[VIELEN DANK. WIR MELDEN UNS BEI IHNEN.]",
+      "powered_by": ""
+    },
+    "404": {
+      "title": "[SEITE NICHT GEFUNDEN]",
+      "subtext": "[DIE GESUCHTE SEITE EXISTIERT NICHT ODER WURDE VERSCHOBEN.]",
+      "link": "[ZURÜCK ZUR STARTSEITE]"
+    },
+    "search": {
+      "placeholder": "[TEPPICHE, MATTEN, KOLLEKTIONEN SUCHEN…]",
+      "submit": "[SUCHEN]",
+      "no_results": "[KEINE ERGEBNISSE FÜR \"{{ terms }}\"]",
+      "results_with_count": "[{{ count }} ERGEBNISSE FÜR \"{{ terms }}\"]",
+      "results_with_count_one": "[1 ERGEBNIS FÜR \"{{ terms }}\"]"
+    },
+    "currency": {
+      "selector_label": "[WÄHRUNG]",
+      "change": "[WÄHRUNG ÄNDERN]"
+    },
+    "language": {
+      "selector_label": "[SPRACHE]",
+      "change": "[SPRACHE ÄNDERN]"
+    },
+    "newsletter": {
+      "success": "[VIELEN DANK FÜR IHR ABONNEMENT.]",
+      "error": "[ETWAS IST SCHIEFGELAUFEN. BITTE VERSUCHEN SIE ES ERNEUT.]",
+      "email_already_exists": "[DIESE E-MAIL IST BEREITS ANGEMELDET.]"
+    },
+    "close": "[SCHLIESSEN]",
+    "back": "[ZURÜCK]",
+    "continue": "[WEITER]",
+    "loading": "[LADEN…]",
+    "see_all": "[ALLE ANZEIGEN]",
+    "view_all": "[ALLE ANZEIGEN]",
+    "learn_more": "[MEHR ERFAHREN]",
+    "read_more": "[WEITERLESEN]",
+    "show_more": "[MEHR ANZEIGEN]",
+    "show_less": "[WENIGER ANZEIGEN]"
+  },
+
+  "accessibility": {
+    "skip_to_content": "[ZUM INHALT SPRINGEN]",
+    "skip_to_main": "[ZUM HAUPTINHALT SPRINGEN]",
+    "open_menu": "[MENÜ ÖFFNEN]",
+    "close_menu": "[MENÜ SCHLIESSEN]",
+    "open_cart": "[WARENKORB ÖFFNEN]",
+    "close_cart": "[WARENKORB SCHLIESSEN]",
+    "open_search": "[SUCHE ÖFFNEN]",
+    "close_search": "[SUCHE SCHLIESSEN]",
+    "logo": "[{{ shop_name }} STARTSEITE]",
+    "cart_count": "[{{ count }} ARTIKEL IM WARENKORB]",
+    "loading": "[WIRD GELADEN]"
+  },
+
+  "navigation": {
+    "open": "[NAVIGATION ÖFFNEN]",
+    "close": "[NAVIGATION SCHLIESSEN]",
+    "menu": "[MENÜ]",
+    "new_arrivals": "[NEUHEITEN]",
+    "bestsellers": "[BESTSELLER]",
+    "collections": "[KOLLEKTIONEN]",
+    "about": "[ÜBER UNS]",
+    "contact": "[KONTAKT]",
+    "journal": "[JOURNAL]"
+  },
+
+  "products": {
+    "product": {
+      "add_to_cart": "[IN DEN WARENKORB]",
+      "sold_out": "[AUSVERKAUFT]",
+      "out_of_stock": "[NICHT VORRÄTIG]",
+      "unavailable": "[NICHT VERFÜGBAR]",
+      "on_sale": "[ANGEBOT]",
+      "new": "[NEU]",
+      "best_seller": "[BESTSELLER]",
+      "price": "[€{{ price }}]",
+      "regular_price": "[NORMALPREIS]",
+      "sale_price": "[SONDERPREIS]",
+      "from_price_html": "[AB {{ price }}]",
+      "quantity": "[MENGE]",
+      "sku": "[ART.-NR.: {{ sku }}]",
+      "description": "[BESCHREIBUNG]",
+      "details": "[DETAILS]",
+      "care_instructions": "[PFLEGEHINWEISE]",
+      "dimensions": "[ABMESSUNGEN]",
+      "materials": "[MATERIALIEN]",
+      "in_stock": "[AUF LAGER]",
+      "low_stock": "[NUR NOCH {{ quantity }} VERFÜGBAR]",
+      "shipping_info": "[VERSANDINFORMATIONEN]",
+      "free_shipping": "[KOSTENLOSER VERSAND FÜR DIESE BESTELLUNG]",
+      "share": "[TEILEN]",
+      "select_size": "[GRÖSSE WÄHLEN]",
+      "select_color": "[FARBE WÄHLEN]",
+      "related_products": "[DAS KÖNNTE IHNEN AUCH GEFALLEN]"
+    }
+  },
+
+  "collections": {
+    "title": "[KOLLEKTIONEN]",
+    "all": "[ALLE PRODUKTE]",
+    "filter_by": "[FILTERN NACH]",
+    "sort_by": "[SORTIEREN NACH]",
+    "sort": {
+      "featured": "[EMPFOHLEN]",
+      "best_selling": "[BESTSELLER]",
+      "title_ascending": "[A–Z]",
+      "title_descending": "[Z–A]",
+      "price_ascending": "[PREIS: AUFSTEIGEND]",
+      "price_descending": "[PREIS: ABSTEIGEND]",
+      "created_ascending": "[ÄLTESTE ZUERST]",
+      "created_descending": "[NEUESTE ZUERST]"
+    },
+    "filter": {
+      "clear": "[FILTER ZURÜCKSETZEN]",
+      "clear_all": "[ALLE ZURÜCKSETZEN]",
+      "apply": "[FILTER ANWENDEN]",
+      "results_count": "[{{ count }} PRODUKTE]",
+      "no_results": "[KEINE PRODUKTE ENTSPRECHEN DIESEN FILTERN.]"
+    }
+  },
+
+  "cart": {
+    "title": "[IHR WARENKORB]",
+    "empty": "[IHR WARENKORB IST LEER.]",
+    "empty_cta": "[UNSERE KOLLEKTIONEN ENTDECKEN]",
+    "items_count": "[{{ count }} ARTIKEL]",
+    "items_count_one": "[1 ARTIKEL]",
+    "item": {
+      "remove": "[ENTFERNEN]"
+    },
+    "subtotal": "[ZWISCHENSUMME]",
+    "tax_and_shipping": "[STEUERN UND VERSANDKOSTEN WERDEN AN DER KASSE BERECHNET.]",
+    "checkout": "[ZUR KASSE]",
+    "continue_shopping": "[WEITER EINKAUFEN]"
+  },
+
+  "customers": {
+    "login": {
+      "title": "[ANMELDEN]",
+      "email": "[E-MAIL-ADRESSE]",
+      "password": "[PASSWORT]",
+      "submit": "[ANMELDEN]",
+      "forgot_password": "[PASSWORT VERGESSEN?]",
+      "no_account": "[NOCH KEIN KONTO?]",
+      "create_account": "[KONTO ERSTELLEN]"
+    },
+    "register": {
+      "title": "[KONTO ERSTELLEN]",
+      "first_name": "[VORNAME]",
+      "last_name": "[NACHNAME]",
+      "email": "[E-MAIL-ADRESSE]",
+      "password": "[PASSWORT]",
+      "submit": "[KONTO ERSTELLEN]"
+    }
+  },
+
+  "gdpr": {
+    "banner_text": "[WIR VERWENDEN COOKIES, UM IHR ERLEBNIS ZU VERBESSERN UND DEN WEBSITE-TRAFFIC ZU ANALYSIEREN. DURCH FORTFAHREN STIMMEN SIE UNSERER COOKIE-RICHTLINIE ZU.]",
+    "accept": "[ALLE AKZEPTIEREN]",
+    "decline": "[EINSTELLUNGEN VERWALTEN]",
+    "learn_more": "[COOKIE-RICHTLINIE]"
+  },
+
+  "sections": {
+    "hero": {
+      "heading": "[STILLE ELEGANZ FÜR BEWUSSTES WOHNEN]",
+      "subheading": "[PREMIUM-FUSSMATTEN & TEPPICHE — ENTWORFEN IN SKANDINAVIEN]",
+      "cta_primary": "[KOLLEKTIONEN ENTDECKEN]",
+      "cta_secondary": "[MARKE KENNENLERNEN]"
+    },
+    "newsletter": {
+      "heading": "[BLEIBEN SIE INFORMIERT]",
+      "subtext": "[NEUE KOLLEKTIONEN, DESIGNGESCHICHTEN UND EXKLUSIVE ANGEBOTE — LEISE GELIEFERT.]",
+      "placeholder": "[IHRE E-MAIL-ADRESSE]",
+      "submit": "[ABONNIEREN]",
+      "success": "[VIELEN DANK FÜR IHR ABONNEMENT.]"
+    },
+    "contact": {
+      "heading": "[KONTAKTIEREN SIE UNS]",
+      "name": "[IHR NAME]",
+      "email": "[E-MAIL-ADRESSE]",
+      "message": "[IHRE NACHRICHT]",
+      "submit": "[NACHRICHT SENDEN]",
+      "success": "[VIELEN DANK. WIR MELDEN UNS INNERHALB VON 1–2 WERKTAGEN.]"
+    },
+    "announcement": {
+      "text": "[KOSTENLOSER VERSAND AB €150 | GRATISMUSTER MIT JEDER BESTELLUNG]"
+    }
+  },
+
+  "localization": {
+    "currency_label": "[WÄHRUNG]",
+    "language_label": "[SPRACHE]",
+    "country_label": "[LAND / REGION]",
+    "update": "[AKTUALISIEREN]",
+    "title": "[REGION & SPRACHE]",
+    "description": "[WÄHLEN SIE IHR LAND UND IHRE BEVORZUGTE SPRACHE. DIE PREISE WERDEN IN IHRER LOKALEN WÄHRUNG ANGEZEIGT.]"
+  }
+}

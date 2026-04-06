@@ -1,0 +1,383 @@
+{%- comment -%}
+  ================================================================================
+  geo-payment-icons.liquid — Metsie Theme
+  ================================================================================
+  Regional payment method icons. Renders SVG icons relevant to visitor's region.
+
+  USAGE:
+    Footer / product page / cart:
+      {% render 'geo-payment-icons' %}
+
+    Force a specific region (e.g. for testing):
+      {% render 'geo-payment-icons', force_region: 'EU' %}
+
+  PARAMETERS:
+    force_region (string) — 'EU' | 'US' | 'UK' | 'DEFAULT' (overrides geo detection)
+
+  REGIONS & METHODS:
+    EU      → Visa, Mastercard, PayPal, Klarna, iDEAL, Bancontact, SOFORT
+    US      → Visa, Mastercard, AmEx, PayPal, Apple Pay, Google Pay
+    UK      → Visa, Mastercard, PayPal, Apple Pay, Klarna
+    DEFAULT → Visa, Mastercard, PayPal, Apple Pay
+
+  DESIGN:
+    - SVG icons inline, monochromatic / muted to match luxury aesthetic
+    - Small "[SECURE PAYMENT]" label above
+    - Subtle grayscale treatment on load; full color on hover (optional)
+    - JS layer swaps to geo-detected region
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign force_region = force_region | default: ''
+-%}
+
+<div
+  class="geo-payments"
+  data-geo-payments
+  {% if force_region != '' %}data-force-region="{{ force_region }}"{% endif %}
+  aria-label="[ACCEPTED PAYMENT METHODS]"
+>
+
+  <p class="geo-payments__label" aria-hidden="true">
+    {%- render 'svg-icons', icon: 'shield', size: 12 -%}
+    [SECURE PAYMENT]
+  </p>
+
+  {%- comment -%}
+    Each region group is rendered hidden; JS shows the correct one.
+    Default (EU) is shown without JS.
+  {%- endcomment -%}
+
+  {%- comment -%} ── EU Region ── {%- endcomment -%}
+  <ul class="geo-payments__list" data-payment-region="EU" aria-label="[EU PAYMENT METHODS]">
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Visa" aria-label="Visa">
+        {%- render 'geo-payment-icons', _render_icon: 'visa' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Mastercard" aria-label="Mastercard">
+        {%- render 'geo-payment-icons', _render_icon: 'mastercard' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="PayPal" aria-label="PayPal">
+        {%- render 'geo-payment-icons', _render_icon: 'paypal' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Klarna" aria-label="Klarna">
+        {%- render 'geo-payment-icons', _render_icon: 'klarna' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="iDEAL" aria-label="iDEAL">
+        {%- render 'geo-payment-icons', _render_icon: 'ideal' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Bancontact" aria-label="Bancontact">
+        {%- render 'geo-payment-icons', _render_icon: 'bancontact' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="SOFORT" aria-label="SOFORT">
+        {%- render 'geo-payment-icons', _render_icon: 'sofort' -%}
+      </span>
+    </li>
+  </ul>
+
+  {%- comment -%} ── US Region ── {%- endcomment -%}
+  <ul class="geo-payments__list is-hidden" data-payment-region="US" aria-label="[US PAYMENT METHODS]" aria-hidden="true">
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Visa" aria-label="Visa">
+        {%- render 'geo-payment-icons', _render_icon: 'visa' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Mastercard" aria-label="Mastercard">
+        {%- render 'geo-payment-icons', _render_icon: 'mastercard' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="American Express" aria-label="American Express">
+        {%- render 'geo-payment-icons', _render_icon: 'amex' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="PayPal" aria-label="PayPal">
+        {%- render 'geo-payment-icons', _render_icon: 'paypal' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Apple Pay" aria-label="Apple Pay">
+        {%- render 'geo-payment-icons', _render_icon: 'applepay' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Google Pay" aria-label="Google Pay">
+        {%- render 'geo-payment-icons', _render_icon: 'googlepay' -%}
+      </span>
+    </li>
+  </ul>
+
+  {%- comment -%} ── UK Region ── {%- endcomment -%}
+  <ul class="geo-payments__list is-hidden" data-payment-region="UK" aria-label="[UK PAYMENT METHODS]" aria-hidden="true">
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Visa" aria-label="Visa">
+        {%- render 'geo-payment-icons', _render_icon: 'visa' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Mastercard" aria-label="Mastercard">
+        {%- render 'geo-payment-icons', _render_icon: 'mastercard' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="PayPal" aria-label="PayPal">
+        {%- render 'geo-payment-icons', _render_icon: 'paypal' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Apple Pay" aria-label="Apple Pay">
+        {%- render 'geo-payment-icons', _render_icon: 'applepay' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Klarna" aria-label="Klarna">
+        {%- render 'geo-payment-icons', _render_icon: 'klarna' -%}
+      </span>
+    </li>
+  </ul>
+
+  {%- comment -%} ── Default Region ── {%- endcomment -%}
+  <ul class="geo-payments__list is-hidden" data-payment-region="DEFAULT" aria-label="[ACCEPTED PAYMENT METHODS]" aria-hidden="true">
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Visa" aria-label="Visa">
+        {%- render 'geo-payment-icons', _render_icon: 'visa' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Mastercard" aria-label="Mastercard">
+        {%- render 'geo-payment-icons', _render_icon: 'mastercard' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="PayPal" aria-label="PayPal">
+        {%- render 'geo-payment-icons', _render_icon: 'paypal' -%}
+      </span>
+    </li>
+    <li class="geo-payments__item">
+      <span class="geo-payments__icon" title="Apple Pay" aria-label="Apple Pay">
+        {%- render 'geo-payment-icons', _render_icon: 'applepay' -%}
+      </span>
+    </li>
+  </ul>
+
+</div>
+
+{%- comment -%}
+  ── SVG Icon Renderer (private, called recursively via _render_icon) ──
+  This pattern avoids repeating large SVG blocks. The _render_icon param
+  is an internal convention — never pass it from outside this snippet.
+{%- endcomment -%}
+
+{%- if _render_icon -%}
+  {%- case _render_icon -%}
+
+    {%- when 'visa' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Visa" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#1A1F71" opacity="0.08"/>
+        <path d="M278.2 334.1l33.1-195.9h53.1l-33.1 195.9H278.2zm210.3-191c-10.5-4-27-8.3-47.7-8.3-52.6 0-89.6 26.6-89.9 64.7-.3 28.2 26.4 43.9 46.6 53.3 20.7 9.6 27.6 15.8 27.5 24.4-.1 13.2-16.5 19.2-31.7 19.2-21.2 0-32.5-2.9-49.9-10l-6.8-3.1-7.4 43.7c12.4 5.5 35.4 10.3 59.2 10.5 55.9 0 92.1-26.3 92.5-67-.2-22.3-13.9-39.3-44.3-53.3-18.4-9.1-29.7-15.1-29.6-24.3 0-8.1 9.5-16.8 30.3-16.8 17.3-.3 29.8 3.5 39.5 7.4l4.7 2.3 7-42.7z" fill="#1A1F71"/>
+        <path d="M636 139.2h-41.1c-12.7 0-22.2 3.5-27.8 16.4L483.8 334.1h55.9s9.1-24.2 11.2-29.5c6.1 0 60.5.1 68.2.1 1.6 6.9 6.5 29.4 6.5 29.4H675L636 139.2zm-65.6 128.4c4.4-11.4 21.3-55.2 21.3-55.2s4.4-11.4 7.1-18.8l3.6 17s10.2 47 12.4 56.9l-44.4.1zM216.4 139.2l-52.1 133.5-5.6-27.2c-9.6-31.2-39.6-65-73.1-81.9l47.6 169.8h56.4l83.8-194.2h-56.9z" fill="#1A1F71"/>
+        <path d="M125.9 139.2H40.1l-.7 3.7c66.9 16.3 111.2 55.7 129.6 103.1l-18.7-90.8c-3.2-12.6-12.5-15.7-24.4-16z" fill="#F9A533" opacity="0.9"/>
+      </svg>
+
+    {%- when 'mastercard' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mastercard" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#252525" opacity="0.06"/>
+        <circle cx="280" cy="235.5" r="146.2" fill="#EB001B" opacity="0.85"/>
+        <circle cx="470" cy="235.5" r="146.2" fill="#F79E1B" opacity="0.85"/>
+        <path d="M375 109.3a146.1 146.1 0 0 1 0 252.4 146.1 146.1 0 0 1 0-252.4z" fill="#FF5F00" opacity="0.9"/>
+      </svg>
+
+    {%- when 'paypal' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PayPal" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#009CDE" opacity="0.07"/>
+        <path d="M270.5 147.1c-11.4 0-21.1 8.3-22.9 19.5l-25.3 160.8c-.8 5 3 9.5 8 9.5h38.2c6.3 0 11.7-4.6 12.7-10.9l7-44.3c1.1-7.1 7.2-12.4 14.4-12.4h25.7c53.6 0 84.5-25.9 92.6-77.3 3.6-22.5.1-40.2-10.3-52.6-11.5-13.7-31.9-20.7-59.1-20.7l-81.1.4zm14.4 47.1h34.1c15.6 0 25.6 3.3 30.7 10.1 4.9 6.5 6.2 16 3.8 28.3-4.6 24.4-18.9 36.1-44.4 36.1h-20.6l-3.6-74.5z" fill="#003087"/>
+        <path d="M474.5 195.4c-.2 0-.3.1-.5.1-6.3.9-12.7 1.3-19.2 1.3-21.9 0-36.1-9.4-36.1-9.4s-8.2 52-9.8 61.6c-1.7 10.1 5.3 19.1 15.5 19.1h30.6c6.3 0 11.6-4.6 12.7-10.9l5.6-35.7c2.8.2 5.6.3 8.5.3 34.9 0 56-15.6 62.4-46.5-5.6 15.9-36 20.1-69.7 20.1z" fill="#009CDE"/>
+      </svg>
+
+    {%- when 'klarna' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klarna" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#FFB3C7" opacity="0.25"/>
+        <text x="375" y="265" font-family="'Inter', sans-serif" font-size="80" font-weight="700" fill="#17120F" text-anchor="middle" letter-spacing="-2">klarna</text>
+      </svg>
+
+    {%- when 'ideal' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="iDEAL" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#CC0066" opacity="0.08"/>
+        <text x="375" y="270" font-family="'Inter', sans-serif" font-size="70" font-weight="700" fill="#CC0066" text-anchor="middle" letter-spacing="-1">iDEAL</text>
+      </svg>
+
+    {%- when 'bancontact' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bancontact" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#005498" opacity="0.08"/>
+        <rect x="50" y="155" width="650" height="160" rx="8" fill="#005498"/>
+        <text x="375" y="255" font-family="'Inter', sans-serif" font-size="56" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">bancontact</text>
+      </svg>
+
+    {%- when 'sofort' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SOFORT" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#EF7422" opacity="0.1"/>
+        <text x="375" y="270" font-family="'Inter', sans-serif" font-size="70" font-weight="800" fill="#EF7422" text-anchor="middle" letter-spacing="2">SOFORT</text>
+      </svg>
+
+    {%- when 'amex' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="American Express" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#2557D6" opacity="0.9"/>
+        <text x="375" y="290" font-family="'Inter', sans-serif" font-size="56" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">AMERICAN</text>
+        <text x="375" y="350" font-family="'Inter', sans-serif" font-size="56" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">EXPRESS</text>
+        <text x="375" y="210" font-family="'Inter', sans-serif" font-size="100" font-weight="800" fill="rgba(255,255,255,0.15)" text-anchor="middle">AMEX</text>
+      </svg>
+
+    {%- when 'applepay' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Apple Pay" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#1A1A1A" opacity="0.9"/>
+        <path d="M257.9 180.7c6.4-7.8 10.8-18.5 9.6-29.3-9.3.4-20.6 6.2-27.2 13.9-6 6.9-11.2 17.9-9.8 28.4 10.3.8 20.9-5.2 27.4-13z" fill="white"/>
+        <path d="M267.4 196.4c-15.1-.9-28.1 8.6-35.4 8.6s-18.3-8.1-30.4-7.9c-15.6.2-30.1 9.1-38.1 23.2-16.3 28.2-4.3 70 11.6 92.9 7.7 11.3 17 23.8 29.2 23.4 11.6-.5 16.1-7.5 30.2-7.5s18.1 7.5 30.4 7.2c12.6-.2 20.6-11.3 28.4-22.6 8.8-12.9 12.5-25.4 12.6-26.1-.3-.2-24.2-9.3-24.5-36.9-.2-23.1 18.8-34.1 19.7-34.8-10.8-16-27.7-17.8-33.7-18.5z" fill="white"/>
+        <text x="420" y="275" font-family="'Inter', sans-serif" font-size="72" font-weight="500" fill="white" text-anchor="middle" letter-spacing="-1">Pay</text>
+      </svg>
+
+    {%- when 'googlepay' -%}
+      <svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Google Pay" width="38" height="24">
+        <rect width="750" height="471" rx="24" fill="#FFFFFF" stroke="#E8E8E8" stroke-width="2"/>
+        <text x="375" y="280" font-family="'Inter', sans-serif" font-size="80" font-weight="500" fill="#1A1A1A" text-anchor="middle" letter-spacing="-2">GPay</text>
+      </svg>
+
+  {%- endcase -%}
+{%- endif -%}
+
+
+{%- comment -%} ── Styles (rendered once) ── {%- endcomment -%}
+{%- unless geo_payment_styles_rendered -%}
+  {%- assign geo_payment_styles_rendered = true -%}
+  <style>
+    /* ── geo-payment-icons ── */
+    .geo-payments {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .geo-payments__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1A1A1A;
+      opacity: 0.4;
+      margin: 0;
+    }
+
+    .geo-payments__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
+    .geo-payments__list.is-hidden {
+      display: none;
+    }
+
+    .geo-payments__item {
+      display: flex;
+    }
+
+    .geo-payments__icon {
+      display: flex;
+      align-items: center;
+      opacity: 0.55;
+      transition: opacity 200ms ease;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .geo-payments__icon:hover {
+      opacity: 0.85;
+    }
+
+    .geo-payments__icon svg {
+      display: block;
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless geo_payment_js_rendered -%}
+  {%- assign geo_payment_js_rendered = true -%}
+  <script>
+    /**
+     * geo-payment-icons.js — Metsie Theme
+     * Switches visible payment icon list based on detected region.
+     */
+    (function () {
+      'use strict';
+
+      var EU_COUNTRIES = [
+        'AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI',
+        'FR','GR','HR','HU','IE','IT','LT','LU','LV','MT',
+        'NL','PL','PT','RO','SE','SI','SK'
+      ];
+
+      function getRegion(countryCode) {
+        if (EU_COUNTRIES.indexOf(countryCode) > -1) return 'EU';
+        if (countryCode === 'US') return 'US';
+        if (countryCode === 'GB') return 'UK';
+        return 'DEFAULT';
+      }
+
+      function updatePaymentIcons(geoData) {
+        document.querySelectorAll('[data-geo-payments]').forEach(function (widget) {
+          // If force_region is set, use that instead of geo
+          var region = widget.dataset.forceRegion || getRegion(geoData.country_code);
+
+          widget.querySelectorAll('[data-payment-region]').forEach(function (list) {
+            var listRegion = list.dataset.paymentRegion;
+            if (listRegion === region) {
+              list.classList.remove('is-hidden');
+              list.removeAttribute('aria-hidden');
+            } else {
+              list.classList.add('is-hidden');
+              list.setAttribute('aria-hidden', 'true');
+            }
+          });
+        });
+      }
+
+      document.addEventListener('geo:detected', function (e) {
+        if (e.detail && e.detail.country_code) updatePaymentIcons(e.detail);
+      });
+
+      // Check session on load
+      (function () {
+        var cached = sessionStorage.getItem('metsie_geo_data');
+        if (!cached) return;
+        try {
+          var geo = JSON.parse(cached);
+          if (geo && geo.country_code) updatePaymentIcons(geo);
+        } catch(e) {}
+      })();
+
+    })();
+  </script>
+{%- endunless -%}

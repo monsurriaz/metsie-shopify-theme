@@ -1,0 +1,52 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "heading": "[INSPIRATION]",
+        "subheading": "[DESIGN IDEAS, STYLING TIPS & STORIES FROM THE WORLD OF METSIE]",
+        "show_banner_image": true,
+        "show_excerpt": true,
+        "show_author": true,
+        "show_date": true,
+        "show_tags": true,
+        "articles_per_page": 9,
+        "columns_desktop": 3,
+        "columns_mobile": 1,
+        "image_ratio": "portrait",
+        "show_divider": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "footer"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "product-main": {
+      "type": "product-main",
+      "settings": {
+        "show_vendor": true,
+        "show_share": true,
+        "show_sku": true,
+        "gallery_layout": "thumbnails_left",
+        "enable_zoom": true,
+        "enable_video_looping": false,
+        "show_quantity_selector": true,
+        "show_dynamic_checkout": true,
+        "show_size_guide": true,
+        "size_guide_page": "pages/size-guide"
+      },
+      "blocks": {
+        "accordion-features": {
+          "type": "accordion",
+          "settings": {
+            "heading": "KEY FEATURES",
+            "content": "[LIST KEY PRODUCT FEATURES HERE — E.G. HAND-TUFTED, NON-SLIP BACKING, ECO-FRIENDLY MATERIALS]",
+            "open_by_default": true
+          }
+        },
+        "accordion-materials": {
+          "type": "accordion",
+          "settings": {
+            "heading": "MATERIALS",
+            "content": "[DESCRIBE MATERIALS USED — E.G. 100% WOOL PILE, COTTON BACKING, NATURAL DYES]",
+            "open_by_default": false
+          }
+        },
+        "accordion-care": {
+          "type": "accordion",
+          "settings": {
+            "heading": "CARE INSTRUCTIONS",
+            "content": "[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH DAMP CLOTH, PROFESSIONAL CLEANING RECOMMENDED]",
+            "open_by_default": false
+          }
+        },
+        "accordion-returns": {
+          "type": "accordion",
+          "settings": {
+            "heading": "RETURNS & EXCHANGES",
+            "content": "[DESCRIBE RETURN AND EXCHANGE POLICY — E.G. FREE RETURNS WITHIN 30 DAYS]",
+            "open_by_default": false
+          }
+        }
+      },
+      "blocks_order": [
+        "accordion-features",
+        "accordion-materials",
+        "accordion-care",
+        "accordion-returns"
+      ]
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "YOU MAY ALSO LIKE",
+        "products_to_show": 4,
+        "intent": "related"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "product-main",
+    "product-recommendations",
+    "footer"
+  ]
+}

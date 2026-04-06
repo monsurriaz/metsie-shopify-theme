@@ -1,0 +1,656 @@
+<section class="shipping-info" data-section-id="{{ section.id }}">
+  <div class="shipping-info__inner">
+
+    {%- comment -%} Page header {%- endcomment -%}
+    <header class="shipping-info__header">
+      <p class="section-label">POLICIES</p>
+      <h1 class="shipping-info__heading">
+        {{ section.settings.heading | default: '[SHIPPING & DELIVERY]' }}
+      </h1>
+      {% if section.settings.subheading != blank %}
+        <p class="shipping-info__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </header>
+
+    {%- comment -%} Intro statement {%- endcomment -%}
+    {% if section.settings.intro_text != blank %}
+      <div class="shipping-info__intro">
+        <p>{{ section.settings.intro_text }}</p>
+      </div>
+    {% endif %}
+
+    {%- comment -%} Shipping zones table {%- endcomment -%}
+    {% if section.settings.show_shipping_table %}
+      {% assign shipping_blocks = section.blocks | where: 'type', 'shipping_zone' %}
+      {% if shipping_blocks.size > 0 %}
+        <div class="shipping-table-wrap">
+          <h2 class="shipping-info__section-heading">DELIVERY TIMES & RATES</h2>
+          <div class="shipping-table">
+            <div class="shipping-table__header">
+              <span>DESTINATION</span>
+              <span>STANDARD</span>
+              <span>EXPRESS</span>
+              <span>FREE SHIPPING</span>
+            </div>
+            {% for block in shipping_blocks %}
+              <div class="shipping-table__row" {{ block.shopify_attributes }}>
+                <div class="shipping-table__cell shipping-table__cell--destination">
+                  <span class="shipping-zone-name">{{ block.settings.zone_name | default: '[REGION]' }}</span>
+                </div>
+                <div class="shipping-table__cell">
+                  <span class="shipping-time">{{ block.settings.standard_time | default: '[X–X BUSINESS DAYS]' }}</span>
+                  {% if block.settings.standard_cost != blank %}
+                    <span class="shipping-cost">{{ block.settings.standard_cost }}</span>
+                  {% endif %}
+                </div>
+                <div class="shipping-table__cell">
+                  <span class="shipping-time">{{ block.settings.express_time | default: '[X–X BUSINESS DAYS]' }}</span>
+                  {% if block.settings.express_cost != blank %}
+                    <span class="shipping-cost">{{ block.settings.express_cost }}</span>
+                  {% endif %}
+                </div>
+                <div class="shipping-table__cell">
+                  <span class="shipping-free">{{ block.settings.free_threshold | default: '[FREE OVER €XXX]' }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% if section.settings.table_note != blank %}
+            <p class="shipping-table-note">{{ section.settings.table_note }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {%- comment -%} Returns section {%- endcomment -%}
+    {% if section.settings.show_returns_info %}
+      {% assign returns_block = section.blocks | where: 'type', 'returns_block' | first %}
+      <div class="returns-info">
+        <h2 class="shipping-info__section-heading">{{ section.settings.returns_heading | default: '[RETURNS & EXCHANGES]' }}</h2>
+        {% if section.settings.returns_intro != blank %}
+          <p class="returns-info__intro">{{ section.settings.returns_intro }}</p>
+        {% endif %}
+
+        {% if returns_block %}
+          <div class="returns-details">
+            <div class="returns-detail-card">
+              <div class="returns-detail-card__icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#2D4A6A" stroke-width="1.5"/>
+                  <path d="M9 12l2 2 4-4" stroke="#2D4A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="returns-detail-card__heading">RETURN WINDOW</h3>
+              <p class="returns-detail-card__text">{{ returns_block.settings.return_window | default: '[XX DAYS]' }}</p>
+            </div>
+
+            <div class="returns-detail-card">
+              <div class="returns-detail-card__icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="#2D4A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="returns-detail-card__heading">CONDITION</h3>
+              <p class="returns-detail-card__text">{{ returns_block.settings.return_condition | default: '[UNUSED, IN ORIGINAL PACKAGING]' }}</p>
+            </div>
+
+            <div class="returns-detail-card">
+              <div class="returns-detail-card__icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#2D4A6A" stroke-width="1.5"/>
+                  <polyline points="12,6 12,12 16,14" stroke="#2D4A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="returns-detail-card__heading">REFUND TIME</h3>
+              <p class="returns-detail-card__text">{{ returns_block.settings.refund_time | default: '[X–X BUSINESS DAYS]' }}</p>
+            </div>
+          </div>
+
+          {% if returns_block.settings.return_process != blank %}
+            <div class="returns-process">
+              <h3 class="returns-process__heading">HOW TO RETURN</h3>
+              <p class="returns-process__text">{{ returns_block.settings.return_process }}</p>
+            </div>
+          {% endif %}
+
+          {% if returns_block.settings.exchange_info != blank %}
+            <div class="returns-process">
+              <h3 class="returns-process__heading">EXCHANGES</h3>
+              <p class="returns-process__text">{{ returns_block.settings.exchange_info }}</p>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="returns-details">
+            <div class="returns-detail-card">
+              <h3 class="returns-detail-card__heading">RETURN WINDOW</h3>
+              <p class="returns-detail-card__text">[XX DAYS FROM DELIVERY]</p>
+            </div>
+            <div class="returns-detail-card">
+              <h3 class="returns-detail-card__heading">CONDITION</h3>
+              <p class="returns-detail-card__text">[UNUSED, IN ORIGINAL PACKAGING]</p>
+            </div>
+            <div class="returns-detail-card">
+              <h3 class="returns-detail-card__heading">REFUND TIME</h3>
+              <p class="returns-detail-card__text">[5–7 BUSINESS DAYS]</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {%- comment -%} Custom content blocks {%- endcomment -%}
+    {% assign content_blocks = section.blocks | where: 'type', 'content_block' %}
+    {% for block in content_blocks %}
+      <div class="shipping-content-block" {{ block.shopify_attributes }}>
+        {% if block.settings.heading != blank %}
+          <h2 class="shipping-info__section-heading">{{ block.settings.heading | upcase }}</h2>
+        {% endif %}
+        {% if block.settings.content != blank %}
+          <div class="shipping-content-block__body">{{ block.settings.content }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    {%- comment -%} Contact link {%- endcomment -%}
+    {% if section.settings.show_contact_cta %}
+      <div class="shipping-contact-cta">
+        <p>{{ section.settings.contact_text | default: '[QUESTIONS ABOUT YOUR ORDER?]' }}</p>
+        <a href="{{ section.settings.contact_link | default: '/pages/contact' }}" class="view-all-link">
+          CONTACT US <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  .shipping-info {
+    padding: 80px 0 96px;
+  }
+
+  .shipping-info__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .shipping-info__header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .shipping-info__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    color: #1A1A1A;
+    margin: 12px 0 0;
+    letter-spacing: -0.01em;
+  }
+
+  .shipping-info__subheading {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin: 16px 0 0;
+    line-height: 1.6;
+  }
+
+  .shipping-info__intro {
+    max-width: 640px;
+    margin: 0 auto 56px;
+    text-align: center;
+  }
+
+  .shipping-info__intro p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+  }
+
+  .shipping-info__section-heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #2D4A6A;
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E8E8E4;
+  }
+
+  /* Shipping table */
+  .shipping-table-wrap {
+    margin-bottom: 64px;
+  }
+
+  .shipping-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .shipping-table__header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+    background-color: #2D4A6A;
+    color: #F5F0E8;
+    padding: 14px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .shipping-table__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-bottom: 1px solid #E8E8E4;
+  }
+
+  .shipping-table__row:nth-child(even) {
+    background-color: #F5F0E8;
+  }
+
+  .shipping-table__cell {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .shipping-zone-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A1A1A;
+    letter-spacing: 0.06em;
+  }
+
+  .shipping-time {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #1A1A1A;
+  }
+
+  .shipping-cost {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #888;
+  }
+
+  .shipping-free {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #2D4A6A;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .shipping-table-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Returns */
+  .returns-info {
+    margin-bottom: 64px;
+  }
+
+  .returns-info__intro {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #555;
+    margin-bottom: 32px;
+  }
+
+  .returns-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .returns-detail-card {
+    padding: 28px 24px;
+    background-color: #F5F0E8;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .returns-detail-card__icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .returns-detail-card__heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #888;
+    margin: 0;
+  }
+
+  .returns-detail-card__text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #1A1A1A;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .returns-process {
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 1px solid #E8E8E4;
+  }
+
+  .returns-process__heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #2D4A6A;
+    margin: 0 0 12px;
+  }
+
+  .returns-process__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+  }
+
+  /* Custom blocks */
+  .shipping-content-block {
+    margin-bottom: 48px;
+    padding-top: 48px;
+    border-top: 1px solid #E8E8E4;
+  }
+
+  .shipping-content-block__body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #555;
+  }
+
+  .shipping-content-block__body p { margin: 0 0 16px; }
+  .shipping-content-block__body p:last-child { margin-bottom: 0; }
+  .shipping-content-block__body ul { padding-left: 20px; margin: 0 0 16px; }
+  .shipping-content-block__body li { margin-bottom: 8px; }
+
+  /* Contact CTA */
+  .shipping-contact-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 56px;
+    padding: 28px 32px;
+    background-color: #F5F0E8;
+  }
+
+  .shipping-contact-cta p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: #1A1A1A;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .shipping-info__inner { padding: 0 24px; }
+  }
+
+  @media (max-width: 768px) {
+    .shipping-table__header,
+    .shipping-table__row {
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .shipping-table__header span:nth-child(n+3),
+    .shipping-table__cell:nth-child(n+3) {
+      display: none;
+    }
+    .returns-details { grid-template-columns: 1fr; }
+    .shipping-contact-cta { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .shipping-info { padding: 56px 0; }
+    .shipping-info__inner { padding: 0 16px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shipping Info",
+  "tag": "section",
+  "class": "shipping-info-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Page heading",
+      "default": "SHIPPING & DELIVERY"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "placeholder": "Everything you need to know about receiving your order"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_text",
+      "label": "Intro text (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_table",
+      "label": "Show shipping table",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "table_note",
+      "label": "Table footnote (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_returns_info",
+      "label": "Show returns section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "returns_heading",
+      "label": "Returns section heading",
+      "default": "RETURNS & EXCHANGES"
+    },
+    {
+      "type": "textarea",
+      "id": "returns_intro",
+      "label": "Returns intro text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact_cta",
+      "label": "Show contact CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "Contact CTA text",
+      "default": "QUESTIONS ABOUT YOUR ORDER?"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact page link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shipping_zone",
+      "name": "Shipping Zone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "zone_name",
+          "label": "Destination",
+          "default": "[REGION]"
+        },
+        {
+          "type": "text",
+          "id": "standard_time",
+          "label": "Standard delivery time",
+          "default": "[X–X BUSINESS DAYS]"
+        },
+        {
+          "type": "text",
+          "id": "standard_cost",
+          "label": "Standard cost",
+          "default": "[€X.XX]"
+        },
+        {
+          "type": "text",
+          "id": "express_time",
+          "label": "Express delivery time",
+          "default": "[X–X BUSINESS DAYS]"
+        },
+        {
+          "type": "text",
+          "id": "express_cost",
+          "label": "Express cost",
+          "default": "[€XX.XX]"
+        },
+        {
+          "type": "text",
+          "id": "free_threshold",
+          "label": "Free shipping threshold",
+          "default": "[FREE OVER €XXX]"
+        }
+      ]
+    },
+    {
+      "type": "returns_block",
+      "name": "Returns Details",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "return_window",
+          "label": "Return window",
+          "default": "[30 DAYS]"
+        },
+        {
+          "type": "text",
+          "id": "return_condition",
+          "label": "Return condition",
+          "default": "[UNUSED, IN ORIGINAL PACKAGING]"
+        },
+        {
+          "type": "textarea",
+          "id": "return_process",
+          "label": "How to return",
+          "default": "[DESCRIBE HOW TO INITIATE A RETURN]"
+        },
+        {
+          "type": "text",
+          "id": "refund_time",
+          "label": "Refund time",
+          "default": "[5–7 BUSINESS DAYS]"
+        },
+        {
+          "type": "textarea",
+          "id": "exchange_info",
+          "label": "Exchange information",
+          "default": "[DESCRIBE EXCHANGE PROCESS]"
+        }
+      ]
+    },
+    {
+      "type": "content_block",
+      "name": "Content Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping Info",
+      "settings": {
+        "heading": "SHIPPING & DELIVERY",
+        "show_shipping_table": true,
+        "show_returns_info": true,
+        "returns_heading": "RETURNS & EXCHANGES",
+        "show_contact_cta": true
+      },
+      "blocks": [
+        {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "EUROPE",
+            "standard_time": "3–5 BUSINESS DAYS",
+            "express_time": "1–2 BUSINESS DAYS",
+            "free_threshold": "FREE OVER €150"
+          }
+        },
+        {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "UNITED KINGDOM",
+            "standard_time": "5–7 BUSINESS DAYS",
+            "express_time": "2–3 BUSINESS DAYS",
+            "free_threshold": "FREE OVER €200"
+          }
+        },
+        {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "REST OF WORLD",
+            "standard_time": "7–14 BUSINESS DAYS",
+            "express_time": "3–5 BUSINESS DAYS",
+            "free_threshold": "FREE OVER €250"
+          }
+        },
+        {
+          "type": "returns_block",
+          "settings": {
+            "return_window": "30 DAYS",
+            "return_condition": "UNUSED, IN ORIGINAL PACKAGING",
+            "refund_time": "5–7 BUSINESS DAYS"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

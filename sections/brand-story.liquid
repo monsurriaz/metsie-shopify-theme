@@ -1,0 +1,251 @@
+<section class="brand-story" data-section-id="{{ section.id }}">
+  <div class="brand-story__inner">
+
+    {%- comment -%} Image column — LEFT {%- endcomment -%}
+    <div class="brand-story__image-col">
+      {% if section.settings.image != blank %}
+        <div class="brand-story__image-container">
+          <img
+            src="{{ section.settings.image | img_url: '800x' }}"
+            srcset="{{ section.settings.image | img_url: '600x' }} 600w, {{ section.settings.image | img_url: '800x' }} 800w, {{ section.settings.image | img_url: '1200x' }} 1200w"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            alt="{{ section.settings.image_alt | default: 'Metsie design studio' }}"
+            width="800"
+            height="960"
+            loading="lazy"
+            class="brand-story__image"
+          >
+        </div>
+      {% else %}
+        <div class="brand-story__image-placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'brand-story__placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+
+    {%- comment -%} Text column — RIGHT {%- endcomment -%}
+    <div class="brand-story__text-col">
+      <p class="brand-story__label">{{ section.settings.label | default: 'METSIE DESIGN STUDIOS' | upcase }}</p>
+
+      <div class="brand-story__body">
+        {% if section.settings.text != blank %}
+          {{ section.settings.text }}
+        {% else %}
+          <p>{{ section.settings.body_text | default: 'Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals' }}</p>
+        {% endif %}
+      </div>
+
+      {% if section.settings.button_text != blank %}
+        <a
+          href="{{ section.settings.button_link | default: '/pages/about' }}"
+          class="brand-story__cta"
+        >
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .brand-story {
+    padding: 96px 0;
+    background-color: #F5F0E8;
+    overflow: hidden;
+  }
+
+  .brand-story__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* Image — always left */
+  .brand-story__image-col {
+    order: 1;
+  }
+
+  .brand-story__text-col {
+    order: 2;
+  }
+
+  .brand-story__image-container,
+  .brand-story__image-placeholder {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    background-color: #E8E8E4;
+  }
+
+  .brand-story__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .brand-story__image-container:hover .brand-story__image {
+    transform: scale(1.03);
+  }
+
+  .brand-story__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    color: #ccc;
+  }
+
+  /* Text */
+  .brand-story__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #2D4A6A;
+    margin: 0 0 32px;
+  }
+
+  .brand-story__body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 300;
+    line-height: 1.3;
+    color: #1A1A1A;
+    margin-bottom: 48px;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-story__body p {
+    margin: 0 0 16px;
+  }
+
+  .brand-story__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Pill-shaped outline button */
+  .brand-story__cta {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    color: #1A1A1A;
+    border: 1px solid #1A1A1A;
+    border-radius: 100px;
+    padding: 14px 32px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .brand-story__cta:hover {
+    background-color: #1A1A1A;
+    color: #F5F0E8;
+  }
+
+  @media (max-width: 1024px) {
+    .brand-story {
+      padding: 72px 0;
+    }
+    .brand-story__inner {
+      padding: 0 24px;
+      gap: 48px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .brand-story__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .brand-story__image-col {
+      order: 1;
+    }
+
+    .brand-story__text-col {
+      order: 2;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .brand-story {
+      padding: 56px 0;
+    }
+    .brand-story__inner {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "tag": "section",
+  "class": "brand-story-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label (small caps)",
+      "default": "METSIE DESIGN STUDIOS"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body text (rich text — leave blank to use plain text field below)",
+      "default": "<p>Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals</p>"
+    },
+    {
+      "type": "text",
+      "id": "body_text",
+      "label": "Body text (plain — used only when rich text above is empty)",
+      "default": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Our philosophy"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (left column)"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story",
+      "settings": {
+        "label": "METSIE DESIGN STUDIOS",
+        "button_text": "Our philosophy",
+        "button_link": "/pages/about"
+      }
+    }
+  ]
+}
+{% endschema %}

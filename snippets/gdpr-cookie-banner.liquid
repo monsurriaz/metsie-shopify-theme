@@ -1,0 +1,864 @@
+{%- comment -%}
+  ================================================================================
+  gdpr-cookie-banner.liquid — Metsie Theme
+  ================================================================================
+  GDPR-compliant cookie consent banner + preferences modal.
+
+  USAGE:
+    Place once in theme.liquid, before </body>:
+      {% render 'gdpr-cookie-banner' %}
+
+    Re-open from footer link:
+      <a href="#" data-cookie-settings-open>[COOKIE SETTINGS]</a>
+
+  FEATURES:
+    - Fixed bottom banner with smooth slide-in animation
+    - [ACCEPT ALL] fills navy
+    - [MANAGE PREFERENCES] opens modal
+    - [PRIVACY POLICY] link (uses shop.privacy_policy.url)
+    - Preferences modal with 4 category toggles
+    - Stores consent in localStorage('metsie_cookie_consent')
+    - Fires Shopify Customer Privacy API (Shopify.customerPrivacy) if available
+    - Auto-shows only for EU visitors (listens to 'geo:detected' event)
+    - Re-openable from any element with [data-cookie-settings-open]
+    - Keyboard navigable, focus trapped in modal
+    - Animates in from bottom, out smoothly
+  ================================================================================
+{%- endcomment -%}
+
+{%- comment -%} ── Banner HTML ── {%- endcomment -%}
+<div
+  id="GdprBanner"
+  class="gdpr-banner"
+  role="region"
+  aria-label="[COOKIE CONSENT]"
+  aria-hidden="true"
+  data-gdpr-banner
+  hidden
+>
+  <div class="gdpr-banner__inner">
+    <p class="gdpr-banner__text">
+      [WE USE COOKIES TO ENHANCE YOUR EXPERIENCE. BY CONTINUING TO VISIT THIS SITE, YOU AGREE TO OUR USE OF COOKIES.]
+    </p>
+
+    <div class="gdpr-banner__actions">
+      <button
+        type="button"
+        class="gdpr-banner__btn gdpr-banner__btn--primary"
+        data-gdpr-accept-all
+        aria-label="[ACCEPT ALL COOKIES]"
+      >
+        [ACCEPT ALL]
+      </button>
+
+      <button
+        type="button"
+        class="gdpr-banner__btn gdpr-banner__btn--ghost"
+        data-gdpr-manage
+        aria-label="[MANAGE COOKIE PREFERENCES]"
+      >
+        [MANAGE PREFERENCES]
+      </button>
+
+      {%- if shop.privacy_policy != blank -%}
+        <a
+          href="{{ shop.privacy_policy.url }}"
+          class="gdpr-banner__link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="[READ OUR PRIVACY POLICY (OPENS IN NEW TAB)]"
+        >
+          [PRIVACY POLICY]
+        </a>
+      {%- else -%}
+        <a
+          href="/policies/privacy-policy"
+          class="gdpr-banner__link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [PRIVACY POLICY]
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+
+{%- comment -%} ── Preferences Modal ── {%- endcomment -%}
+<div
+  id="GdprModal"
+  class="gdpr-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="GdprModalTitle"
+  aria-hidden="true"
+  data-gdpr-modal
+  hidden
+>
+  <div class="gdpr-modal__backdrop" data-gdpr-modal-backdrop></div>
+
+  <div class="gdpr-modal__panel">
+
+    <div class="gdpr-modal__header">
+      <h2 id="GdprModalTitle" class="gdpr-modal__title">[COOKIE PREFERENCES]</h2>
+      <button
+        type="button"
+        class="gdpr-modal__close"
+        aria-label="[CLOSE COOKIE PREFERENCES]"
+        data-gdpr-modal-close
+      >
+        {%- render 'svg-icons', icon: 'close', size: 16 -%}
+      </button>
+    </div>
+
+    <div class="gdpr-modal__body">
+      <p class="gdpr-modal__intro">
+        [WE USE COOKIES AND SIMILAR TECHNOLOGIES TO HELP PERSONALISE CONTENT, TAILOR AND MEASURE PERFORMANCE, AND PROVIDE A BETTER EXPERIENCE. BY CLICKING ON YOUR PREFERENCES BELOW, YOU CONSENT TO THE PROCESSING OF YOUR DATA.]
+      </p>
+
+      {%- comment -%} ── Cookie Categories ── {%- endcomment -%}
+      <ul class="gdpr-modal__categories" role="list">
+
+        {%- comment -%} 1. Essential — always on {%- endcomment -%}
+        <li class="gdpr-modal__category" data-category="essential">
+          <div class="gdpr-modal__category-header">
+            <div class="gdpr-modal__category-info">
+              <span class="gdpr-modal__category-name">[ESSENTIAL]</span>
+              <span class="gdpr-modal__category-tag">[ALWAYS ACTIVE]</span>
+            </div>
+            <div
+              class="gdpr-modal__toggle gdpr-modal__toggle--disabled"
+              aria-label="[ESSENTIAL COOKIES — ALWAYS ACTIVE]"
+              aria-checked="true"
+              role="switch"
+              tabindex="-1"
+            >
+              <span class="gdpr-modal__toggle-thumb"></span>
+            </div>
+          </div>
+          <p class="gdpr-modal__category-desc">
+            [THESE COOKIES ARE NECESSARY FOR THE WEBSITE TO FUNCTION AND CANNOT BE SWITCHED OFF. THEY ARE USUALLY ONLY SET IN RESPONSE TO ACTIONS YOU TAKE, SUCH AS LOGGING IN OR FILLING OUT FORMS.]
+          </p>
+        </li>
+
+        {%- comment -%} 2. Analytics {%- endcomment -%}
+        <li class="gdpr-modal__category" data-category="analytics">
+          <div class="gdpr-modal__category-header">
+            <div class="gdpr-modal__category-info">
+              <span class="gdpr-modal__category-name">[ANALYTICS]</span>
+            </div>
+            <button
+              type="button"
+              class="gdpr-modal__toggle"
+              role="switch"
+              aria-checked="false"
+              aria-label="[TOGGLE ANALYTICS COOKIES]"
+              data-category-toggle="analytics"
+            >
+              <span class="gdpr-modal__toggle-thumb"></span>
+            </button>
+          </div>
+          <p class="gdpr-modal__category-desc">
+            [THESE COOKIES ALLOW US TO COUNT VISITS AND TRAFFIC SOURCES SO WE CAN MEASURE AND IMPROVE PERFORMANCE. ALL INFORMATION IS AGGREGATED AND ANONYMOUS.]
+          </p>
+        </li>
+
+        {%- comment -%} 3. Marketing {%- endcomment -%}
+        <li class="gdpr-modal__category" data-category="marketing">
+          <div class="gdpr-modal__category-header">
+            <div class="gdpr-modal__category-info">
+              <span class="gdpr-modal__category-name">[MARKETING]</span>
+            </div>
+            <button
+              type="button"
+              class="gdpr-modal__toggle"
+              role="switch"
+              aria-checked="false"
+              aria-label="[TOGGLE MARKETING COOKIES]"
+              data-category-toggle="marketing"
+            >
+              <span class="gdpr-modal__toggle-thumb"></span>
+            </button>
+          </div>
+          <p class="gdpr-modal__category-desc">
+            [THESE COOKIES MAY BE SET THROUGH OUR SITE BY ADVERTISING PARTNERS. THEY MAY BE USED TO BUILD A PROFILE OF YOUR INTERESTS AND SHOW RELEVANT ADVERTS ON OTHER SITES.]
+          </p>
+        </li>
+
+        {%- comment -%} 4. Personalization {%- endcomment -%}
+        <li class="gdpr-modal__category" data-category="personalization">
+          <div class="gdpr-modal__category-header">
+            <div class="gdpr-modal__category-info">
+              <span class="gdpr-modal__category-name">[PERSONALIZATION]</span>
+            </div>
+            <button
+              type="button"
+              class="gdpr-modal__toggle"
+              role="switch"
+              aria-checked="false"
+              aria-label="[TOGGLE PERSONALIZATION COOKIES]"
+              data-category-toggle="personalization"
+            >
+              <span class="gdpr-modal__toggle-thumb"></span>
+            </button>
+          </div>
+          <p class="gdpr-modal__category-desc">
+            [THESE COOKIES ENABLE THE WEBSITE TO PROVIDE ENHANCED FUNCTIONALITY AND PERSONALISATION, SUCH AS REMEMBERING YOUR LANGUAGE AND CURRENCY PREFERENCES.]
+          </p>
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="gdpr-modal__footer">
+      <button
+        type="button"
+        class="gdpr-modal__save-btn"
+        data-gdpr-save-preferences
+        aria-label="[SAVE COOKIE PREFERENCES]"
+      >
+        [SAVE PREFERENCES]
+      </button>
+
+      <button
+        type="button"
+        class="gdpr-modal__accept-all-btn"
+        data-gdpr-modal-accept-all
+        aria-label="[ACCEPT ALL COOKIES]"
+      >
+        [ACCEPT ALL]
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+<style>
+  /* ════════════════════════════════════════════════════
+     GDPR Cookie Banner
+  ════════════════════════════════════════════════════ */
+
+  /* ── Banner ── */
+  .gdpr-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #2D4A6A;
+    color: #FFFFFF;
+    padding: 16px 24px;
+    transform: translateY(100%);
+    transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 -4px 24px rgba(26, 26, 26, 0.2);
+  }
+
+  .gdpr-banner.is-visible {
+    transform: translateY(0);
+  }
+
+  .gdpr-banner__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+  }
+
+  .gdpr-banner__text {
+    flex: 1 1 300px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .gdpr-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    flex-shrink: 0;
+  }
+
+  .gdpr-banner__btn {
+    padding: 9px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+    white-space: nowrap;
+  }
+
+  .gdpr-banner__btn--primary {
+    background: #FFFFFF;
+    color: #2D4A6A;
+    border: 1px solid #FFFFFF;
+    font-weight: 600;
+  }
+
+  .gdpr-banner__btn--primary:hover {
+    background: #F5F0E8;
+    border-color: #F5F0E8;
+  }
+
+  .gdpr-banner__btn--primary:focus-visible {
+    outline: 2px solid #F5F0E8;
+    outline-offset: 2px;
+  }
+
+  .gdpr-banner__btn--ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+
+  .gdpr-banner__btn--ghost:hover {
+    border-color: rgba(255,255,255,0.7);
+    color: #FFFFFF;
+  }
+
+  .gdpr-banner__btn--ghost:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.6);
+    outline-offset: 2px;
+  }
+
+  .gdpr-banner__link {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 200ms ease;
+  }
+
+  .gdpr-banner__link:hover { color: #FFFFFF; }
+
+  .gdpr-banner__link:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.6);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+
+  /* ── Preferences Modal ── */
+  .gdpr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 250ms ease;
+    pointer-events: none;
+  }
+
+  .gdpr-modal.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gdpr-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+  .gdpr-modal__panel {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    border-top: 3px solid #2D4A6A;
+    border-radius: 2px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(26, 26, 26, 0.15);
+    transform: scale(0.96) translateY(8px);
+    transition: transform 300ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  .gdpr-modal.is-visible .gdpr-modal__panel {
+    transform: scale(1) translateY(0);
+  }
+
+  .gdpr-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid rgba(45, 74, 106, 0.1);
+    flex-shrink: 0;
+  }
+
+  .gdpr-modal__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+    margin: 0;
+  }
+
+  .gdpr-modal__close {
+    padding: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #2D4A6A;
+    opacity: 0.5;
+    transition: opacity 200ms ease;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  .gdpr-modal__close:hover { opacity: 1; }
+
+  .gdpr-modal__close:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 2px;
+    border-radius: 2px;
+    opacity: 1;
+  }
+
+  .gdpr-modal__body {
+    padding: 20px 28px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .gdpr-modal__intro {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+    color: #1A1A1A;
+    opacity: 0.65;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+  }
+
+  /* Categories */
+  .gdpr-modal__categories {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .gdpr-modal__category {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(45, 74, 106, 0.08);
+  }
+
+  .gdpr-modal__category:last-child { border-bottom: none; }
+
+  .gdpr-modal__category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .gdpr-modal__category-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .gdpr-modal__category-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+  }
+
+  .gdpr-modal__category-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #2D4A6A;
+    background: rgba(45, 74, 106, 0.08);
+    padding: 2px 6px;
+    border-radius: 1px;
+  }
+
+  .gdpr-modal__category-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+    color: #1A1A1A;
+    opacity: 0.55;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  /* Toggle switch */
+  .gdpr-modal__toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    background: rgba(45, 74, 106, 0.15);
+    border-radius: 11px;
+    border: none;
+    cursor: pointer;
+    transition: background 250ms ease;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .gdpr-modal__toggle[aria-checked="true"] {
+    background: #2D4A6A;
+  }
+
+  .gdpr-modal__toggle--disabled {
+    background: #2D4A6A;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .gdpr-modal__toggle:not(.gdpr-modal__toggle--disabled):focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 2px;
+  }
+
+  .gdpr-modal__toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+
+  .gdpr-modal__toggle[aria-checked="true"] .gdpr-modal__toggle-thumb {
+    transform: translateX(18px);
+  }
+
+  .gdpr-modal__toggle--disabled .gdpr-modal__toggle-thumb {
+    transform: translateX(18px);
+  }
+
+  /* Modal footer */
+  .gdpr-modal__footer {
+    padding: 20px 28px 24px;
+    border-top: 1px solid rgba(45, 74, 106, 0.1);
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .gdpr-modal__save-btn,
+  .gdpr-modal__accept-all-btn {
+    padding: 10px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+    white-space: nowrap;
+  }
+
+  .gdpr-modal__save-btn {
+    background: transparent;
+    color: #2D4A6A;
+    border: 1px solid rgba(45, 74, 106, 0.35);
+    flex: 1;
+  }
+
+  .gdpr-modal__save-btn:hover {
+    border-color: #2D4A6A;
+    background: rgba(245, 240, 232, 0.5);
+  }
+
+  .gdpr-modal__save-btn:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 2px;
+  }
+
+  .gdpr-modal__accept-all-btn {
+    background: #2D4A6A;
+    color: #FFFFFF;
+    border: 1px solid #2D4A6A;
+    flex: 1;
+  }
+
+  .gdpr-modal__accept-all-btn:hover { background: #1A3550; border-color: #1A3550; }
+
+  .gdpr-modal__accept-all-btn:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gdpr-banner,
+    .gdpr-modal,
+    .gdpr-modal__panel,
+    .gdpr-modal__toggle,
+    .gdpr-modal__toggle-thumb {
+      transition: none;
+    }
+  }
+</style>
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+<script>
+  /**
+   * gdpr-cookie-banner.js — Metsie Theme
+   *
+   * Flow:
+   *  1. On 'geo:detected', check if EU visitor → show banner if no prior consent
+   *  2. Accept All → store full consent, close banner
+   *  3. Manage → open preferences modal
+   *  4. Save Preferences → store selected consent, close both
+   *  5. data-cookie-settings-open → re-opens preferences modal
+   *  6. Fires Shopify Customer Privacy API if available
+   */
+  (function () {
+    'use strict';
+
+    const CONSENT_KEY = 'metsie_cookie_consent';
+
+    const banner       = document.getElementById('GdprBanner');
+    const modal        = document.getElementById('GdprModal');
+    const acceptAllBtn = banner  && banner.querySelector('[data-gdpr-accept-all]');
+    const manageBtn    = banner  && banner.querySelector('[data-gdpr-manage]');
+    const modalClose   = modal   && modal.querySelector('[data-gdpr-modal-close]');
+    const modalBackdrop= modal   && modal.querySelector('[data-gdpr-modal-backdrop]');
+    const saveBtn      = modal   && modal.querySelector('[data-gdpr-save-preferences]');
+    const modalAcceptAll = modal && modal.querySelector('[data-gdpr-modal-accept-all]');
+
+    // ── Consent helpers ──────────────────────────────────────────────────────────
+    function getConsent() {
+      try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); } catch(e) { return null; }
+    }
+
+    function saveConsent(preferences) {
+      const data = {
+        version:    1,
+        ts:         Date.now(),
+        essential:  true, // always true
+        analytics:      !!preferences.analytics,
+        marketing:      !!preferences.marketing,
+        personalization:!!preferences.personalization
+      };
+      localStorage.setItem(CONSENT_KEY, JSON.stringify(data));
+      applyShopifyPrivacy(data);
+      document.dispatchEvent(new CustomEvent('cookie:consent-updated', { detail: data }));
+      return data;
+    }
+
+    function applyShopifyPrivacy(data) {
+      // Shopify Customer Privacy API (if available via Shopify's cookie consent script)
+      if (window.Shopify && window.Shopify.customerPrivacy) {
+        try {
+          window.Shopify.customerPrivacy.setTrackingConsent({
+            analytics:   data.analytics,
+            marketing:   data.marketing,
+            preferences: data.personalization,
+            sale_of_data: false
+          }, function() {
+            // Consent registered
+          });
+        } catch(e) {}
+      }
+    }
+
+    // ── Banner visibility ────────────────────────────────────────────────────────
+    function showBanner() {
+      if (!banner) return;
+      banner.removeAttribute('hidden');
+      // Force reflow for animation
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          banner.classList.add('is-visible');
+          banner.setAttribute('aria-hidden', 'false');
+        });
+      });
+    }
+
+    function hideBanner() {
+      if (!banner) return;
+      banner.classList.remove('is-visible');
+      banner.setAttribute('aria-hidden', 'true');
+      setTimeout(function () { banner.setAttribute('hidden', ''); }, 400);
+    }
+
+    // ── Modal visibility ─────────────────────────────────────────────────────────
+    let previousFocusBefore = null;
+
+    function openModal() {
+      if (!modal) return;
+      previousFocusBefore = document.activeElement;
+      modal.removeAttribute('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          modal.classList.add('is-visible');
+          // Focus first toggle
+          const first = modal.querySelector('[data-category-toggle]');
+          if (first) first.focus();
+        });
+      });
+      document.body.style.overflow = 'hidden';
+      // Load saved prefs into toggles
+      loadPrefsIntoToggles();
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('is-visible');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(function () { modal.setAttribute('hidden', ''); }, 300);
+      if (previousFocusBefore) previousFocusBefore.focus();
+    }
+
+    // ── Toggle management ────────────────────────────────────────────────────────
+    function loadPrefsIntoToggles() {
+      const saved = getConsent();
+      if (!saved) return;
+      ['analytics','marketing','personalization'].forEach(function (cat) {
+        const toggle = modal.querySelector('[data-category-toggle="' + cat + '"]');
+        if (toggle) {
+          const val = saved[cat] ? 'true' : 'false';
+          toggle.setAttribute('aria-checked', val);
+        }
+      });
+    }
+
+    function initToggles() {
+      if (!modal) return;
+      modal.querySelectorAll('[data-category-toggle]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const current = btn.getAttribute('aria-checked') === 'true';
+          btn.setAttribute('aria-checked', String(!current));
+        });
+      });
+    }
+
+    function getCurrentPrefs() {
+      const prefs = { analytics: false, marketing: false, personalization: false };
+      if (!modal) return prefs;
+      ['analytics','marketing','personalization'].forEach(function (cat) {
+        const toggle = modal.querySelector('[data-category-toggle="' + cat + '"]');
+        if (toggle) prefs[cat] = toggle.getAttribute('aria-checked') === 'true';
+      });
+      return prefs;
+    }
+
+    // ── Accept all ───────────────────────────────────────────────────────────────
+    function acceptAll() {
+      saveConsent({ analytics: true, marketing: true, personalization: true });
+      hideBanner();
+      closeModal();
+    }
+
+    // ── Save preferences ─────────────────────────────────────────────────────────
+    function savePreferences() {
+      const prefs = getCurrentPrefs();
+      saveConsent(prefs);
+      closeModal();
+      hideBanner();
+    }
+
+    // ── Events ───────────────────────────────────────────────────────────────────
+    if (acceptAllBtn)    acceptAllBtn.addEventListener('click', acceptAll);
+    if (manageBtn)       manageBtn.addEventListener('click', openModal);
+    if (modalClose)      modalClose.addEventListener('click', closeModal);
+    if (modalBackdrop)   modalBackdrop.addEventListener('click', closeModal);
+    if (saveBtn)         saveBtn.addEventListener('click', savePreferences);
+    if (modalAcceptAll)  modalAcceptAll.addEventListener('click', acceptAll);
+
+    // Re-open from footer/any link
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cookie-settings-open]')) {
+        e.preventDefault();
+        openModal();
+      }
+    });
+
+    // Escape key closes modal
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('is-visible')) {
+        closeModal();
+      }
+    });
+
+    // Focus trap in modal
+    if (modal) {
+      modal.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        const focusable = Array.from(modal.querySelectorAll(
+          'button:not([disabled]), [href], input, select, [tabindex]:not([tabindex="-1"])'
+        )).filter(function(el) { return !el.closest('[hidden]'); });
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      });
+    }
+
+    // ── Show banner for EU visitors ───────────────────────────────────────────────
+    // Listen to geo:detected from geo-detector.liquid
+    document.addEventListener('geo:detected', function (e) {
+      const isEU   = e.detail && e.detail.is_eu;
+      const saved  = getConsent();
+      if (!saved && isEU) {
+        setTimeout(showBanner, 800); // slight delay after page load
+      }
+    });
+
+    // ── Also check: if geo:detected fires before this script, use sessionStorage ──
+    (function () {
+      const cached = sessionStorage.getItem('metsie_geo_data');
+      if (!cached) return;
+      try {
+        const geo = JSON.parse(cached);
+        if (geo.is_eu && !getConsent()) {
+          setTimeout(showBanner, 800);
+        }
+      } catch(e) {}
+    })();
+
+    // ── Init ──────────────────────────────────────────────────────────────────────
+    initToggles();
+
+  })();
+</script>

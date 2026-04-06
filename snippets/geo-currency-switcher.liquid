@@ -1,0 +1,473 @@
+{%- comment -%}
+  ================================================================================
+  geo-currency-switcher.liquid — Metsie Theme
+  ================================================================================
+  Currency conversion widget using Shopify's native Localization API.
+
+  USAGE:
+    {% render 'geo-currency-switcher', context: 'header' %}
+    {% render 'geo-currency-switcher', context: 'footer' %}
+    {% render 'geo-currency-switcher', context: 'mobile' %}
+
+  PARAMETERS:
+    context (string) — 'header' | 'footer' | 'mobile'
+
+  DEPENDENCIES:
+    - Shopify Markets must be enabled in Settings > Markets
+    - geo-detector.liquid fires 'geo:detected' event used here
+    - Expects CSS variables from theme stylesheet:
+        --color-navy: #2D4A6A
+        --color-cream: #F5F0E8
+        --color-near-black: #1A1A1A
+        --font-heading: 'Cormorant Garamond', serif
+        --font-body: 'Inter', sans-serif
+
+  SUPPORTED CURRENCIES:
+    EUR, USD, GBP, CHF, SEK, DKK, NOK, PLN, CZK
+
+  GRACEFUL FALLBACK:
+    If Shopify Markets / localization is not enabled, the switcher renders
+    nothing. No broken markup.
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign context = context | default: 'header'
+
+  # Build the supported currency list with flag emojis and labels
+  # These are the currencies Metsie ships to
+  assign supported_currencies = 'EUR,USD,GBP,CHF,SEK,DKK,NOK,PLN,CZK' | split: ','
+
+  # Map currency codes to flag emojis (regional indicator symbols)
+  # Stored as a paired list for Liquid (no native hash/object)
+  assign currency_flags = 'EUR:🇪🇺,USD:🇺🇸,GBP:🇬🇧,CHF:🇨🇭,SEK:🇸🇪,DKK:🇩🇰,NOK:🇳🇴,PLN:🇵🇱,CZK:🇨🇿' | split: ','
+-%}
+
+{%- comment -%} Guard: Only render if localization object is available {%- endcomment -%}
+{%- if localization.available_currencies and localization.available_currencies.size > 1 -%}
+
+  {%- liquid
+    assign current_currency = localization.currency.iso_code
+  -%}
+
+  {%- comment -%} Build a lookup map for flags using assign trick {%- endcomment -%}
+  {%- capture flag_lookup -%}
+    {%- for pair in currency_flags -%}
+      {%- assign parts = pair | split: ':' -%}
+      {{- parts[0] -}}|{{- parts[1] -}}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- comment -%} Find current currency flag {%- endcomment -%}
+  {%- assign current_flag = '' -%}
+  {%- for pair in currency_flags -%}
+    {%- assign parts = pair | split: ':' -%}
+    {%- if parts[0] == current_currency -%}
+      {%- assign current_flag = parts[1] -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  <div
+    class="geo-currency-switcher geo-currency-switcher--{{ context }}"
+    data-currency-switcher
+    data-context="{{ context }}"
+    aria-label="[CURRENCY SELECTOR]"
+  >
+    {%- form 'localization', id: 'CurrencyForm-{{ context }}', class: 'geo-currency-form' -%}
+
+      {%- comment -%}
+        The hidden input name="currency_code" is submitted by Shopify's
+        localization form to switch the active currency.
+      {%- endcomment -%}
+      <input type="hidden" name="currency_code" value="{{ current_currency }}">
+
+      {%- comment -%} Custom styled dropdown trigger {%- endcomment -%}
+      <div class="geo-currency-dropdown" data-currency-dropdown>
+        <button
+          type="button"
+          class="geo-currency-trigger"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="CurrencyList-{{ context }}"
+          aria-label="[CURRENT CURRENCY]: {{ current_currency }}"
+          data-currency-trigger
+        >
+          <span class="geo-currency-flag" aria-hidden="true">{{ current_flag }}</span>
+          <span class="geo-currency-code">{{ current_currency }}</span>
+          <span class="geo-currency-chevron" aria-hidden="true">
+            {%- render 'svg-icons', icon: 'chevron-down', size: 12, class: 'geo-currency-chevron-icon' -%}
+          </span>
+        </button>
+
+        {%- comment -%} Dropdown listbox {%- endcomment -%}
+        <ul
+          id="CurrencyList-{{ context }}"
+          class="geo-currency-list"
+          role="listbox"
+          aria-label="[SELECT CURRENCY]"
+          data-currency-list
+        >
+          {%- for currency in localization.available_currencies -%}
+            {%- comment -%} Only show supported currencies {%- endcomment -%}
+            {%- if supported_currencies contains currency.iso_code -%}
+
+              {%- comment -%} Find flag for this currency {%- endcomment -%}
+              {%- assign item_flag = '' -%}
+              {%- for pair in currency_flags -%}
+                {%- assign parts = pair | split: ':' -%}
+                {%- if parts[0] == currency.iso_code -%}
+                  {%- assign item_flag = parts[1] -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              <li
+                class="geo-currency-option{% if currency.iso_code == current_currency %} is-active{% endif %}"
+                role="option"
+                aria-selected="{% if currency.iso_code == current_currency %}true{% else %}false{% endif %}"
+                data-currency-option="{{ currency.iso_code }}"
+              >
+                <button
+                  type="submit"
+                  name="currency_code"
+                  value="{{ currency.iso_code }}"
+                  class="geo-currency-option-btn"
+                  aria-label="{{ currency.iso_code }}{% if currency.iso_code == current_currency %} ([SELECTED]){% endif %}"
+                >
+                  <span class="geo-currency-option-flag" aria-hidden="true">{{ item_flag }}</span>
+                  <span class="geo-currency-option-code">{{ currency.iso_code }}</span>
+                  <span class="geo-currency-option-symbol">{{ currency.symbol }}</span>
+                </button>
+              </li>
+
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+    {%- endform -%}
+  </div>
+
+{%- elsif localization.available_currencies == blank or localization.available_currencies.size <= 1 -%}
+  {%- comment -%}
+    Graceful fallback: Markets not enabled or only one currency.
+    Render nothing — no broken UI.
+  {%- endcomment -%}
+{%- endif -%}
+
+
+{%- comment -%} ── Styles (scoped, injected once per page via schema) ── {%- endcomment -%}
+{%- unless geo_currency_styles_rendered -%}
+  {%- assign geo_currency_styles_rendered = true -%}
+  <style>
+    /* ── geo-currency-switcher ── */
+    :root {
+      --geo-navy: #2D4A6A;
+      --geo-cream: #F5F0E8;
+      --geo-near-black: #1A1A1A;
+      --geo-white: #FFFFFF;
+      --geo-font-heading: 'Cormorant Garamond', Georgia, serif;
+      --geo-font-body: 'Inter', -apple-system, sans-serif;
+      --geo-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .geo-currency-switcher {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--geo-font-body);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .geo-currency-form {
+      margin: 0;
+    }
+
+    /* Trigger button */
+    .geo-currency-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      background: transparent;
+      border: 1px solid rgba(45, 74, 106, 0.25);
+      border-radius: 2px;
+      cursor: pointer;
+      color: var(--geo-near-black);
+      font-family: var(--geo-font-body);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color var(--geo-transition), background var(--geo-transition);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .geo-currency-trigger:hover {
+      border-color: var(--geo-navy);
+      background: rgba(245, 240, 232, 0.5);
+    }
+
+    .geo-currency-trigger:focus-visible {
+      outline: 2px solid var(--geo-navy);
+      outline-offset: 2px;
+    }
+
+    .geo-currency-trigger[aria-expanded="true"] .geo-currency-chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .geo-currency-chevron-icon {
+      transition: transform var(--geo-transition);
+    }
+
+    .geo-currency-flag {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* Dropdown list */
+    .geo-currency-dropdown {
+      position: relative;
+    }
+
+    .geo-currency-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      min-width: 140px;
+      background: var(--geo-white);
+      border: 1px solid rgba(45, 74, 106, 0.15);
+      border-radius: 2px;
+      box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08), 0 2px 8px rgba(26, 26, 26, 0.04);
+      list-style: none;
+      margin: 0;
+      padding: 4px 0;
+      z-index: 500;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition:
+        opacity var(--geo-transition),
+        transform var(--geo-transition),
+        visibility var(--geo-transition);
+    }
+
+    .geo-currency-list.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .geo-currency-option-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: var(--geo-font-body);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--geo-near-black);
+      text-align: left;
+      transition: background var(--geo-transition);
+    }
+
+    .geo-currency-option-btn:hover {
+      background: var(--geo-cream);
+    }
+
+    .geo-currency-option.is-active .geo-currency-option-btn {
+      color: var(--geo-navy);
+      font-weight: 600;
+    }
+
+    .geo-currency-option-symbol {
+      margin-left: auto;
+      opacity: 0.5;
+      font-size: 10px;
+    }
+
+    /* Footer variant: lighter border */
+    .geo-currency-switcher--footer .geo-currency-trigger {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--geo-white);
+    }
+
+    .geo-currency-switcher--footer .geo-currency-trigger:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .geo-currency-switcher--footer .geo-currency-list {
+      bottom: calc(100% + 4px);
+      top: auto;
+    }
+
+    /* Mobile variant: full width */
+    .geo-currency-switcher--mobile {
+      width: 100%;
+    }
+
+    .geo-currency-switcher--mobile .geo-currency-dropdown {
+      width: 100%;
+    }
+
+    .geo-currency-switcher--mobile .geo-currency-trigger {
+      width: 100%;
+      justify-content: space-between;
+      padding: 10px 14px;
+    }
+
+    .geo-currency-switcher--mobile .geo-currency-list {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      border-top: 1px solid rgba(45, 74, 106, 0.1);
+      display: none;
+    }
+
+    .geo-currency-switcher--mobile .geo-currency-list.is-open {
+      display: block;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .geo-currency-list,
+      .geo-currency-chevron-icon {
+        transition: none;
+      }
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless geo_currency_js_rendered -%}
+  {%- assign geo_currency_js_rendered = true -%}
+  <script>
+    /**
+     * geo-currency-switcher.js
+     * Handles dropdown open/close, keyboard navigation, and form submission.
+     * Listens to 'geo:detected' event from geo-detector.liquid to auto-suggest currency.
+     */
+    (function () {
+      'use strict';
+
+      function initCurrencySwitcher(wrapper) {
+        const trigger = wrapper.querySelector('[data-currency-trigger]');
+        const list    = wrapper.querySelector('[data-currency-list]');
+        const form    = wrapper.querySelector('.geo-currency-form');
+        if (!trigger || !list) return;
+
+        // ── Open / Close ──────────────────────────────────────────────────────
+        function open() {
+          trigger.setAttribute('aria-expanded', 'true');
+          list.classList.add('is-open');
+          // Focus first active item or first item
+          const active = list.querySelector('.is-active button') || list.querySelector('button');
+          if (active) active.focus();
+        }
+
+        function close() {
+          trigger.setAttribute('aria-expanded', 'false');
+          list.classList.remove('is-open');
+          trigger.focus();
+        }
+
+        function toggle() {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          isOpen ? close() : open();
+        }
+
+        trigger.addEventListener('click', toggle);
+
+        // ── Keyboard navigation ───────────────────────────────────────────────
+        list.addEventListener('keydown', function (e) {
+          const options = Array.from(list.querySelectorAll('.geo-currency-option-btn'));
+          const current = document.activeElement;
+          const idx     = options.indexOf(current);
+
+          switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault();
+              if (idx < options.length - 1) options[idx + 1].focus();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              if (idx > 0) options[idx - 1].focus();
+              else close();
+              break;
+            case 'Escape':
+              e.preventDefault();
+              close();
+              break;
+            case 'Tab':
+              close();
+              break;
+          }
+        });
+
+        // ── Close on outside click ────────────────────────────────────────────
+        document.addEventListener('click', function (e) {
+          if (!wrapper.contains(e.target)) close();
+        });
+
+        // ── Submit on option click ────────────────────────────────────────────
+        list.addEventListener('click', function (e) {
+          const btn = e.target.closest('.geo-currency-option-btn');
+          if (!btn) return;
+          // The form submit is handled natively via type="submit" on each option button.
+          // Close dropdown immediately for UX.
+          close();
+        });
+      }
+
+      // ── Init all switchers on the page ──────────────────────────────────────
+      function init() {
+        document.querySelectorAll('[data-currency-switcher]').forEach(initCurrencySwitcher);
+      }
+
+      // ── Listen for geo:detected to match currency ────────────────────────────
+      // When geo-detector fires, we can auto-select the matching currency.
+      document.addEventListener('geo:detected', function (e) {
+        const country  = e.detail && e.detail.country_code;
+        if (!country) return;
+
+        // Country → recommended currency map
+        const currencyMap = {
+          // Eurozone
+          AT: 'EUR', BE: 'EUR', CY: 'EUR', EE: 'EUR', FI: 'EUR',
+          FR: 'EUR', DE: 'EUR', GR: 'EUR', IE: 'EUR', IT: 'EUR',
+          LV: 'EUR', LT: 'EUR', LU: 'EUR', MT: 'EUR', NL: 'EUR',
+          PT: 'EUR', SK: 'EUR', SI: 'EUR', ES: 'EUR',
+          // Others
+          US: 'USD', GB: 'GBP', CH: 'CHF',
+          SE: 'SEK', DK: 'DKK', NO: 'NOK',
+          PL: 'PLN', CZ: 'CZK'
+        };
+
+        const suggested = currencyMap[country];
+        if (!suggested) return;
+
+        // Dispatch for the suggestion popup in geo-detector.liquid to consume
+        document.dispatchEvent(new CustomEvent('geo:currency-suggested', {
+          detail: { currency: suggested }
+        }));
+      });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+{%- endunless -%}

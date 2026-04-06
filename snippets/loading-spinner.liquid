@@ -1,0 +1,198 @@
+{%- comment -%}
+  ================================================================================
+  loading-spinner.liquid — Metsie Theme
+  ================================================================================
+  Lightweight CSS-only loading spinner.
+
+  USAGE:
+    Default (medium, navy):
+      {% render 'loading-spinner' %}
+
+    Small, inside a button:
+      {% render 'loading-spinner', size: 'sm', color: 'white' %}
+
+    Large, full overlay:
+      {% render 'loading-spinner', size: 'lg', overlay: true %}
+
+    Named (for JS targeting):
+      {% render 'loading-spinner', id: 'cart-spinner' %}
+
+  PARAMETERS:
+    size     (string)  — 'xs' | 'sm' | 'md' | 'lg'. Default: 'md'
+    color    (string)  — 'navy' | 'white' | 'cream' | 'black'. Default: 'navy'
+    overlay  (boolean) — wraps spinner in full-screen semi-transparent overlay
+    id       (string)  — adds id to the root element for JS targeting
+    class    (string)  — additional CSS classes
+
+  USAGE NOTES:
+    - Show/hide via JS: element.hidden = false / element.hidden = true
+    - Or via CSS class: .loading-spinner.is-active / .is-hidden
+    - aria-live="polite" announces loading state to screen readers
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign spinner_size    = size    | default: 'md'
+  assign spinner_color   = color   | default: 'navy'
+  assign spinner_overlay = overlay | default: false
+  assign spinner_id      = id      | default: ''
+  assign spinner_class   = class   | default: ''
+-%}
+
+{%- if spinner_overlay -%}
+  <div
+    class="loading-spinner-overlay"
+    {% if spinner_id != '' %}id="{{ spinner_id }}-overlay"{% endif %}
+    aria-hidden="true"
+    role="presentation"
+  >
+{%- endif -%}
+
+<div
+  class="loading-spinner loading-spinner--{{ spinner_size }} loading-spinner--{{ spinner_color }}{% if spinner_class != '' %} {{ spinner_class }}{% endif %}"
+  {% if spinner_id != '' %}id="{{ spinner_id }}"{% endif %}
+  role="status"
+  aria-label="[LOADING]"
+  aria-live="polite"
+>
+  <span class="loading-spinner__ring" aria-hidden="true"></span>
+  <span class="visually-hidden">[LOADING...]</span>
+</div>
+
+{%- if spinner_overlay -%}
+  </div>
+{%- endif -%}
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless loading_spinner_styles_rendered -%}
+  {%- assign loading_spinner_styles_rendered = true -%}
+  <style>
+    /* ═══════════════════════════════════════════════════
+       Loading Spinner — Metsie Theme
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Visually hidden helper (if not already in base stylesheet) ── */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── Spinner base ── */
+    .loading-spinner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .loading-spinner__ring {
+      display: block;
+      border-radius: 50%;
+      border-style: solid;
+      animation: metsie-spin 700ms linear infinite;
+    }
+
+    /* ── Sizes ── */
+    .loading-spinner--xs .loading-spinner__ring {
+      width: 12px;
+      height: 12px;
+      border-width: 1.5px;
+    }
+
+    .loading-spinner--sm .loading-spinner__ring {
+      width: 18px;
+      height: 18px;
+      border-width: 2px;
+    }
+
+    .loading-spinner--md .loading-spinner__ring {
+      width: 28px;
+      height: 28px;
+      border-width: 2.5px;
+    }
+
+    .loading-spinner--lg .loading-spinner__ring {
+      width: 44px;
+      height: 44px;
+      border-width: 3px;
+    }
+
+    /* ── Color variants ── */
+    /* Navy (default) */
+    .loading-spinner--navy .loading-spinner__ring {
+      border-color: rgba(45, 74, 106, 0.15);
+      border-top-color: #2D4A6A;
+    }
+
+    /* White (for dark/navy backgrounds) */
+    .loading-spinner--white .loading-spinner__ring {
+      border-color: rgba(255, 255, 255, 0.2);
+      border-top-color: #FFFFFF;
+    }
+
+    /* Cream */
+    .loading-spinner--cream .loading-spinner__ring {
+      border-color: rgba(245, 240, 232, 0.3);
+      border-top-color: #F5F0E8;
+    }
+
+    /* Black */
+    .loading-spinner--black .loading-spinner__ring {
+      border-color: rgba(26, 26, 26, 0.1);
+      border-top-color: #1A1A1A;
+    }
+
+    /* ── Full-screen overlay ── */
+    .loading-spinner-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(245, 240, 232, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* ── Animation ── */
+    @keyframes metsie-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── States ── */
+    /* Hide with hidden attribute or JS class */
+    .loading-spinner[hidden],
+    .loading-spinner-overlay[hidden],
+    .loading-spinner.is-hidden,
+    .loading-spinner-overlay.is-hidden {
+      display: none;
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .loading-spinner__ring {
+        animation: none;
+        /* Show as static partial ring */
+        border-color: transparent;
+        border-top-color: currentColor;
+        opacity: 0.5;
+      }
+    }
+
+    /* ── Inline button usage helpers ── */
+    /* When inside a button, align with button text */
+    .btn .loading-spinner,
+    button .loading-spinner {
+      margin-right: 6px;
+    }
+  </style>
+{%- endunless -%}

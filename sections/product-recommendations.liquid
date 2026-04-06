@@ -1,0 +1,209 @@
+<section
+  class="product-recommendations"
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-intent="{{ section.settings.intent }}"
+  data-limit="{{ section.settings.products_to_show }}"
+>
+  <div class="product-recommendations__inner" id="recommendations-container-{{ section.id }}">
+    {%- comment -%}
+      Content is loaded asynchronously via Product Recommendations API.
+      See JavaScript below for fetch logic.
+    {%- endcomment -%}
+
+    {%- comment -%} Initial placeholder (shown before JS loads) {%- endcomment -%}
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <header class="section-header">
+        <h2 class="section-heading">{{ section.settings.heading | default: 'YOU MAY ALSO LIKE' }}</h2>
+      </header>
+      <ul class="recommendations-grid" role="list">
+        {% for rec_product in recommendations.products limit: section.settings.products_to_show %}
+          <li class="product-card-wrapper">
+            <article class="product-card">
+              <a href="{{ rec_product.url }}" class="product-card__image-link">
+                <div class="product-card__image-container">
+                  {% if rec_product.featured_image %}
+                    <img
+                      src="{{ rec_product.featured_image | img_url: '500x' }}"
+                      alt="{{ rec_product.featured_image.alt | default: rec_product.title | escape }}"
+                      width="500"
+                      height="600"
+                      loading="lazy"
+                      class="product-card__image"
+                    >
+                    {% if rec_product.images.size > 1 %}
+                      <img
+                        src="{{ rec_product.images[1] | img_url: '500x' }}"
+                        alt="{{ rec_product.title | escape }}"
+                        width="500"
+                        height="600"
+                        loading="lazy"
+                        class="product-card__secondary-image"
+                      >
+                    {% endif %}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+                  {% endif %}
+                </div>
+              </a>
+              <div class="product-card__info">
+                <div class="product-card__meta">
+                  <span class="product-card__type">{{ rec_product.type | default: '' | upcase }}</span>
+                </div>
+                <h3 class="product-card__title">
+                  <a href="{{ rec_product.url }}">{{ rec_product.title }}</a>
+                </h3>
+                <p class="product-card__price">{{ rec_product.price | money }}</p>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .product-recommendations {
+    padding: 80px 0;
+    background-color: #F5F0E8;
+    border-top: 1px solid #E8E8E4;
+  }
+
+  .product-recommendations__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .product-recommendations .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .recommendations-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+
+  @media (max-width: 1024px) {
+    .product-recommendations__inner { padding: 0 24px; }
+    .recommendations-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .product-recommendations { padding: 56px 0; }
+    .product-recommendations__inner { padding: 0 16px; }
+    .recommendations-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+</style>
+
+<script>
+  (function() {
+    const section = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!section) return;
+
+    const productId = section.dataset.productId;
+    const intent = section.dataset.intent || 'related';
+    const limit = section.dataset.limit || 4;
+    const container = document.getElementById('recommendations-container-{{ section.id }}');
+    const heading = {{ section.settings.heading | default: 'YOU MAY ALSO LIKE' | json }};
+
+    fetch(`/recommendations/products.json?product_id=${productId}&limit=${limit}&intent=${intent}`)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.products || data.products.length === 0) return;
+
+        let html = `
+          <header class="section-header">
+            <h2 class="section-heading">${heading}</h2>
+          </header>
+          <ul class="recommendations-grid" role="list">
+        `;
+
+        data.products.forEach(p => {
+          const imgSrc = p.featured_image
+            ? p.featured_image.replace(/(\.\w+)$/, '_500x$1')
+            : '';
+          html += `
+            <li class="product-card-wrapper">
+              <article class="product-card">
+                <a href="${p.url}" class="product-card__image-link">
+                  <div class="product-card__image-container">
+                    ${imgSrc ? `<img src="${imgSrc}" alt="${p.title}" width="500" height="600" loading="lazy" class="product-card__image">` : ''}
+                  </div>
+                </a>
+                <div class="product-card__info">
+                  <div class="product-card__meta">
+                    <span class="product-card__type">${(p.product_type || '').toUpperCase()}</span>
+                  </div>
+                  <h3 class="product-card__title"><a href="${p.url}">${p.title}</a></h3>
+                  <p class="product-card__price">${formatMoney(p.price)}</p>
+                </div>
+              </article>
+            </li>
+          `;
+        });
+
+        html += '</ul>';
+        container.innerHTML = html;
+      })
+      .catch(err => console.log('Recommendations unavailable:', err));
+
+    function formatMoney(cents) {
+      return new Intl.NumberFormat('{{ request.locale.iso_code }}', {
+        style: 'currency',
+        currency: '{{ cart.currency.iso_code }}'
+      }).format(cents / 100);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "tag": "section",
+  "class": "product-recommendations-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "YOU MAY ALSO LIKE"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "options": [
+        { "value": "related", "label": "Related" },
+        { "value": "complementary", "label": "Complementary" }
+      ],
+      "default": "related"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Recommendations",
+      "settings": {
+        "heading": "YOU MAY ALSO LIKE",
+        "products_to_show": 4,
+        "intent": "related"
+      }
+    }
+  ]
+}
+{% endschema %}

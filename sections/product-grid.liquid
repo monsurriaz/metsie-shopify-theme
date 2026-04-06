@@ -1,0 +1,268 @@
+{% assign grid_collection = collections[section.settings.collection] %}
+
+<section class="product-grid-section" data-section-id="{{ section.id }}">
+  <div class="product-grid-section__inner">
+
+    {% if section.settings.section_heading != blank %}
+      <header class="section-header section-header--split">
+        <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+        {% if section.settings.show_explore_link %}
+          <a href="{{ section.settings.explore_link | default: '/collections/all' }}" class="view-all-link">
+            {{ section.settings.explore_text | default: 'EXPLORE ALL' | upcase }}
+            <span aria-hidden="true">→</span>
+          </a>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    {% if grid_collection != blank and grid_collection.products.size > 0 %}
+      <ul class="product-grid" role="list">
+        {% assign count = section.settings.products_to_show | default: 6 %}
+        {% for product in grid_collection.products limit: count %}
+          <li class="product-card-wrapper">
+            <article class="product-card">
+              <a href="{{ product.url }}" class="product-card__image-link">
+                <div class="product-card__image-container">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | img_url: '600x' }}"
+                      srcset="{{ product.featured_image | img_url: '400x' }} 400w, {{ product.featured_image | img_url: '600x' }} 600w, {{ product.featured_image | img_url: '900x' }} 900w"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                      width="600"
+                      height="720"
+                      loading="lazy"
+                      class="product-card__image"
+                    >
+                    {% if product.images.size > 1 %}
+                      <img
+                        src="{{ product.images[1] | img_url: '600x' }}"
+                        alt="{{ product.images[1].alt | default: product.title | escape }}"
+                        width="600"
+                        height="720"
+                        loading="lazy"
+                        class="product-card__secondary-image"
+                      >
+                    {% endif %}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+                  {% endif %}
+                </div>
+              </a>
+              <div class="product-card__info">
+                <div class="product-card__meta">
+                  <span class="product-card__type">
+                    {{ product.type | default: '[PRODUCT TYPE]' | upcase }}
+                  </span>
+                </div>
+                <h3 class="product-card__title">
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                </h3>
+                <p class="product-card__price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="product-card__price--sale">{{ product.price | money }}</span>
+                    <span class="product-card__price--compare">{{ product.compare_at_price | money }}</span>
+                  {% else %}
+                    {{ product.price | money }}
+                  {% endif %}
+                </p>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {%- comment -%} Placeholder grid when no collection assigned {%- endcomment -%}
+      <ul class="product-grid" role="list">
+        {% for i in (1..6) %}
+          <li class="product-card-wrapper">
+            <article class="product-card product-card--placeholder">
+              <div class="product-card__image-link">
+                <div class="product-card__image-container">
+                  {{ 'product-' | append: i | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+                </div>
+              </div>
+              <div class="product-card__info">
+                <div class="product-card__meta">
+                  <span class="product-card__type">[GEOMETRIC — CREAM]</span>
+                </div>
+                <h3 class="product-card__title"><a href="#">[PRODUCT NAME HERE]</a></h3>
+                <p class="product-card__price">[€145.00]</p>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if section.settings.show_explore_link and section.settings.section_heading == blank %}
+      <div class="product-grid-section__cta">
+        <a href="{{ section.settings.explore_link | default: '/collections/all' }}" class="btn btn--outline">
+          {{ section.settings.explore_text | default: 'EXPLORE ALL' | upcase }}
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  .product-grid-section {
+    padding: 96px 0;
+    background-color: #FFFFFF;
+  }
+
+  .product-grid-section__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .section-header--split {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 24px;
+  }
+
+  .product-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .product-grid-section__cta {
+    text-align: center;
+    margin-top: 56px;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 40px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn--outline {
+    background-color: transparent;
+    color: #2D4A6A;
+    border: 1px solid #2D4A6A;
+  }
+
+  .btn--outline:hover {
+    background-color: #2D4A6A;
+    color: #F5F0E8;
+  }
+
+  /* Reuse product-card styles from featured-collection */
+  .product-card__price--sale {
+    color: #2D4A6A;
+  }
+
+  .product-card__price--compare {
+    text-decoration: line-through;
+    color: #999;
+    margin-left: 6px;
+  }
+
+  @media (max-width: 1024px) {
+    .product-grid-section {
+      padding: 72px 0;
+    }
+    .product-grid-section__inner {
+      padding: 0 24px;
+    }
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .section-header--split {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-grid-section {
+      padding: 56px 0;
+    }
+    .product-grid-section__inner {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "tag": "section",
+  "class": "product-grid-outer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section heading (optional)",
+      "placeholder": "[EXPLORE ALL]"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_explore_link",
+      "label": "Show Explore All link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "explore_text",
+      "label": "Link text",
+      "default": "EXPLORE ALL"
+    },
+    {
+      "type": "url",
+      "id": "explore_link",
+      "label": "Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid",
+      "settings": {
+        "products_to_show": 6,
+        "show_explore_link": true,
+        "explore_text": "EXPLORE ALL"
+      }
+    }
+  ]
+}
+{% endschema %}

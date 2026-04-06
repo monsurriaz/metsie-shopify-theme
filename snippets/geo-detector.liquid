@@ -1,0 +1,567 @@
+{%- comment -%}
+  ================================================================================
+  geo-detector.liquid — Metsie Theme
+  ================================================================================
+  GEO/IP location detection + visitor suggestion popup.
+
+  USAGE:
+    Place once in theme.liquid, just before </body>:
+      {% render 'geo-detector' %}
+
+  LOGIC:
+    1. On first visit, calls ipapi.co (free, no key required, 1000 req/day)
+       to detect country, currency, and language.
+    2. Stores detected country in sessionStorage('metsie_geo_country').
+    3. Fires CustomEvent 'geo:detected' with full detail payload.
+    4. If Shopify Markets currency doesn't match detected region:
+       → Shows elegant suggestion modal.
+    5. User choice (accept/dismiss) stored in localStorage('metsie_geo_choice').
+    6. On subsequent visits within the same session, skips API call.
+    7. If ipapi.co fails, Shopify's own localization data is used as fallback.
+
+  EVENTS FIRED:
+    'geo:detected'      — always, payload: { country_code, currency, language }
+    'geo:popup:open'    — when modal shows
+    'geo:popup:close'   — when modal is dismissed/accepted
+
+  DEPENDENCIES:
+    - geo-currency-switcher.liquid (listens to geo:detected)
+    - gdpr-cookie-banner.liquid (listens to geo:detected to check EU status)
+  ================================================================================
+{%- endcomment -%}
+
+{%- comment -%} Render the modal HTML shell — hidden by default {%- endcomment -%}
+<div
+  id="GeoDetectorModal"
+  class="geo-detector-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="GeoDetectorTitle"
+  aria-hidden="true"
+  data-geo-modal
+>
+  <div class="geo-detector-modal__backdrop" data-geo-modal-backdrop aria-hidden="true"></div>
+
+  <div class="geo-detector-modal__panel" role="document">
+
+    {%- comment -%} Close button — top right {%- endcomment -%}
+    <button
+      type="button"
+      class="geo-detector-modal__close"
+      aria-label="[CLOSE]"
+      data-geo-modal-close
+    >
+      {%- render 'svg-icons', icon: 'close', size: 16 -%}
+    </button>
+
+    {%- comment -%} Shipping/globe icon — decorative {%- endcomment -%}
+    <div class="geo-detector-modal__icon" aria-hidden="true">
+      {%- render 'svg-icons', icon: 'truck', size: 24 -%}
+    </div>
+
+    {%- comment -%} Heading — filled by JS {%- endcomment -%}
+    <h2 id="GeoDetectorTitle" class="geo-detector-modal__title" data-geo-modal-title>
+      {%- comment -%} JS populates: [WE NOTICED YOU'RE VISITING FROM {COUNTRY}.
+      WOULD YOU LIKE TO SHOP IN {CURRENCY}?] {%- endcomment -%}
+    </h2>
+
+    <p class="geo-detector-modal__subtitle" data-geo-modal-subtitle>
+      {%- comment -%} JS populates: "Prices shown in {currency} / shipped from Europe." {%- endcomment -%}
+    </p>
+
+    <div class="geo-detector-modal__actions">
+      <button
+        type="button"
+        class="geo-detector-modal__btn geo-detector-modal__btn--primary"
+        data-geo-modal-accept
+      >
+        {%- comment -%} JS populates: [YES, SWITCH] {%- endcomment -%}
+      </button>
+
+      <button
+        type="button"
+        class="geo-detector-modal__btn geo-detector-modal__btn--secondary"
+        data-geo-modal-dismiss
+      >
+        [NO, KEEP CURRENT]
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+<style>
+  /* ── Geo Detector Modal ── */
+  .geo-detector-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .geo-detector-modal.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Backdrop */
+  .geo-detector-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* Panel */
+  .geo-detector-modal__panel {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    border-top: 3px solid #2D4A6A;
+    padding: 36px 40px 32px;
+    max-width: 480px;
+    width: calc(100% - 32px);
+    margin: 0 16px 0;
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 -8px 40px rgba(26, 26, 26, 0.12);
+    transform: translateY(20px);
+    transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+  }
+
+  .geo-detector-modal.is-visible .geo-detector-modal__panel {
+    transform: translateY(0);
+  }
+
+  /* Desktop: centered card */
+  @media (min-width: 768px) {
+    .geo-detector-modal {
+      align-items: center;
+    }
+    .geo-detector-modal__panel {
+      border-top: none;
+      border-top: 3px solid #2D4A6A;
+      border-radius: 2px;
+      margin: 0;
+      padding: 44px 52px 40px;
+      transform: translateY(16px) scale(0.97);
+    }
+    .geo-detector-modal.is-visible .geo-detector-modal__panel {
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Close button */
+  .geo-detector-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #2D4A6A;
+    opacity: 0.5;
+    transition: opacity 200ms ease;
+    line-height: 0;
+  }
+
+  .geo-detector-modal__close:hover { opacity: 1; }
+
+  .geo-detector-modal__close:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 2px;
+    border-radius: 2px;
+    opacity: 1;
+  }
+
+  /* Icon */
+  .geo-detector-modal__icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: #2D4A6A;
+    opacity: 0.6;
+  }
+
+  /* Title */
+  .geo-detector-modal__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: #1A1A1A;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+
+  .geo-detector-modal__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: #1A1A1A;
+    opacity: 0.55;
+    margin: 0 0 28px;
+    text-transform: uppercase;
+  }
+
+  /* Actions */
+  .geo-detector-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  @media (min-width: 400px) {
+    .geo-detector-modal__actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .geo-detector-modal__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+    white-space: nowrap;
+  }
+
+  .geo-detector-modal__btn--primary {
+    background: #2D4A6A;
+    color: #FFFFFF;
+    border: 1px solid #2D4A6A;
+  }
+
+  .geo-detector-modal__btn--primary:hover {
+    background: #1A3550;
+    border-color: #1A3550;
+  }
+
+  .geo-detector-modal__btn--primary:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 3px;
+  }
+
+  .geo-detector-modal__btn--secondary {
+    background: transparent;
+    color: #2D4A6A;
+    border: 1px solid rgba(45, 74, 106, 0.3);
+  }
+
+  .geo-detector-modal__btn--secondary:hover {
+    border-color: #2D4A6A;
+    background: rgba(245, 240, 232, 0.5);
+  }
+
+  .geo-detector-modal__btn--secondary:focus-visible {
+    outline: 2px solid #2D4A6A;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .geo-detector-modal,
+    .geo-detector-modal__panel {
+      transition: none;
+    }
+  }
+</style>
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+<script>
+  /**
+   * geo-detector.js — Metsie Theme
+   *
+   * Detection flow:
+   *   1. Check localStorage for saved choice → if found, skip everything
+   *   2. Check sessionStorage for cached geo data → skip API call
+   *   3. Call ipapi.co for fresh geo data
+   *   4. Store in sessionStorage, fire 'geo:detected'
+   *   5. If currency mismatch → show modal
+   *
+   * Country → currency map mirrors geo-currency-switcher.liquid.
+   */
+  (function () {
+    'use strict';
+
+    // ── Constants ────────────────────────────────────────────────────────────────
+    const CHOICE_KEY   = 'metsie_geo_choice';       // localStorage
+    const SESSION_KEY  = 'metsie_geo_data';          // sessionStorage
+    const API_URL      = 'https://ipapi.co/json/';
+
+    // Supported currencies from the switcher
+    const SUPPORTED_CURRENCIES = ['EUR','USD','GBP','CHF','SEK','DKK','NOK','PLN','CZK'];
+
+    // Country code → currency code
+    const CURRENCY_MAP = {
+      // Eurozone
+      AT:'EUR',BE:'EUR',CY:'EUR',EE:'EUR',FI:'EUR',
+      FR:'EUR',DE:'EUR',GR:'EUR',IE:'EUR',IT:'EUR',
+      LV:'EUR',LT:'EUR',LU:'EUR',MT:'EUR',NL:'EUR',
+      PT:'EUR',SK:'EUR',SI:'EUR',ES:'EUR',
+      // Non-euro EU + neighbours
+      US:'USD',GB:'GBP',CH:'CHF',
+      SE:'SEK',DK:'DKK',NO:'NOK',
+      PL:'PLN',CZ:'CZK'
+    };
+
+    // EU country codes (for GDPR triggering in gdpr-cookie-banner.liquid)
+    const EU_COUNTRIES = [
+      'AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI',
+      'FR','GR','HR','HU','IE','IT','LT','LU','LV','MT',
+      'NL','PL','PT','RO','SE','SI','SK'
+    ];
+
+    // Country code → display name
+    const COUNTRY_NAMES = {
+      AT:'Austria',BE:'Belgium',CH:'Switzerland',CZ:'Czech Republic',
+      DE:'Germany',DK:'Denmark',ES:'Spain',FI:'Finland',FR:'France',
+      GB:'United Kingdom',GR:'Greece',IE:'Ireland',IT:'Italy',
+      LU:'Luxembourg',NL:'Netherlands',NO:'Norway',PL:'Poland',
+      PT:'Portugal',SE:'Sweden',SI:'Slovenia',SK:'Slovakia',
+      US:'United States'
+    };
+
+    // Currency → symbol map for display
+    const CURRENCY_SYMBOLS = {
+      EUR:'€',USD:'$',GBP:'£',CHF:'Fr.',
+      SEK:'kr',DKK:'kr',NOK:'kr',PLN:'zł',CZK:'Kč'
+    };
+
+    // ── Modal elements ────────────────────────────────────────────────────────────
+    const modal    = document.getElementById('GeoDetectorModal');
+    const titleEl  = modal && modal.querySelector('[data-geo-modal-title]');
+    const subtitleEl = modal && modal.querySelector('[data-geo-modal-subtitle]');
+    const acceptBtn  = modal && modal.querySelector('[data-geo-modal-accept]');
+    const dismissBtn = modal && modal.querySelector('[data-geo-modal-dismiss]');
+    const closeBtn   = modal && modal.querySelector('[data-geo-modal-close]');
+    const backdrop   = modal && modal.querySelector('[data-geo-modal-backdrop]');
+
+    let previousFocus = null;
+
+    // ── Modal control ─────────────────────────────────────────────────────────────
+    function openModal(geoData, suggestedCurrency) {
+      if (!modal) return;
+
+      const countryName = COUNTRY_NAMES[geoData.country_code] || geoData.country_code;
+      const symbol      = CURRENCY_SYMBOLS[suggestedCurrency] || suggestedCurrency;
+
+      // Populate text
+      titleEl.textContent = '[WE NOTICED YOU\'RE VISITING FROM ' + countryName.toUpperCase() +
+        '. WOULD YOU LIKE TO SHOP IN ' + suggestedCurrency + '?]';
+      subtitleEl.textContent = '[PRICES SHOWN IN ' + suggestedCurrency + ' · SHIPPED FROM EUROPE]';
+      acceptBtn.textContent  = '[YES, SWITCH TO ' + suggestedCurrency + ']';
+
+      // Trap focus
+      previousFocus = document.activeElement;
+      modal.setAttribute('aria-hidden', 'false');
+      modal.classList.add('is-visible');
+      acceptBtn.focus();
+
+      document.dispatchEvent(new CustomEvent('geo:popup:open', { detail: geoData }));
+
+      // Lock body scroll
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('is-visible');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (previousFocus) previousFocus.focus();
+      document.dispatchEvent(new CustomEvent('geo:popup:close'));
+    }
+
+    // ── Modal events ──────────────────────────────────────────────────────────────
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', function () {
+        const cached = sessionStorage.getItem(SESSION_KEY);
+        const geoData = cached ? JSON.parse(cached) : null;
+        if (geoData && geoData.suggested_currency) {
+          // Submit the currency form for the header switcher
+          const currencyForm = document.getElementById('CurrencyForm-header');
+          if (currencyForm) {
+            const input = currencyForm.querySelector('input[name="currency_code"]');
+            if (input) {
+              input.value = geoData.suggested_currency;
+              currencyForm.submit();
+              return;
+            }
+          }
+          // Fallback: reload with currency param
+          const url = new URL(window.location.href);
+          url.searchParams.set('currency', geoData.suggested_currency);
+          window.location.href = url.toString();
+        }
+        localStorage.setItem(CHOICE_KEY, JSON.stringify({ accepted: true, ts: Date.now() }));
+        closeModal();
+      });
+    }
+
+    function dismiss() {
+      localStorage.setItem(CHOICE_KEY, JSON.stringify({ accepted: false, ts: Date.now() }));
+      closeModal();
+    }
+
+    if (dismissBtn) dismissBtn.addEventListener('click', dismiss);
+    if (closeBtn)   closeBtn.addEventListener('click', dismiss);
+    if (backdrop)   backdrop.addEventListener('click', dismiss);
+
+    // Keyboard: Escape closes
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('is-visible')) {
+        dismiss();
+      }
+    });
+
+    // Focus trap inside modal
+    if (modal) {
+      modal.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        const focusable = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+    }
+
+    // ── Main detection flow ───────────────────────────────────────────────────────
+    function runDetection() {
+      // 1. Skip if user already made a choice (expires after 30 days)
+      const savedChoice = localStorage.getItem(CHOICE_KEY);
+      if (savedChoice) {
+        try {
+          const parsed = JSON.parse(savedChoice);
+          const AGE    = 30 * 24 * 60 * 60 * 1000; // 30 days
+          if (Date.now() - parsed.ts < AGE) {
+            // Still fire geo:detected with session data if available
+            const cached = sessionStorage.getItem(SESSION_KEY);
+            if (cached) fireDetected(JSON.parse(cached));
+            return;
+          }
+        } catch(e) {}
+      }
+
+      // 2. Use cached session data if available (avoid repeat API calls)
+      const cached = sessionStorage.getItem(SESSION_KEY);
+      if (cached) {
+        try {
+          const geoData = JSON.parse(cached);
+          fireDetected(geoData);
+          maybeShowModal(geoData);
+          return;
+        } catch(e) {}
+      }
+
+      // 3. Fetch from ipapi.co — free tier, no API key needed
+      fetch(API_URL, { signal: AbortSignal.timeout(5000) })
+        .then(function (res) {
+          if (!res.ok) throw new Error('ipapi error ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          const country         = data.country_code || '';
+          const suggestedCurrency = CURRENCY_MAP[country] || 'EUR';
+          const isEU            = EU_COUNTRIES.includes(country);
+          const geoData = {
+            country_code:      country,
+            country_name:      data.country_name || '',
+            currency:          data.currency || suggestedCurrency,
+            suggested_currency: SUPPORTED_CURRENCIES.includes(suggestedCurrency)
+                                  ? suggestedCurrency
+                                  : 'EUR',
+            language:          data.languages ? data.languages.split(',')[0].slice(0,2) : 'en',
+            is_eu:             isEU,
+            ip:                data.ip || '',
+            timezone:          data.timezone || ''
+          };
+
+          // Cache in sessionStorage
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify(geoData));
+
+          fireDetected(geoData);
+          maybeShowModal(geoData);
+        })
+        .catch(function () {
+          // ── Fallback: use Shopify localization data embedded in page ──
+          // Shopify injects window.Shopify with country info
+          const shopifyCountry = (window.Shopify && window.Shopify.country)
+            ? window.Shopify.country
+            : null;
+
+          if (shopifyCountry) {
+            const suggestedCurrency = CURRENCY_MAP[shopifyCountry] || 'EUR';
+            const fallbackData = {
+              country_code:       shopifyCountry,
+              country_name:       COUNTRY_NAMES[shopifyCountry] || shopifyCountry,
+              currency:           suggestedCurrency,
+              suggested_currency: suggestedCurrency,
+              language:           'en',
+              is_eu:              EU_COUNTRIES.includes(shopifyCountry),
+              ip:                 '',
+              timezone:           '',
+              source:             'shopify_fallback'
+            };
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(fallbackData));
+            fireDetected(fallbackData);
+            maybeShowModal(fallbackData);
+          }
+        });
+    }
+
+    function fireDetected(geoData) {
+      document.dispatchEvent(new CustomEvent('geo:detected', {
+        bubbles:  true,
+        detail:   geoData
+      }));
+    }
+
+    function maybeShowModal(geoData) {
+      if (!geoData.suggested_currency) return;
+
+      // Read Shopify's current active currency from meta tag or window.Shopify
+      const activeCurrency =
+        (window.Shopify && window.Shopify.currency && window.Shopify.currency.active) ||
+        document.documentElement.lang || 'EUR';
+
+      // Only show modal if currency doesn't match
+      if (activeCurrency !== geoData.suggested_currency) {
+        // Small delay so page is ready + not jarring
+        setTimeout(function () { openModal(geoData, geoData.suggested_currency); }, 1200);
+      }
+    }
+
+    // ── Run on DOMContentLoaded ───────────────────────────────────────────────────
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', runDetection);
+    } else {
+      runDetection();
+    }
+
+  })();
+</script>

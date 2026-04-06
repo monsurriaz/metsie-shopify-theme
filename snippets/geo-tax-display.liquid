@@ -1,0 +1,175 @@
+{%- comment -%}
+  ================================================================================
+  geo-tax-display.liquid — Metsie Theme
+  ================================================================================
+  Tax display helper. Shows "[INCL. VAT]" for EU, "[EXCL. TAX]" for US, etc.
+
+  USAGE:
+    On product price, cart line item, order summary:
+      {% render 'geo-tax-display' %}
+
+    With explicit region override (e.g. for testing):
+      {% render 'geo-tax-display', force_region: 'EU' %}
+
+    Inline with price (wrapping context):
+      <span class="price">{{ product.price | money }}</span>
+      {% render 'geo-tax-display', inline: true %}
+
+  PARAMETERS:
+    force_region  (string)  — 'EU' | 'US' | 'UK' | 'DEFAULT'
+    inline        (boolean) — render as inline <span> instead of <p>
+
+  NOTES:
+    - Uses Shopify's tax_included setting (shop.taxes_included) as primary signal
+    - Geo detection provides the secondary signal for border cases
+    - EU VAT: inclusive pricing required by EU consumer law
+    - US: prices typically exclude state tax (displayed at checkout)
+    - UK: VAT included for B2C
+    - CH: VAT typically included
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign force_region = force_region | default: ''
+  assign inline       = inline | default: false
+
+  # Shopify's tax_included flag — set in Settings > Taxes
+  assign taxes_included = shop.taxes_included
+-%}
+
+{%- comment -%}
+  Render a container; JS will update the text based on geo detection.
+  We provide sensible server-side defaults based on Shopify's tax settings.
+{%- endcomment -%}
+
+{%- if inline -%}
+  <span
+    class="geo-tax-display geo-tax-display--inline"
+    data-geo-tax
+    {% if force_region != '' %}data-force-region="{{ force_region }}"{% endif %}
+    aria-live="polite"
+  >
+    {%- if taxes_included -%}
+      [INCL. VAT]
+    {%- else -%}
+      [EXCL. TAX]
+    {%- endif -%}
+  </span>
+{%- else -%}
+  <p
+    class="geo-tax-display"
+    data-geo-tax
+    {% if force_region != '' %}data-force-region="{{ force_region }}"{% endif %}
+    aria-live="polite"
+  >
+    {%- comment -%}
+      Server-side default:
+        If Shopify has taxes_included = true → show VAT inclusive label
+        Otherwise → show exclusive label
+      JS will refine this per geo region.
+    {%- endcomment -%}
+    {%- if taxes_included -%}
+      [INCL. VAT]
+    {%- else -%}
+      [EXCL. TAX]
+    {%- endif -%}
+  </p>
+{%- endif -%}
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless geo_tax_styles_rendered -%}
+  {%- assign geo_tax_styles_rendered = true -%}
+  <style>
+    /* ── geo-tax-display ── */
+    .geo-tax-display {
+      display: block;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #1A1A1A;
+      opacity: 0.5;
+      margin: 3px 0 0;
+      line-height: 1;
+    }
+
+    .geo-tax-display--inline {
+      display: inline;
+      font-size: 9px;
+      vertical-align: middle;
+      margin: 0 0 0 4px;
+    }
+
+    /* Muted when loading / before geo detected */
+    .geo-tax-display.is-pending {
+      opacity: 0.2;
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless geo_tax_js_rendered -%}
+  {%- assign geo_tax_js_rendered = true -%}
+  <script>
+    /**
+     * geo-tax-display.js — Metsie Theme
+     *
+     * Updates tax label based on visitor region.
+     * EU + UK + CH: "INCL. VAT"
+     * US:           "EXCL. TAX"
+     * Others:       defer to Shopify's shop.taxes_included setting
+     */
+    (function () {
+      'use strict';
+
+      // Region → tax label map
+      var TAX_LABELS = {
+        EU:      '[INCL. VAT]',
+        UK:      '[INCL. VAT]',
+        CH:      '[INCL. VAT]',
+        US:      '[EXCL. TAX]',
+        DEFAULT: '[INCL. VAT]'  // fallback
+      };
+
+      var EU_COUNTRIES = [
+        'AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI',
+        'FR','GR','HR','HU','IE','IT','LT','LU','LV','MT',
+        'NL','PL','PT','RO','SE','SI','SK'
+      ];
+
+      function getRegion(countryCode) {
+        if (EU_COUNTRIES.indexOf(countryCode) > -1) return 'EU';
+        if (countryCode === 'GB') return 'UK';
+        if (countryCode === 'CH') return 'CH';
+        if (countryCode === 'US') return 'US';
+        return 'DEFAULT';
+      }
+
+      function updateTaxDisplays(geoData) {
+        document.querySelectorAll('[data-geo-tax]').forEach(function (el) {
+          var region = el.dataset.forceRegion || getRegion(geoData.country_code);
+          var label  = TAX_LABELS[region] || TAX_LABELS.DEFAULT;
+          el.textContent = label;
+          el.classList.remove('is-pending');
+        });
+      }
+
+      document.addEventListener('geo:detected', function (e) {
+        if (e.detail && e.detail.country_code) updateTaxDisplays(e.detail);
+      });
+
+      // Check session on load
+      (function () {
+        var cached = sessionStorage.getItem('metsie_geo_data');
+        if (!cached) return;
+        try {
+          var geo = JSON.parse(cached);
+          if (geo && geo.country_code) updateTaxDisplays(geo);
+        } catch(e) {}
+      })();
+
+    })();
+  </script>
+{%- endunless -%}

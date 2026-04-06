@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "[GET IN TOUCH]",
+        "subheading": "[WE'D LOVE TO HEAR FROM YOU]",
+        "intro_text": "[HAVE A QUESTION ABOUT YOUR ORDER OR WANT TO LEARN MORE ABOUT OUR PRODUCTS? REACH OUT AND WE'LL GET BACK TO YOU WITHIN 1–2 BUSINESS DAYS.]",
+        "show_contact_info": true,
+        "contact_email": "[hello@metsie.com]",
+        "contact_phone": "[+XX XXX XXX XXXX]",
+        "contact_hours": "[MONDAY — FRIDAY, 9AM – 5PM CET]",
+        "show_map": false,
+        "success_message": "[THANK YOU FOR YOUR MESSAGE. WE'LL BE IN TOUCH SOON.]",
+        "name_label": "YOUR NAME",
+        "email_label": "YOUR EMAIL",
+        "subject_label": "SUBJECT",
+        "message_label": "MESSAGE",
+        "submit_text": "SEND MESSAGE"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "contact-form",
+    "footer"
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "faq-section": {
+      "type": "faq-section",
+      "settings": {
+        "heading": "[FREQUENTLY ASKED QUESTIONS]",
+        "subheading": "[FIND ANSWERS TO THE MOST COMMON QUESTIONS ABOUT METSIE PRODUCTS AND ORDERS]",
+        "show_contact_cta": true,
+        "contact_cta_text": "[STILL HAVE QUESTIONS? GET IN TOUCH]",
+        "contact_link": "/pages/contact"
+      },
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "category": "ORDERING",
+            "question": "[HOW DO I PLACE AN ORDER?]",
+            "answer": "[DESCRIBE THE ORDERING PROCESS — BROWSE, SELECT SIZE AND COLOR, ADD TO CART, AND CHECKOUT.]"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "category": "SHIPPING",
+            "question": "[HOW LONG DOES SHIPPING TAKE?]",
+            "answer": "[PROVIDE SHIPPING TIMEFRAMES FOR DIFFERENT REGIONS — E.G. EUROPE 3–5 BUSINESS DAYS, INTERNATIONAL 7–14 DAYS.]"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "category": "SHIPPING",
+            "question": "[DO YOU OFFER FREE SHIPPING?]",
+            "answer": "[DESCRIBE FREE SHIPPING THRESHOLD — E.G. FREE SHIPPING ON ALL ORDERS OVER €150 WITHIN EUROPE.]"
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "category": "RETURNS",
+            "question": "[WHAT IS YOUR RETURN POLICY?]",
+            "answer": "[DESCRIBE RETURN POLICY — E.G. FREE RETURNS WITHIN 30 DAYS OF DELIVERY FOR UNUSED ITEMS IN ORIGINAL PACKAGING.]"
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "category": "PRODUCTS",
+            "question": "[HOW DO I CARE FOR MY METSIE MAT?]",
+            "answer": "[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH A DAMP CLOTH AND MILD SOAP. AVOID HARSH CHEMICALS. PROFESSIONAL CLEANING RECOMMENDED FOR DEEP CLEANS.]"
+          }
+        },
+        "faq-6": {
+          "type": "faq",
+          "settings": {
+            "category": "PRODUCTS",
+            "question": "[WHAT SIZES ARE AVAILABLE?]",
+            "answer": "[LIST AVAILABLE SIZES — E.G. SMALL (60×90CM), MEDIUM (90×150CM), LARGE (120×180CM), EXTRA LARGE (160×230CM).]"
+          }
+        }
+      },
+      "blocks_order": ["faq-1", "faq-2", "faq-3", "faq-4", "faq-5", "faq-6"]
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "faq-section",
+    "footer"
+  ]
+}

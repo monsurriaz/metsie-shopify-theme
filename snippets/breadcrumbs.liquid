@@ -1,0 +1,445 @@
+{%- comment -%}
+  ================================================================================
+  breadcrumbs.liquid — Metsie Theme
+  ================================================================================
+  Breadcrumb navigation with JSON-LD BreadcrumbList structured data.
+
+  USAGE:
+    {% render 'breadcrumbs' %}
+
+  RENDERS ON:
+    product   → Home > Collection > Product Title
+    collection→ Home > Collection Title
+    article   → Home > Blog > Article Title
+    page      → Home > Page Title
+    blog      → Home > Blog Title
+    search    → Home > [SEARCH RESULTS]
+    Other     → Nothing (no breadcrumbs rendered)
+
+  NOTES:
+    - Inline breadcrumbs: small text, uppercase, Cormorant Garamond dividers
+    - JSON-LD BreadcrumbList injected immediately after the <nav>
+    - Accessible: <nav aria-label="Breadcrumb"> wrapping <ol>
+    - Current page has aria-current="page"
+    - Truncates long titles on mobile via CSS
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  # Build breadcrumb items as arrays for JSON-LD
+  # We'll capture them and also output HTML
+
+  assign show_breadcrumbs = false
+  if template.name == 'product' or template.name == 'collection' or template.name == 'article' or template.name == 'page' or template.name == 'blog' or template.name == 'search'
+    assign show_breadcrumbs = true
+  endif
+-%}
+
+{%- if show_breadcrumbs -%}
+
+{%- comment -%} ── Collect breadcrumb items ── {%- endcomment -%}
+{%- liquid
+  # Item 1: always Home
+  assign bc_count = 1
+
+  # Item 2 onward depends on template
+  if template.name == 'product'
+    # Try to get the first collection this product belongs to
+    assign bc_collection = product.collections.first
+    if bc_collection
+      assign bc_count = 3
+    else
+      assign bc_count = 2
+    endif
+  elsif template.name == 'collection'
+    assign bc_count = 2
+  elsif template.name == 'article'
+    assign bc_count = 3
+  elsif template.name == 'page'
+    assign bc_count = 2
+  elsif template.name == 'blog'
+    assign bc_count = 2
+  elsif template.name == 'search'
+    assign bc_count = 2
+  endif
+-%}
+
+<nav
+  class="breadcrumbs"
+  aria-label="[BREADCRUMB NAVIGATION]"
+  data-breadcrumbs
+>
+  <ol class="breadcrumbs__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+
+    {%- comment -%} ── Item 1: Home ── {%- endcomment -%}
+    <li
+      class="breadcrumbs__item"
+      itemprop="itemListElement"
+      itemscope
+      itemtype="https://schema.org/ListItem"
+    >
+      <a
+        href="/"
+        class="breadcrumbs__link"
+        itemprop="item"
+      >
+        <span itemprop="name">[HOME]</span>
+      </a>
+      <meta itemprop="position" content="1">
+      <span class="breadcrumbs__divider" aria-hidden="true">/</span>
+    </li>
+
+    {%- comment -%} ── Template-specific items ── {%- endcomment -%}
+
+    {%- if template.name == 'product' -%}
+
+      {%- comment -%} Collection (if product belongs to one) {%- endcomment -%}
+      {%- if bc_collection -%}
+        <li
+          class="breadcrumbs__item"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <a
+            href="{{ bc_collection.url }}"
+            class="breadcrumbs__link"
+            itemprop="item"
+          >
+            <span itemprop="name">{{ bc_collection.title | escape }}</span>
+          </a>
+          <meta itemprop="position" content="2">
+          <span class="breadcrumbs__divider" aria-hidden="true">/</span>
+        </li>
+
+        {%- comment -%} Product title — current page {%- endcomment -%}
+        <li
+          class="breadcrumbs__item breadcrumbs__item--current"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <span
+            class="breadcrumbs__current"
+            itemprop="name"
+            aria-current="page"
+          >
+            {{ product.title | escape }}
+          </span>
+          <meta itemprop="item" content="{{ request.origin }}{{ product.url }}">
+          <meta itemprop="position" content="3">
+        </li>
+
+      {%- else -%}
+
+        {%- comment -%} No collection: Home > Product {%- endcomment -%}
+        <li
+          class="breadcrumbs__item breadcrumbs__item--current"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <span
+            class="breadcrumbs__current"
+            itemprop="name"
+            aria-current="page"
+          >
+            {{ product.title | escape }}
+          </span>
+          <meta itemprop="item" content="{{ request.origin }}{{ product.url }}">
+          <meta itemprop="position" content="2">
+        </li>
+
+      {%- endif -%}
+
+    {%- elsif template.name == 'collection' -%}
+
+      <li
+        class="breadcrumbs__item breadcrumbs__item--current"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <span
+          class="breadcrumbs__current"
+          itemprop="name"
+          aria-current="page"
+        >
+          {%- if collection.title != blank -%}
+            {{ collection.title | escape }}
+          {%- else -%}
+            [ALL PRODUCTS]
+          {%- endif -%}
+        </span>
+        <meta itemprop="item" content="{{ request.origin }}{{ collection.url }}">
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- elsif template.name == 'article' -%}
+
+      {%- comment -%} Blog {%- endcomment -%}
+      <li
+        class="breadcrumbs__item"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <a
+          href="{{ blog.url }}"
+          class="breadcrumbs__link"
+          itemprop="item"
+        >
+          <span itemprop="name">{{ blog.title | escape }}</span>
+        </a>
+        <meta itemprop="position" content="2">
+        <span class="breadcrumbs__divider" aria-hidden="true">/</span>
+      </li>
+
+      {%- comment -%} Article {%- endcomment -%}
+      <li
+        class="breadcrumbs__item breadcrumbs__item--current"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <span
+          class="breadcrumbs__current"
+          itemprop="name"
+          aria-current="page"
+        >
+          {{ article.title | escape }}
+        </span>
+        <meta itemprop="item" content="{{ request.origin }}{{ article.url }}">
+        <meta itemprop="position" content="3">
+      </li>
+
+    {%- elsif template.name == 'page' -%}
+
+      <li
+        class="breadcrumbs__item breadcrumbs__item--current"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <span
+          class="breadcrumbs__current"
+          itemprop="name"
+          aria-current="page"
+        >
+          {{ page.title | escape }}
+        </span>
+        <meta itemprop="item" content="{{ request.origin }}{{ page.url }}">
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- elsif template.name == 'blog' -%}
+
+      <li
+        class="breadcrumbs__item breadcrumbs__item--current"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <span
+          class="breadcrumbs__current"
+          itemprop="name"
+          aria-current="page"
+        >
+          {{ blog.title | escape }}
+        </span>
+        <meta itemprop="item" content="{{ request.origin }}{{ blog.url }}">
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- elsif template.name == 'search' -%}
+
+      <li
+        class="breadcrumbs__item breadcrumbs__item--current"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        <span
+          class="breadcrumbs__current"
+          itemprop="name"
+          aria-current="page"
+        >
+          [SEARCH RESULTS]
+        </span>
+        <meta itemprop="item" content="{{ request.origin }}/search">
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- endif -%}
+
+  </ol>
+</nav>
+
+
+{%- comment -%} ── JSON-LD BreadcrumbList ── {%- endcomment -%}
+{%- comment -%}
+  Output a standalone JSON-LD block for Google.
+  This complements (not replaces) the itemscope microdata above.
+{%- endcomment -%}
+{%- liquid
+  # Build JSON-LD items list
+  assign jsonld_items = ''
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": {{ request.origin | json }}
+    }
+    {%- if template.name == 'product' -%}
+      {%- if bc_collection -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ bc_collection.title | json }},
+      "item": {{ request.origin | append: bc_collection.url | json }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ product.title | json }},
+      "item": {{ request.origin | append: product.url | json }}
+    }
+      {%- else -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ product.title | json }},
+      "item": {{ request.origin | append: product.url | json }}
+    }
+      {%- endif -%}
+    {%- elsif template.name == 'collection' -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ collection.title | default: 'All Products' | json }},
+      "item": {{ request.origin | append: collection.url | json }}
+    }
+    {%- elsif template.name == 'article' -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ blog.title | json }},
+      "item": {{ request.origin | append: blog.url | json }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ article.title | json }},
+      "item": {{ request.origin | append: article.url | json }}
+    }
+    {%- elsif template.name == 'page' -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ page.title | json }},
+      "item": {{ request.origin | append: page.url | json }}
+    }
+    {%- elsif template.name == 'blog' -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ blog.title | json }},
+      "item": {{ request.origin | append: blog.url | json }}
+    }
+    {%- endif -%}
+  ]
+}
+</script>
+
+{%- endif -%}{%- comment -%} end show_breadcrumbs {%- endcomment -%}
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless breadcrumbs_styles_rendered -%}
+  {%- assign breadcrumbs_styles_rendered = true -%}
+  <style>
+    /* ── Breadcrumbs ── */
+    .breadcrumbs {
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    .breadcrumbs__list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+    }
+
+    .breadcrumbs__item {
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1A1A1A;
+    }
+
+    .breadcrumbs__link {
+      color: #1A1A1A;
+      opacity: 0.5;
+      text-decoration: none;
+      transition: opacity 200ms ease, color 200ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    .breadcrumbs__link:hover {
+      opacity: 1;
+      color: #2D4A6A;
+    }
+
+    .breadcrumbs__link:focus-visible {
+      outline: 2px solid #2D4A6A;
+      outline-offset: 2px;
+      border-radius: 1px;
+      opacity: 1;
+    }
+
+    .breadcrumbs__divider {
+      margin: 0 8px;
+      opacity: 0.25;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 14px;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    .breadcrumbs__current {
+      color: #1A1A1A;
+      opacity: 0.8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .breadcrumbs__item--current {
+      font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+      .breadcrumbs__link {
+        max-width: 80px;
+      }
+      .breadcrumbs__current {
+        max-width: 140px;
+      }
+    }
+  </style>
+{%- endunless -%}

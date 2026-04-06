@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "shipping-info": {
+      "type": "shipping-info",
+      "settings": {
+        "heading": "[SHIPPING & DELIVERY]",
+        "subheading": "[EVERYTHING YOU NEED TO KNOW ABOUT RECEIVING YOUR METSIE ORDER]",
+        "show_shipping_table": true,
+        "show_returns_info": true,
+        "returns_heading": "[RETURNS & EXCHANGES]",
+        "returns_intro": "[WE WANT YOU TO LOVE YOUR METSIE MAT. IF FOR ANY REASON YOU'RE NOT SATISFIED, WE MAKE RETURNS EASY.]"
+      },
+      "blocks": {
+        "zone-europe": {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "[EUROPE]",
+            "standard_time": "[3–5 BUSINESS DAYS]",
+            "standard_cost": "[€X.XX]",
+            "express_time": "[1–2 BUSINESS DAYS]",
+            "express_cost": "[€XX.XX]",
+            "free_threshold": "[FREE OVER €150]"
+          }
+        },
+        "zone-uk": {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "[UNITED KINGDOM]",
+            "standard_time": "[5–7 BUSINESS DAYS]",
+            "standard_cost": "[€X.XX]",
+            "express_time": "[2–3 BUSINESS DAYS]",
+            "express_cost": "[€XX.XX]",
+            "free_threshold": "[FREE OVER €200]"
+          }
+        },
+        "zone-international": {
+          "type": "shipping_zone",
+          "settings": {
+            "zone_name": "[REST OF WORLD]",
+            "standard_time": "[7–14 BUSINESS DAYS]",
+            "standard_cost": "[€XX.XX]",
+            "express_time": "[3–5 BUSINESS DAYS]",
+            "express_cost": "[€XX.XX]",
+            "free_threshold": "[FREE OVER €250]"
+          }
+        },
+        "return-policy": {
+          "type": "returns_block",
+          "settings": {
+            "return_window": "[30 DAYS]",
+            "return_condition": "[UNUSED, IN ORIGINAL PACKAGING]",
+            "return_process": "[DESCRIBE HOW TO INITIATE A RETURN — EMAIL US AT RETURNS@METSIE.COM WITH YOUR ORDER NUMBER]",
+            "refund_time": "[5–7 BUSINESS DAYS AFTER WE RECEIVE YOUR RETURN]",
+            "exchange_info": "[EXCHANGES ARE AVAILABLE FOR DIFFERENT SIZES OR COLORS, SUBJECT TO AVAILABILITY]"
+          }
+        }
+      },
+      "blocks_order": ["zone-europe", "zone-uk", "zone-international", "return-policy"]
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "shipping-info",
+    "footer"
+  ]
+}

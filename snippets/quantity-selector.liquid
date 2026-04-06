@@ -1,0 +1,303 @@
+{%- comment -%}
+  ================================================================================
+  quantity-selector.liquid — Metsie Theme
+  ================================================================================
+  Quantity input component with minus/plus buttons.
+
+  USAGE:
+    On product page form:
+      {% render 'quantity-selector', min: 1, max: product.selected_or_first_available_variant.inventory_quantity, default: 1 %}
+
+    On cart line item:
+      {% render 'quantity-selector',
+         min: 1,
+         max: 99,
+         default: item.quantity,
+         name: 'updates[]',
+         id: 'Quantity-' | append: item.index,
+         data_line: forloop.index
+      %}
+
+  PARAMETERS:
+    min          (integer) — Minimum quantity. Default: 1
+    max          (integer) — Maximum quantity (from inventory). Default: 99
+    default      (integer) — Starting value. Default: 1
+    name         (string)  — Input name attribute. Default: 'quantity'
+    id           (string)  — Input id. Default: 'Quantity'
+    data_line    (string)  — data-line attribute for cart updates
+    size         (string)  — 'sm' | 'md' | 'lg'. Default: 'md'
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign qty_min     = min      | default: 1
+  assign qty_max     = max      | default: 99
+  assign qty_default = default  | default: 1
+  assign qty_name    = name     | default: 'quantity'
+  assign qty_id      = id       | default: 'Quantity'
+  assign qty_size    = size     | default: 'md'
+
+  # Clamp default within min/max
+  if qty_default < qty_min
+    assign qty_default = qty_min
+  endif
+  if qty_max != blank and qty_default > qty_max
+    assign qty_default = qty_max
+  endif
+-%}
+
+<div
+  class="quantity-selector quantity-selector--{{ qty_size }}"
+  data-quantity-selector
+  {% if data_line %}data-line="{{ data_line }}"{% endif %}
+>
+  {%- comment -%} Minus button {%- endcomment -%}
+  <button
+    type="button"
+    class="quantity-selector__btn quantity-selector__btn--minus"
+    data-quantity-minus
+    aria-label="[DECREASE QUANTITY]"
+    {% if qty_default <= qty_min %}disabled aria-disabled="true"{% endif %}
+  >
+    {%- render 'svg-icons', icon: 'minus', size: 14 -%}
+  </button>
+
+  {%- comment -%} Input field {%- endcomment -%}
+  <input
+    type="number"
+    id="{{ qty_id }}"
+    name="{{ qty_name }}"
+    class="quantity-selector__input"
+    value="{{ qty_default }}"
+    min="{{ qty_min }}"
+    max="{{ qty_max }}"
+    aria-label="[QUANTITY]"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    autocomplete="off"
+    data-quantity-input
+  >
+
+  {%- comment -%} Plus button {%- endcomment -%}
+  <button
+    type="button"
+    class="quantity-selector__btn quantity-selector__btn--plus"
+    data-quantity-plus
+    aria-label="[INCREASE QUANTITY]"
+    {% if qty_max != blank and qty_default >= qty_max %}disabled aria-disabled="true"{% endif %}
+  >
+    {%- render 'svg-icons', icon: 'plus', size: 14 -%}
+  </button>
+
+</div>
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless quantity_selector_styles_rendered -%}
+  {%- assign quantity_selector_styles_rendered = true -%}
+  <style>
+    /* ── Quantity Selector ── */
+    .quantity-selector {
+      display: inline-flex;
+      align-items: stretch;
+      border: 1px solid rgba(45, 74, 106, 0.25);
+      border-radius: 2px;
+      overflow: hidden;
+      background: #FFFFFF;
+    }
+
+    .quantity-selector:focus-within {
+      border-color: #2D4A6A;
+      box-shadow: 0 0 0 2px rgba(45, 74, 106, 0.12);
+    }
+
+    /* ── Buttons ── */
+    .quantity-selector__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #2D4A6A;
+      transition: background 150ms ease, color 150ms ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .quantity-selector__btn:hover:not(:disabled) {
+      background: #F5F0E8;
+      color: #1A1A1A;
+    }
+
+    .quantity-selector__btn:focus-visible {
+      outline: 2px solid #2D4A6A;
+      outline-offset: -2px;
+    }
+
+    .quantity-selector__btn:disabled,
+    .quantity-selector__btn[aria-disabled="true"] {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ── Input ── */
+    .quantity-selector__input {
+      flex: 1;
+      text-align: center;
+      background: transparent;
+      border: none;
+      border-left: 1px solid rgba(45, 74, 106, 0.12);
+      border-right: 1px solid rgba(45, 74, 106, 0.12);
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #1A1A1A;
+      -moz-appearance: textfield;
+      appearance: textfield;
+      min-width: 0;
+    }
+
+    .quantity-selector__input:focus {
+      outline: none;
+    }
+
+    /* Hide number input spinners */
+    .quantity-selector__input::-webkit-outer-spin-button,
+    .quantity-selector__input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* ── Size variants ── */
+    .quantity-selector--sm .quantity-selector__btn {
+      width: 28px;
+      height: 28px;
+    }
+    .quantity-selector--sm .quantity-selector__input {
+      width: 36px;
+      height: 28px;
+      font-size: 12px;
+    }
+
+    .quantity-selector--md .quantity-selector__btn {
+      width: 36px;
+      height: 36px;
+    }
+    .quantity-selector--md .quantity-selector__input {
+      width: 44px;
+      height: 36px;
+      font-size: 14px;
+    }
+
+    .quantity-selector--lg .quantity-selector__btn {
+      width: 44px;
+      height: 44px;
+    }
+    .quantity-selector--lg .quantity-selector__input {
+      width: 52px;
+      height: 44px;
+      font-size: 15px;
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless quantity_selector_js_rendered -%}
+  {%- assign quantity_selector_js_rendered = true -%}
+  <script>
+    /**
+     * quantity-selector.js — Metsie Theme
+     * Handles +/- button clicks, validates bounds, dispatches change events.
+     */
+    (function () {
+      'use strict';
+
+      function initQuantitySelector(wrapper) {
+        var minusBtn = wrapper.querySelector('[data-quantity-minus]');
+        var plusBtn  = wrapper.querySelector('[data-quantity-plus]');
+        var input    = wrapper.querySelector('[data-quantity-input]');
+        if (!input) return;
+
+        var min = parseInt(input.min, 10) || 1;
+        var max = parseInt(input.max, 10) || Infinity;
+
+        function updateButtonStates(val) {
+          if (minusBtn) {
+            var disableMinus = val <= min;
+            minusBtn.disabled = disableMinus;
+            minusBtn.setAttribute('aria-disabled', String(disableMinus));
+          }
+          if (plusBtn) {
+            var disablePlus = val >= max;
+            plusBtn.disabled = disablePlus;
+            plusBtn.setAttribute('aria-disabled', String(disablePlus));
+          }
+        }
+
+        function getValue() {
+          return parseInt(input.value, 10) || min;
+        }
+
+        function setValue(newVal) {
+          newVal = Math.max(min, Math.min(max, newVal));
+          if (isNaN(newVal)) newVal = min;
+          input.value = newVal;
+          updateButtonStates(newVal);
+          // Dispatch native change event for form/cart listeners
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          wrapper.dispatchEvent(new CustomEvent('quantity:changed', {
+            bubbles: true,
+            detail: { value: newVal, line: wrapper.dataset.line }
+          }));
+        }
+
+        if (minusBtn) {
+          minusBtn.addEventListener('click', function () {
+            setValue(getValue() - 1);
+          });
+        }
+
+        if (plusBtn) {
+          plusBtn.addEventListener('click', function () {
+            setValue(getValue() + 1);
+          });
+        }
+
+        // Validate manual input
+        input.addEventListener('change', function () {
+          setValue(getValue());
+        });
+
+        input.addEventListener('blur', function () {
+          setValue(getValue());
+        });
+
+        // Prevent non-numeric keys
+        input.addEventListener('keydown', function (e) {
+          if (
+            !['Backspace','Delete','Tab','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter'].includes(e.key) &&
+            !/^[0-9]$/.test(e.key)
+          ) {
+            e.preventDefault();
+          }
+        });
+
+        // Init button states
+        updateButtonStates(getValue());
+      }
+
+      function init() {
+        document.querySelectorAll('[data-quantity-selector]').forEach(initQuantitySelector);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      // Re-init after cart / section updates (Shopify section events)
+      document.addEventListener('shopify:section:load', init);
+    })();
+  </script>
+{%- endunless -%}

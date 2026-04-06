@@ -1,0 +1,393 @@
+{
+  "general": {
+    "announcement_bar": "Announcement",
+    "password_page": {
+      "title": "[OPENING SOON]",
+      "opening_soon": "[OPENING SOON]",
+      "message": "[SOMETHING QUIET & CONSIDERED IS BEING PREPARED.]",
+      "password_placeholder": "[ENTER PASSWORD]",
+      "submit": "[ENTER]",
+      "notify_heading": "[BE FIRST TO KNOW]",
+      "notify_text": "[LEAVE YOUR EMAIL AND WE WILL NOTIFY YOU WHEN WE LAUNCH.]",
+      "notify_submit": "[NOTIFY ME]",
+      "notify_success": "[THANK YOU. WE WILL BE IN TOUCH.]",
+      "powered_by": ""
+    },
+    "404": {
+      "title": "[PAGE NOT FOUND]",
+      "subtext": "[THE PAGE YOU WERE LOOKING FOR DOESN'T EXIST OR HAS BEEN MOVED.]",
+      "link": "[RETURN HOME]"
+    },
+    "search": {
+      "placeholder": "[SEARCH RUGS, MATS, COLLECTIONS…]",
+      "submit": "[SEARCH]",
+      "no_results": "[NO RESULTS FOR \"{{ terms }}\"]",
+      "results_with_count": "[{{ count }} RESULTS FOR \"{{ terms }}\"]",
+      "results_with_count_one": "[1 RESULT FOR \"{{ terms }}\"]"
+    },
+    "currency": {
+      "selector_label": "[CURRENCY]",
+      "change": "[CHANGE CURRENCY]"
+    },
+    "language": {
+      "selector_label": "[LANGUAGE]",
+      "change": "[CHANGE LANGUAGE]"
+    },
+    "newsletter": {
+      "success": "[THANK YOU FOR SUBSCRIBING.]",
+      "error": "[SOMETHING WENT WRONG. PLEASE TRY AGAIN.]",
+      "email_already_exists": "[THIS EMAIL IS ALREADY SUBSCRIBED.]"
+    },
+    "social": {
+      "links": {
+        "instagram": "[INSTAGRAM]",
+        "pinterest": "[PINTEREST]",
+        "facebook": "[FACEBOOK]",
+        "tiktok": "[TIKTOK]",
+        "youtube": "[YOUTUBE]",
+        "linkedin": "[LINKEDIN]"
+      }
+    },
+    "close": "[CLOSE]",
+    "back": "[BACK]",
+    "continue": "[CONTINUE]",
+    "loading": "[LOADING…]",
+    "see_all": "[SEE ALL]",
+    "view_all": "[VIEW ALL]",
+    "learn_more": "[LEARN MORE]",
+    "read_more": "[READ MORE]",
+    "show_more": "[SHOW MORE]",
+    "show_less": "[SHOW LESS]",
+    "required_field": "[REQUIRED FIELD]",
+    "optional": "[OPTIONAL]"
+  },
+
+  "accessibility": {
+    "skip_to_content": "[SKIP TO CONTENT]",
+    "skip_to_main": "[SKIP TO MAIN CONTENT]",
+    "open_menu": "[OPEN MENU]",
+    "close_menu": "[CLOSE MENU]",
+    "open_cart": "[OPEN CART]",
+    "close_cart": "[CLOSE CART]",
+    "open_search": "[OPEN SEARCH]",
+    "close_search": "[CLOSE SEARCH]",
+    "open_quick_add": "[OPEN QUICK ADD FOR {{ product_name }}]",
+    "logo": "[{{ shop_name }} HOME]",
+    "cart_count": "[{{ count }} ITEMS IN CART]",
+    "next_slide": "[NEXT SLIDE]",
+    "previous_slide": "[PREVIOUS SLIDE]",
+    "play_slideshow": "[PLAY SLIDESHOW]",
+    "pause_slideshow": "[PAUSE SLIDESHOW]",
+    "image_zoom": "[ZOOM IMAGE]",
+    "image_alt_default": "[PRODUCT IMAGE]",
+    "loading": "[LOADING]",
+    "load_more": "[LOAD MORE PRODUCTS]"
+  },
+
+  "navigation": {
+    "open": "[OPEN NAVIGATION]",
+    "close": "[CLOSE NAVIGATION]",
+    "menu": "[MENU]",
+    "browse_by": "[BROWSE BY]",
+    "new_arrivals": "[NEW ARRIVALS]",
+    "bestsellers": "[BESTSELLERS]",
+    "collections": "[COLLECTIONS]",
+    "about": "[ABOUT]",
+    "contact": "[CONTACT]",
+    "journal": "[JOURNAL]",
+    "stores": "[STORES]",
+    "back_to_main": "[BACK TO MAIN MENU]"
+  },
+
+  "products": {
+    "product": {
+      "add_to_cart": "[ADD TO CART]",
+      "sold_out": "[SOLD OUT]",
+      "out_of_stock": "[OUT OF STOCK]",
+      "unavailable": "[UNAVAILABLE]",
+      "on_sale": "[SALE]",
+      "new": "[NEW]",
+      "best_seller": "[BESTSELLER]",
+      "price": "[€{{ price }}]",
+      "regular_price": "[REGULAR PRICE]",
+      "sale_price": "[SALE PRICE]",
+      "from_price_html": "[FROM {{ price }}]",
+      "unit_price_html": "[{{ price }} PER {{ unit_measure }}]",
+      "quantity": "[QUANTITY]",
+      "sku": "[SKU: {{ sku }}]",
+      "vendor": "[{{ vendor }}]",
+      "description": "[DESCRIPTION]",
+      "details": "[DETAILS]",
+      "care_instructions": "[CARE INSTRUCTIONS]",
+      "dimensions": "[DIMENSIONS]",
+      "materials": "[MATERIALS]",
+      "in_stock": "[IN STOCK]",
+      "low_stock": "[ONLY {{ quantity }} LEFT]",
+      "preorder": "[PREORDER]",
+      "backorder": "[AVAILABLE ON BACKORDER]",
+      "shipping_info": "[SHIPPING INFORMATION]",
+      "free_shipping": "[FREE SHIPPING ON THIS ORDER]",
+      "share": "[SHARE]",
+      "share_on_twitter": "[SHARE ON TWITTER]",
+      "share_on_facebook": "[SHARE ON FACEBOOK]",
+      "share_on_pinterest": "[SHARE ON PINTEREST]",
+      "view_full_details": "[VIEW FULL DETAILS]",
+      "quick_add": "[QUICK ADD]",
+      "add_to_wishlist": "[ADD TO WISHLIST]",
+      "select_size": "[SELECT SIZE]",
+      "select_color": "[SELECT COLOUR]",
+      "select_variant": "[SELECT {{ option }}]",
+      "no_options": "[NO OPTIONS AVAILABLE]",
+      "zoom": "[ZOOM IMAGE]",
+      "more_images": "[MORE IMAGES]",
+      "related_products": "[YOU MAY ALSO LIKE]",
+      "recently_viewed": "[RECENTLY VIEWED]"
+    },
+    "grid": {
+      "see_all": "[SEE ALL PRODUCTS]"
+    }
+  },
+
+  "collections": {
+    "title": "[COLLECTIONS]",
+    "all": "[ALL PRODUCTS]",
+    "filter_by": "[FILTER BY]",
+    "sort_by": "[SORT BY]",
+    "sort": {
+      "featured": "[FEATURED]",
+      "best_selling": "[BEST SELLING]",
+      "title_ascending": "[A–Z]",
+      "title_descending": "[Z–A]",
+      "price_ascending": "[PRICE: LOW TO HIGH]",
+      "price_descending": "[PRICE: HIGH TO LOW]",
+      "created_ascending": "[OLDEST FIRST]",
+      "created_descending": "[NEWEST FIRST]"
+    },
+    "filter": {
+      "clear": "[CLEAR FILTERS]",
+      "clear_all": "[CLEAR ALL]",
+      "apply": "[APPLY FILTERS]",
+      "close": "[CLOSE FILTERS]",
+      "results_count": "[{{ count }} PRODUCTS]",
+      "no_results": "[NO PRODUCTS MATCH THESE FILTERS.]",
+      "in_stock": "[IN STOCK]",
+      "price_range": "[PRICE RANGE]",
+      "size": "[SIZE]",
+      "color": "[COLOUR]",
+      "material": "[MATERIAL]",
+      "shape": "[SHAPE]",
+      "style": "[STYLE]"
+    },
+    "product_count": "[{{ count }} PRODUCTS]",
+    "product_count_one": "[1 PRODUCT]",
+    "description": "[COLLECTION DESCRIPTION]"
+  },
+
+  "cart": {
+    "title": "[YOUR CART]",
+    "empty": "[YOUR CART IS EMPTY.]",
+    "empty_cta": "[EXPLORE OUR COLLECTIONS]",
+    "items_count": "[{{ count }} ITEMS]",
+    "items_count_one": "[1 ITEM]",
+    "item": {
+      "title": "[PRODUCT NAME]",
+      "price": "[€{{ price }}]",
+      "quantity": "[QTY]",
+      "remove": "[REMOVE]",
+      "edit": "[EDIT]",
+      "save_for_later": "[SAVE FOR LATER]",
+      "sold_out": "[SOLD OUT — REMOVE TO CONTINUE]"
+    },
+    "subtotal": "[SUBTOTAL]",
+    "tax_and_shipping": "[TAXES AND SHIPPING CALCULATED AT CHECKOUT.]",
+    "free_shipping_progress": "[{{ amount }} MORE FOR FREE SHIPPING]",
+    "free_shipping_unlocked": "[YOU HAVE FREE SHIPPING!]",
+    "promo_code": "[PROMO CODE]",
+    "add_promo": "[APPLY]",
+    "promo_applied": "[PROMO APPLIED: {{ code }}]",
+    "order_note": "[ORDER NOTE]",
+    "order_note_placeholder": "[ADD A NOTE TO YOUR ORDER]",
+    "checkout": "[PROCEED TO CHECKOUT]",
+    "continue_shopping": "[CONTINUE SHOPPING]",
+    "cross_sell_heading": "[COMPLETE THE LOOK]",
+    "shipping_policy": "[VIEW SHIPPING POLICY]",
+    "estimated_delivery": "[ESTIMATED DELIVERY: {{ date }}]"
+  },
+
+  "checkout": {
+    "title": "[CHECKOUT]",
+    "order_summary": "[ORDER SUMMARY]",
+    "contact": "[CONTACT INFORMATION]",
+    "shipping": "[SHIPPING ADDRESS]",
+    "billing": "[BILLING ADDRESS]",
+    "payment": "[PAYMENT]",
+    "place_order": "[PLACE ORDER]",
+    "same_as_shipping": "[SAME AS SHIPPING ADDRESS]",
+    "fields": {
+      "first_name": "[FIRST NAME]",
+      "last_name": "[LAST NAME]",
+      "email": "[EMAIL ADDRESS]",
+      "phone": "[PHONE NUMBER]",
+      "address1": "[ADDRESS LINE 1]",
+      "address2": "[ADDRESS LINE 2]",
+      "city": "[CITY]",
+      "country": "[COUNTRY]",
+      "province": "[STATE / PROVINCE]",
+      "zip": "[POSTAL CODE]"
+    },
+    "shipping_methods": {
+      "title": "[SHIPPING METHOD]",
+      "standard": "[STANDARD DELIVERY — {{ price }}]",
+      "express": "[EXPRESS DELIVERY — {{ price }}]",
+      "free": "[FREE DELIVERY]",
+      "estimated": "[ESTIMATED {{ days }} BUSINESS DAYS]"
+    }
+  },
+
+  "customers": {
+    "account": {
+      "title": "[MY ACCOUNT]",
+      "orders": "[ORDER HISTORY]",
+      "details": "[ACCOUNT DETAILS]",
+      "logout": "[SIGN OUT]"
+    },
+    "login": {
+      "title": "[SIGN IN]",
+      "email": "[EMAIL ADDRESS]",
+      "password": "[PASSWORD]",
+      "submit": "[SIGN IN]",
+      "forgot_password": "[FORGOT PASSWORD?]",
+      "no_account": "[DON'T HAVE AN ACCOUNT?]",
+      "create_account": "[CREATE ACCOUNT]",
+      "guest_continue": "[CONTINUE AS GUEST]"
+    },
+    "register": {
+      "title": "[CREATE ACCOUNT]",
+      "first_name": "[FIRST NAME]",
+      "last_name": "[LAST NAME]",
+      "email": "[EMAIL ADDRESS]",
+      "password": "[PASSWORD]",
+      "submit": "[CREATE ACCOUNT]",
+      "already_have_account": "[ALREADY HAVE AN ACCOUNT?]",
+      "login": "[SIGN IN]"
+    },
+    "forgot_password": {
+      "title": "[RESET PASSWORD]",
+      "subtext": "[ENTER YOUR EMAIL AND WE'LL SEND RESET INSTRUCTIONS.]",
+      "email": "[EMAIL ADDRESS]",
+      "submit": "[SEND RESET LINK]",
+      "success": "[CHECK YOUR EMAIL FOR RESET INSTRUCTIONS.]",
+      "back_to_login": "[BACK TO SIGN IN]"
+    },
+    "order": {
+      "title": "[ORDER #{{ name }}]",
+      "date": "[PLACED ON {{ date }}]",
+      "status": "[STATUS: {{ status }}]",
+      "items": "[ITEMS]",
+      "subtotal": "[SUBTOTAL]",
+      "shipping": "[SHIPPING]",
+      "tax": "[TAX]",
+      "total": "[TOTAL]",
+      "tracking": "[TRACK ORDER]",
+      "reorder": "[REORDER]"
+    }
+  },
+
+  "blogs": {
+    "article": {
+      "read_time": "[{{ minutes }} MIN READ]",
+      "author": "[BY {{ name }}]",
+      "tags": "[TAGGED: {{ tags }}]",
+      "next_article": "[NEXT ARTICLE]",
+      "previous_article": "[PREVIOUS ARTICLE]",
+      "back_to_blog": "[BACK TO JOURNAL]",
+      "share": "[SHARE THIS ARTICLE]"
+    },
+    "blog": {
+      "all_articles": "[ALL ARTICLES]",
+      "latest": "[LATEST FROM THE JOURNAL]",
+      "filter_by_tag": "[FILTER BY TOPIC]"
+    }
+  },
+
+  "gift_cards": {
+    "issued": "[YOUR GIFT CARD FOR {{ shop }}]",
+    "subtext": "[SHARE THIS CODE TO REDEEM YOUR GIFT.]",
+    "code_label": "[GIFT CARD CODE]",
+    "amount": "[AMOUNT: {{ amount }}]",
+    "balance": "[REMAINING BALANCE: {{ balance }}]",
+    "add_to_wallet": "[ADD TO APPLE WALLET]",
+    "shop_now": "[SHOP NOW]",
+    "expires": "[EXPIRES {{ date }}]"
+  },
+
+  "gdpr": {
+    "banner_text": "[WE USE COOKIES TO ENHANCE YOUR EXPERIENCE AND ANALYSE SITE TRAFFIC. BY CONTINUING, YOU AGREE TO OUR COOKIE POLICY.]",
+    "accept": "[ACCEPT ALL]",
+    "decline": "[MANAGE PREFERENCES]",
+    "learn_more": "[COOKIE POLICY]",
+    "preferences": {
+      "title": "[COOKIE PREFERENCES]",
+      "necessary": "[NECESSARY COOKIES]",
+      "necessary_description": "[REQUIRED FOR THE SITE TO FUNCTION. CANNOT BE DISABLED.]",
+      "analytics": "[ANALYTICS COOKIES]",
+      "analytics_description": "[HELP US UNDERSTAND HOW VISITORS INTERACT WITH OUR SITE.]",
+      "marketing": "[MARKETING COOKIES]",
+      "marketing_description": "[USED TO DELIVER RELEVANT ADVERTISEMENTS.]",
+      "save": "[SAVE PREFERENCES]"
+    }
+  },
+
+  "sections": {
+    "hero": {
+      "heading": "[QUIET LUXURY FOR CONSIDERED LIVING]",
+      "subheading": "[PREMIUM FLOOR MATS & RUGS — DESIGNED IN SCANDINAVIA]",
+      "cta_primary": "[EXPLORE COLLECTIONS]",
+      "cta_secondary": "[DISCOVER THE BRAND]"
+    },
+    "featured_collection": {
+      "heading": "[NEW ARRIVALS]",
+      "view_all": "[VIEW ALL NEW ARRIVALS]"
+    },
+    "newsletter": {
+      "heading": "[STAY IN THE KNOW]",
+      "subtext": "[NEW COLLECTIONS, DESIGN STORIES, AND EXCLUSIVE OFFERS — DELIVERED QUIETLY.]",
+      "placeholder": "[YOUR EMAIL ADDRESS]",
+      "submit": "[SUBSCRIBE]",
+      "success": "[THANK YOU FOR SUBSCRIBING.]",
+      "disclaimer": "[BY SUBSCRIBING YOU AGREE TO OUR PRIVACY POLICY. UNSUBSCRIBE AT ANY TIME.]"
+    },
+    "testimonials": {
+      "heading": "[WHAT OUR CUSTOMERS SAY]"
+    },
+    "about": {
+      "heading": "[ABOUT METSIE]",
+      "subheading": "[DESIGNED IN SCANDINAVIA. CRAFTED FOR QUIET LIVING.]"
+    },
+    "shipping_bar": {
+      "text": "[FREE SHIPPING ON ORDERS OVER €{{ amount }}]"
+    },
+    "announcement": {
+      "text": "[FREE SHIPPING ON ORDERS OVER €150 | COMPLIMENTARY SAMPLES WITH EVERY ORDER]"
+    },
+    "contact": {
+      "heading": "[GET IN TOUCH]",
+      "name": "[YOUR NAME]",
+      "email": "[EMAIL ADDRESS]",
+      "phone": "[PHONE NUMBER (OPTIONAL)]",
+      "message": "[YOUR MESSAGE]",
+      "submit": "[SEND MESSAGE]",
+      "success": "[THANK YOU. WE'LL BE IN TOUCH WITHIN 1–2 BUSINESS DAYS.]",
+      "required": "[REQUIRED]"
+    }
+  },
+
+  "localization": {
+    "currency_label": "[CURRENCY]",
+    "language_label": "[LANGUAGE]",
+    "country_label": "[COUNTRY / REGION]",
+    "update": "[UPDATE]",
+    "title": "[REGION & LANGUAGE]",
+    "description": "[SELECT YOUR COUNTRY AND PREFERRED LANGUAGE. PRICES WILL BE SHOWN IN YOUR LOCAL CURRENCY.]"
+  }
+}

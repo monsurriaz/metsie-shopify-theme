@@ -1,0 +1,196 @@
+<section class="editorial-statement" data-section-id="{{ section.id }}">
+
+  {%- comment -%} Full-width image background {%- endcomment -%}
+  {% if section.settings.image != blank %}
+    <div class="editorial-statement__bg">
+      <img
+        src="{{ section.settings.image | img_url: '2000x' }}"
+        srcset="{{ section.settings.image | img_url: '800x' }} 800w, {{ section.settings.image | img_url: '1400x' }} 1400w, {{ section.settings.image | img_url: '2000x' }} 2000w"
+        sizes="100vw"
+        alt="{{ section.settings.image_alt | default: 'Metsie editorial' }}"
+        width="2000"
+        height="1200"
+        loading="lazy"
+        class="editorial-statement__bg-img"
+      >
+      <div class="editorial-statement__overlay"></div>
+    </div>
+  {% else %}
+    <div class="editorial-statement__bg editorial-statement__bg--placeholder">
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'editorial-statement__placeholder-svg' }}
+      <div class="editorial-statement__overlay"></div>
+    </div>
+  {% endif %}
+
+  {%- comment -%} Centered overlaid content {%- endcomment -%}
+  <div class="editorial-statement__content">
+    <h2 class="editorial-statement__heading">
+      {{ section.settings.heading | default: 'Crafted by balance. Created for living, spaces, and permanence.' }}
+    </h2>
+
+    {% if section.settings.button_text != blank %}
+      <a
+        href="{{ section.settings.button_link | default: '/collections/all' }}"
+        class="editorial-statement__cta"
+      >
+        {{ section.settings.button_text }}
+      </a>
+    {% endif %}
+  </div>
+
+</section>
+
+<style>
+  .editorial-statement {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .editorial-statement__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .editorial-statement__bg--placeholder {
+    background-color: #2D4A6A;
+  }
+
+  .editorial-statement__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .editorial-statement__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    color: rgba(255,255,255,0.1);
+  }
+
+  .editorial-statement__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(29, 40, 54, 0.55);
+  }
+
+  .editorial-statement__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 80px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #F5F0E8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .editorial-statement__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: inherit;
+  }
+
+  .editorial-statement__cta {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #F5F0E8;
+    border: 1px solid rgba(245, 240, 232, 0.7);
+    border-radius: 100px;
+    padding: 14px 36px;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .editorial-statement__cta:hover {
+    background-color: rgba(245, 240, 232, 0.15);
+    border-color: #F5F0E8;
+  }
+
+  @media (max-width: 768px) {
+    .editorial-statement {
+      min-height: 60vh;
+    }
+    .editorial-statement__content {
+      padding: 60px 24px;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .editorial-statement__content {
+      padding: 48px 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Editorial Statement",
+  "tag": "section",
+  "class": "editorial-statement-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Full-width background image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted by balance. Created for living, spaces, and permanence."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Explore"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Statement",
+      "settings": {
+        "heading": "Crafted by balance. Created for living, spaces, and permanence.",
+        "button_text": "Explore",
+        "button_link": "/collections/all"
+      }
+    }
+  ]
+}
+{% endschema %}

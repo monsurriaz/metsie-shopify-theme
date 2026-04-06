@@ -1,0 +1,703 @@
+{%- comment -%}
+  ================================================================================
+  product-card.liquid — Metsie Theme
+  ================================================================================
+  Reusable product card. Used in collection grids, recommendations, search results.
+
+  USAGE:
+    {% render 'product-card', product: product %}
+    {% render 'product-card', product: product, lazy_index: forloop.index %}
+
+  PARAMETERS:
+    product        (object, required) — Shopify product object
+    lazy_index     (integer)          — Used to defer loading. Images after index 4
+                                        get loading="lazy". Default: 0 (eager)
+    show_vendor    (boolean)          — Show product vendor. Default: false
+    show_swatches  (boolean)          — Show color swatches. Default: true
+    show_quick_add (boolean)          — Show quick add on hover. Default: true
+    aspect_ratio   (string)           — 'square' | 'portrait' (4:5). Default: 'square'
+
+  DESIGN:
+    - 1:1 square image container (or 4:5 portrait)
+    - Blur-up lazy load (base64 LQIP → full res)
+    - Product type in small caps
+    - Color swatches if variants named with color options
+    - Quick add button slides in on desktop hover
+    - Fade-in on scroll via IntersectionObserver
+    - Proper semantic HTML: heading, figure, price
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign product         = product
+  assign lazy_index      = lazy_index      | default: 0
+  assign show_vendor     = show_vendor     | default: false
+  assign show_swatches   = show_swatches   | default: true
+  assign show_quick_add  = show_quick_add  | default: true
+  assign aspect_ratio    = aspect_ratio    | default: 'square'
+
+  # Determine loading strategy
+  if lazy_index > 4
+    assign loading_attr = 'lazy'
+  else
+    assign loading_attr = 'eager'
+  endif
+
+  # Primary image
+  assign featured_image = product.featured_image
+
+  # Hover image (second image if available)
+  assign hover_image = product.images[1]
+
+  # Price display
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  # Check for color option
+  assign has_color_option = false
+  assign color_option = nil
+  for option in product.options_with_values
+    assign option_downcase = option.name | downcase
+    if option_downcase == 'color' or option_downcase == 'colour' or option_downcase == 'farbe' or option_downcase == 'couleur'
+      assign has_color_option = true
+      assign color_option = option
+    endif
+  endfor
+
+  # Availability
+  assign sold_out = true
+  if product.available
+    assign sold_out = false
+  endif
+
+  # Aspect ratio padding
+  assign padding_bottom = '100%'
+  if aspect_ratio == 'portrait'
+    assign padding_bottom = '125%'
+  endif
+-%}
+
+<article
+  class="product-card{% if sold_out %} product-card--sold-out{% endif %}"
+  data-product-card
+  data-product-id="{{ product.id }}"
+  data-product-handle="{{ product.handle }}"
+>
+
+  {%- comment -%} ── Image ── {%- endcomment -%}
+  <div class="product-card__media-wrapper">
+    <a
+      href="{{ product.url }}"
+      class="product-card__media-link"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <figure
+        class="product-card__figure"
+        style="padding-bottom: {{ padding_bottom }};"
+      >
+        {%- if featured_image != blank -%}
+
+          {%- comment -%} Primary image {%- endcomment -%}
+          {{
+            featured_image
+            | image_url: width: 800
+            | image_tag:
+              class: 'product-card__image product-card__image--primary',
+              loading: loading_attr,
+              alt: featured_image.alt | escape | default: product.title | escape,
+              width: featured_image.width,
+              height: featured_image.height,
+              widths: '300, 400, 500, 600, 800',
+              sizes: '(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 50vw'
+          }}
+
+          {%- comment -%} Hover image (second product photo) {%- endcomment -%}
+          {%- if hover_image and show_quick_add -%}
+            {{
+              hover_image
+              | image_url: width: 800
+              | image_tag:
+                class: 'product-card__image product-card__image--hover',
+                loading: 'lazy',
+                alt: hover_image.alt | escape | default: product.title | escape,
+                width: hover_image.width,
+                height: hover_image.height,
+                widths: '300, 400, 500, 600, 800',
+                sizes: '(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 50vw'
+            }}
+          {%- endif -%}
+
+        {%- else -%}
+          {%- comment -%} Placeholder when no image {%- endcomment -%}
+          <div class="product-card__placeholder" aria-hidden="true">
+            {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+          </div>
+        {%- endif -%}
+
+      </figure>
+    </a>
+
+    {%- comment -%} ── Badges ── {%- endcomment -%}
+    <div class="product-card__badges" aria-hidden="true">
+      {%- if on_sale and sold_out == false -%}
+        <span class="product-card__badge product-card__badge--sale">[SALE]</span>
+      {%- endif -%}
+      {%- if sold_out -%}
+        <span class="product-card__badge product-card__badge--sold-out">[SOLD OUT]</span>
+      {%- endif -%}
+      {%- if product.tags contains 'new' or product.tags contains 'New' -%}
+        <span class="product-card__badge product-card__badge--new">[NEW]</span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Quick Add (desktop hover) ── {%- endcomment -%}
+    {%- if show_quick_add and sold_out == false -%}
+      <div class="product-card__quick-add" aria-hidden="true">
+        {%- if product.variants.size == 1 -%}
+          {%- comment -%} Single variant: direct add to cart {%- endcomment -%}
+          <button
+            type="button"
+            class="product-card__quick-add-btn"
+            data-quick-add
+            data-variant-id="{{ product.variants.first.id }}"
+            tabindex="-1"
+            aria-label="[QUICK ADD]: {{ product.title | escape }}"
+          >
+            [QUICK ADD]
+          </button>
+        {%- else -%}
+          {%- comment -%} Multiple variants: open product page {%- endcomment -%}
+          <a
+            href="{{ product.url }}"
+            class="product-card__quick-add-btn"
+            tabindex="-1"
+            aria-label="[SELECT OPTIONS]: {{ product.title | escape }}"
+          >
+            [SELECT OPTIONS]
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Wishlist button ── {%- endcomment -%}
+    <button
+      type="button"
+      class="product-card__wishlist"
+      aria-label="[ADD TO WISHLIST]: {{ product.title | escape }}"
+      data-wishlist-toggle
+      data-product-id="{{ product.id }}"
+    >
+      {%- render 'svg-icons', icon: 'heart', size: 18 -%}
+    </button>
+
+  </div>{%- comment -%} /.product-card__media-wrapper {%- endcomment -%}
+
+
+  {%- comment -%} ── Card Info ── {%- endcomment -%}
+  <div class="product-card__info">
+
+    {%- comment -%} Vendor (optional) {%- endcomment -%}
+    {%- if show_vendor and product.vendor != blank -%}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Product type {%- endcomment -%}
+    {%- if product.type != blank -%}
+      <p class="product-card__type">{{ product.type }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Title — h3 for semantic grid context {%- endcomment -%}
+    <h3 class="product-card__title">
+      <a
+        href="{{ product.url }}"
+        class="product-card__title-link"
+        aria-label="{{ product.title | escape }}"
+      >
+        {{ product.title | escape }}
+      </a>
+    </h3>
+
+    {%- comment -%} ── Color Swatches ── {%- endcomment -%}
+    {%- if show_swatches and has_color_option and color_option != nil -%}
+      <div
+        class="product-card__swatches"
+        aria-label="[AVAILABLE COLORS]"
+        role="list"
+      >
+        {%- for value in color_option.values -%}
+          {%- comment -%}
+            Convert color name to CSS value.
+            For custom colors, set metafield or use a known name map.
+            This uses a simple CSS color name attempt; real impl should
+            use a metafield or JSON map for accurate hex values.
+          {%- endcomment -%}
+          {%- assign swatch_color = value | downcase | replace: ' ', '' -%}
+          <span
+            class="product-card__swatch"
+            role="listitem"
+            title="{{ value | escape }}"
+            aria-label="{{ value | escape }}"
+            style="--swatch-color: {{ swatch_color }};"
+          ></span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Price ── {%- endcomment -%}
+    <div class="product-card__price-wrapper">
+      {%- if on_sale -%}
+        <span class="product-card__price product-card__price--sale" aria-label="[SALE PRICE]: {{ product.price | money }}">
+          {{ product.price | money }}
+        </span>
+        <span class="product-card__price product-card__price--compare" aria-label="[ORIGINAL PRICE]: {{ product.compare_at_price | money }}">
+          <s>{{ product.compare_at_price | money }}</s>
+        </span>
+      {%- elsif product.price_varies -%}
+        <span class="product-card__price" aria-label="[PRICE FROM]: {{ product.price_min | money }}">
+          [FROM] {{ product.price_min | money }}
+        </span>
+      {%- else -%}
+        <span class="product-card__price" aria-label="[PRICE]: {{ product.price | money }}">
+          {{ product.price | money }}
+        </span>
+      {%- endif -%}
+
+      {%- comment -%} Tax display {%- endcomment -%}
+      {%- render 'geo-tax-display', inline: true -%}
+    </div>
+
+  </div>{%- comment -%} /.product-card__info {%- endcomment -%}
+
+</article>
+
+
+{%- comment -%} ── Styles (rendered once per page) ── {%- endcomment -%}
+{%- unless product_card_styles_rendered -%}
+  {%- assign product_card_styles_rendered = true -%}
+  <style>
+    /* ════════════════════════════════════════════════════
+       Product Card
+    ════════════════════════════════════════════════════ */
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      /* Fade-in: starts invisible, IntersectionObserver adds .is-visible */
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+
+    .product-card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* No JS / reduced motion fallback */
+    @media (prefers-reduced-motion: reduce) {
+      .product-card {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* ── Media wrapper ── */
+    .product-card__media-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      background: #F5F0E8;
+    }
+
+    .product-card__media-link {
+      display: block;
+      text-decoration: none;
+    }
+
+    .product-card__figure {
+      position: relative;
+      width: 100%;
+      height: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* ── Images ── */
+    .product-card__image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 500ms ease, transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-card__image--primary {
+      z-index: 1;
+    }
+
+    .product-card__image--hover {
+      z-index: 2;
+      opacity: 0;
+    }
+
+    @media (hover: hover) {
+      .product-card:hover .product-card__image--hover {
+        opacity: 1;
+      }
+      .product-card:hover .product-card__image--primary {
+        transform: scale(1.02);
+      }
+    }
+
+    /* ── Placeholder ── */
+    .product-card__placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F5F0E8;
+    }
+
+    .product-card__placeholder-svg {
+      width: 50%;
+      height: 50%;
+      opacity: 0.3;
+    }
+
+    /* ── Badges ── */
+    .product-card__badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-card__badge {
+      display: inline-block;
+      padding: 3px 7px;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 1px;
+    }
+
+    .product-card__badge--sale {
+      background: #2D4A6A;
+      color: #FFFFFF;
+    }
+
+    .product-card__badge--sold-out {
+      background: rgba(26, 26, 26, 0.7);
+      color: #FFFFFF;
+    }
+
+    .product-card__badge--new {
+      background: #F5F0E8;
+      color: #2D4A6A;
+      border: 1px solid rgba(45, 74, 106, 0.3);
+    }
+
+    /* ── Wishlist button ── */
+    .product-card__wishlist {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #2D4A6A;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 200ms ease, transform 200ms ease, background 200ms ease;
+    }
+
+    @media (hover: hover) {
+      .product-card:hover .product-card__wishlist {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Always visible on touch */
+    @media (hover: none) {
+      .product-card__wishlist {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .product-card__wishlist:hover {
+      background: #FFFFFF;
+    }
+
+    .product-card__wishlist:focus-visible {
+      outline: 2px solid #2D4A6A;
+      outline-offset: 2px;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .product-card__wishlist.is-active svg {
+      fill: #2D4A6A;
+      stroke: #2D4A6A;
+    }
+
+    /* ── Quick Add ── */
+    .product-card__quick-add {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      transform: translateY(100%);
+      transition: transform 300ms cubic-bezier(0.34, 1.1, 0.64, 1);
+    }
+
+    @media (hover: hover) {
+      .product-card:hover .product-card__quick-add {
+        transform: translateY(0);
+      }
+    }
+
+    .product-card__quick-add-btn {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      background: #2D4A6A;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 200ms ease;
+    }
+
+    .product-card__quick-add-btn:hover {
+      background: #1A3550;
+    }
+
+    /* ── Card info ── */
+    .product-card__info {
+      padding: 12px 2px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-card__vendor {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1A1A1A;
+      opacity: 0.4;
+      margin: 0;
+    }
+
+    .product-card__type {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #2D4A6A;
+      opacity: 0.7;
+      margin: 0;
+    }
+
+    .product-card__title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 400;
+      line-height: 1.3;
+      margin: 0;
+      color: #1A1A1A;
+      letter-spacing: 0.01em;
+    }
+
+    .product-card__title-link {
+      text-decoration: none;
+      color: inherit;
+      transition: color 200ms ease;
+    }
+
+    .product-card__title-link:hover {
+      color: #2D4A6A;
+    }
+
+    .product-card__title-link:focus-visible {
+      outline: 2px solid #2D4A6A;
+      outline-offset: 2px;
+      border-radius: 1px;
+    }
+
+    /* ── Swatches ── */
+    .product-card__swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .product-card__swatch {
+      display: block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--swatch-color, #ccc);
+      border: 1px solid rgba(26, 26, 26, 0.15);
+      cursor: pointer;
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    .product-card__swatch:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(45, 74, 106, 0.4);
+    }
+
+    /* ── Price ── */
+    .product-card__price-wrapper {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .product-card__price {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      color: #1A1A1A;
+    }
+
+    .product-card__price--sale {
+      color: #2D4A6A;
+    }
+
+    .product-card__price--compare {
+      opacity: 0.4;
+      font-size: 12px;
+    }
+
+    /* Sold out: dim the card */
+    .product-card--sold-out .product-card__media-wrapper {
+      opacity: 0.65;
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript (IntersectionObserver fade-in + Quick Add) ── {%- endcomment -%}
+{%- unless product_card_js_rendered -%}
+  {%- assign product_card_js_rendered = true -%}
+  <script>
+    /**
+     * product-card.js — Metsie Theme
+     *
+     * 1. IntersectionObserver: fade cards in as they scroll into view
+     * 2. Quick Add: AJAX add to cart for single-variant products
+     */
+    (function () {
+      'use strict';
+
+      // ── Fade-in on scroll ──────────────────────────────────────────────────────
+      if ('IntersectionObserver' in window) {
+        var cardObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              cardObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          rootMargin: '0px 0px -5% 0px',
+          threshold: 0.08
+        });
+
+        function observeCards() {
+          document.querySelectorAll('[data-product-card]').forEach(function (card) {
+            // Stagger delay based on position in row
+            var idx   = Array.from(card.parentElement ? card.parentElement.children : []).indexOf(card);
+            var delay = Math.min((idx % 4) * 80, 240);
+            card.style.transitionDelay = delay + 'ms';
+            cardObserver.observe(card);
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', observeCards);
+        } else {
+          observeCards();
+        }
+      } else {
+        // Fallback: show all cards immediately
+        document.querySelectorAll('[data-product-card]').forEach(function (c) {
+          c.classList.add('is-visible');
+        });
+      }
+
+      // ── Quick Add ─────────────────────────────────────────────────────────────
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-quick-add]');
+        if (!btn) return;
+        e.preventDefault();
+
+        var variantId = btn.dataset.variantId;
+        if (!variantId) return;
+
+        btn.textContent = '[ADDING...]';
+        btn.disabled    = true;
+
+        fetch('/cart/add.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body:    JSON.stringify({ id: variantId, quantity: 1 })
+        })
+        .then(function (res) {
+          if (!res.ok) throw new Error('add to cart failed');
+          return res.json();
+        })
+        .then(function () {
+          btn.textContent = '[ADDED!]';
+          setTimeout(function () {
+            btn.textContent = '[QUICK ADD]';
+            btn.disabled    = false;
+          }, 2000);
+          // Dispatch event for cart drawer / header count update
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+        })
+        .catch(function () {
+          btn.textContent = '[ERROR — TRY AGAIN]';
+          btn.disabled    = false;
+        });
+      });
+
+    })();
+  </script>
+{%- endunless -%}

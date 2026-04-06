@@ -1,0 +1,217 @@
+<div
+  class="collection-banner"
+  data-section-id="{{ section.id }}"
+  style="
+    {% if collection.image and section.settings.show_collection_image %}
+      background-image: url('{{ collection.image | img_url: '2000x' }}');
+      background-size: cover;
+      background-position: {{ section.settings.bg_position }};
+    {% else %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+  "
+>
+  {% if collection.image and section.settings.show_collection_image %}
+    <div class="collection-banner__overlay"></div>
+  {% endif %}
+
+  <div class="collection-banner__content">
+    <p class="section-label collection-banner__label">{{ section.settings.label | default: 'THE COLLECTION' | upcase }}</p>
+    <h1 class="collection-banner__title">
+      {% if section.settings.heading != blank %}
+        {{ section.settings.heading }}
+      {% elsif collection.title != blank %}
+        {{ collection.title }}
+      {% else %}
+        Mats designed to belong
+      {% endif %}
+    </h1>
+
+    {% if section.settings.show_description and collection.description != blank %}
+      <div class="collection-banner__description">
+        {{ collection.description | strip_html | truncate: 200 }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_product_count %}
+      <p class="collection-banner__count">
+        {{ collection.products_count }}
+        {% if collection.products_count == 1 %}
+          PRODUCT
+        {% else %}
+          PRODUCTS
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .collection-banner {
+    position: relative;
+    background-color: #2D4A6A;
+    color: #F5F0E8;
+    {% if section.settings.banner_height == 'small' %}
+      padding: 64px 40px;
+    {% elsif section.settings.banner_height == 'large' %}
+      padding: 160px 40px;
+    {% else %}
+      padding: 100px 40px;
+    {% endif %}
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .collection-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(45,74,106,0.5);
+    z-index: 1;
+  }
+
+  .collection-banner__content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    color: #F5F0E8;
+  }
+
+  /* When image is shown, always white text */
+  .collection-banner:has(.collection-banner__overlay) .collection-banner__content {
+    color: #F5F0E8;
+  }
+
+  .collection-banner__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.6;
+  }
+
+  .collection-banner__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 300;
+    margin: 0 0 20px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .collection-banner__description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.75;
+    margin-bottom: 20px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .collection-banner__count {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .collection-banner {
+      padding: 72px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .collection-banner {
+      padding: 56px 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "tag": "div",
+  "class": "collection-banner-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image as background",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "Image position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "top center", "label": "Top" },
+        { "value": "bottom center", "label": "Bottom" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Small label above heading",
+      "default": "THE COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (leave blank to use collection title)",
+      "default": "Mats designed to belong"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color (no image)",
+      "default": "#2D4A6A"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Banner",
+      "settings": {
+        "show_collection_image": true,
+        "show_description": true,
+        "show_product_count": true,
+        "banner_height": "medium",
+        "bg_color": "#2D4A6A",
+        "label": "THE COLLECTION",
+        "heading": "Mats designed to belong"
+      }
+    }
+  ]
+}
+{% endschema %}

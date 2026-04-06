@@ -1,0 +1,76 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "show_cart_count": true
+      }
+    },
+    "about-page": {
+      "type": "about-page",
+      "settings": {
+        "hero_heading": "[OUR STORY]",
+        "hero_subheading": "[CRAFTED WITH INTENTION. DESIGNED FOR LIVING.]",
+        "hero_image": "",
+        "hero_bg_color": "#2D4A6A",
+        "mission_heading": "[OUR MISSION]",
+        "mission_text": "[DESCRIBE YOUR BRAND MISSION — COMMITMENT TO QUALITY, SUSTAINABILITY, AND THOUGHTFUL DESIGN]",
+        "values_heading": "[WHAT WE BELIEVE]",
+        "show_team": true,
+        "team_heading": "[THE PEOPLE BEHIND METSIE]",
+        "cta_heading": "[READY TO FIND YOUR PERFECT MAT?]",
+        "cta_button_text": "SHOP NOW",
+        "cta_button_link": "/collections/all"
+      },
+      "blocks": {
+        "value-1": {
+          "type": "value",
+          "settings": {
+            "heading": "[QUALITY]",
+            "text": "[DESCRIBE YOUR COMMITMENT TO QUALITY MATERIALS AND CRAFTSMANSHIP]"
+          }
+        },
+        "value-2": {
+          "type": "value",
+          "settings": {
+            "heading": "[SUSTAINABILITY]",
+            "text": "[DESCRIBE YOUR SUSTAINABLE PRACTICES AND ECO-FRIENDLY MATERIALS]"
+          }
+        },
+        "value-3": {
+          "type": "value",
+          "settings": {
+            "heading": "[DESIGN]",
+            "text": "[DESCRIBE YOUR DESIGN PHILOSOPHY AND AESTHETIC VISION]"
+          }
+        }
+      },
+      "blocks_order": ["value-1", "value-2", "value-3"]
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "[DESIGNED FOR LIVING]",
+        "shop_menu": "footer-shop",
+        "help_menu": "footer-help",
+        "contact_email": "[hello@metsie.com]",
+        "show_social": true,
+        "instagram_url": "[INSTAGRAM URL]",
+        "pinterest_url": "[PINTEREST URL]",
+        "facebook_url": "[FACEBOOK URL]",
+        "show_payment_icons": true,
+        "show_currency_selector": true,
+        "copyright_text": "ALL RIGHTS RESERVED"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "about-page",
+    "footer"
+  ]
+}

@@ -1,0 +1,468 @@
+{%- comment -%}
+  Mobile Menu — Full-screen dark navy overlay.
+  Triggered via: @click="$dispatch('open-mobile-menu')"
+  Close: @keydown.escape, tap backdrop, or close button.
+{%- endcomment -%}
+
+<div
+  class="mobile-menu"
+  x-data="mobileMenu()"
+  @open-mobile-menu.window="open()"
+  @keydown.escape.window="close()"
+  :class="{ 'is-open': isOpen }"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+>
+  {%- comment -%} Full-screen panel {%- endcomment -%}
+  <div
+    class="mobile-menu__panel"
+    x-show="isOpen"
+    x-transition:enter="menu-enter"
+    x-transition:enter-start="menu-enter-start"
+    x-transition:enter-end="menu-enter-end"
+    x-transition:leave="menu-leave"
+    x-transition:leave-start="menu-leave-start"
+    x-transition:leave-end="menu-leave-end"
+  >
+
+    {%- comment -%} Header row {%- endcomment -%}
+    <div class="mobile-menu__header">
+      <a href="/" class="mobile-menu__logo" @click="close()" aria-label="{{ shop.name }} — Home">
+        <svg viewBox="0 0 100 24" fill="none" height="20" aria-label="{{ shop.name }}" role="img">
+          <text
+            x="0" y="20"
+            font-family="'Cormorant Garamond', Georgia, serif"
+            font-size="22"
+            font-weight="300"
+            letter-spacing="6"
+            fill="currentColor"
+          >{{ section.settings.logo_text | default: 'METSIE' }}</text>
+        </svg>
+      </a>
+      <button
+        class="mobile-menu__close"
+        @click="close()"
+        aria-label="Close menu"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M1 1l18 18M19 1L1 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- comment -%} Primary navigation {%- endcomment -%}
+    <nav class="mobile-menu__nav" aria-label="Main navigation">
+      {% if section.settings.menu != blank %}
+        {% for link in linklists[section.settings.menu].links %}
+          {% if link.links.size > 0 %}
+            <div class="mobile-menu__nav-group" x-data="{ subOpen: false }">
+              <button
+                class="mobile-menu__link mobile-menu__link--parent"
+                @click="subOpen = !subOpen"
+                :aria-expanded="subOpen"
+              >
+                <span>{{ link.title | upcase }}</span>
+                <svg
+                  class="mobile-menu__link-icon"
+                  :class="{ 'is-rotated': subOpen }"
+                  width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+                >
+                  <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="mobile-menu__subnav" x-show="subOpen" x-transition>
+                {% for sublink in link.links %}
+                  <a href="{{ sublink.url }}" class="mobile-menu__sublink" @click="close()">
+                    {{ sublink.title | upcase }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            <a
+              href="{{ link.url }}"
+              class="mobile-menu__link{% if link.active %} is-active{% endif %}"
+              @click="close()"
+            >
+              {{ link.title | upcase }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <a href="/collections/all" class="mobile-menu__link" @click="close()">SHOP</a>
+        <a href="/collections/geometric" class="mobile-menu__link" @click="close()">GEOMETRIC</a>
+        <a href="/collections/organic" class="mobile-menu__link" @click="close()">ORGANIC</a>
+        <a href="/collections/wavy" class="mobile-menu__link" @click="close()">WAVY</a>
+        <a href="/pages/about" class="mobile-menu__link" @click="close()">ABOUT</a>
+        <a href="/pages/inspiration" class="mobile-menu__link" @click="close()">INSPIRATION</a>
+        <a href="/blogs/news" class="mobile-menu__link" @click="close()">BLOG</a>
+      {% endif %}
+    </nav>
+
+    {%- comment -%} Divider {%- endcomment -%}
+    <div class="mobile-menu__divider"></div>
+
+    {%- comment -%} Secondary links {%- endcomment -%}
+    <nav class="mobile-menu__secondary" aria-label="Secondary navigation">
+      {% if section.settings.secondary_menu != blank %}
+        {% for link in linklists[section.settings.secondary_menu].links %}
+          <a href="{{ link.url }}" class="mobile-menu__secondary-link" @click="close()">
+            {{ link.title | upcase }}
+          </a>
+        {% endfor %}
+      {% else %}
+        <a href="/pages/faq" class="mobile-menu__secondary-link" @click="close()">FAQ</a>
+        <a href="/pages/shipping" class="mobile-menu__secondary-link" @click="close()">SHIPPING & RETURNS</a>
+        <a href="/pages/contact" class="mobile-menu__secondary-link" @click="close()">CONTACT</a>
+      {% endif %}
+    </nav>
+
+    {%- comment -%} Footer: social + currency {%- endcomment -%}
+    <div class="mobile-menu__footer">
+      {% if section.settings.show_social %}
+        <div class="mobile-menu__social">
+          {% if section.settings.instagram_url != blank %}
+            <a href="{{ section.settings.instagram_url }}" class="mobile-menu__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.pinterest_url != blank %}
+            <a href="{{ section.settings.pinterest_url }}" class="mobile-menu__social-link" aria-label="Pinterest" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.18-.78 1.22-5.17 1.22-5.17s-.31-.63-.31-1.56c0-1.46.85-2.55 1.9-2.55.9 0 1.33.67 1.33 1.48 0 .9-.58 2.26-.87 3.51-.25 1.05.52 1.9 1.54 1.9 1.85 0 3.09-2.38 3.09-5.2 0-2.14-1.44-3.74-4.03-3.74-2.94 0-4.76 2.2-4.76 4.65 0 .84.24 1.44.62 1.9.17.2.19.28.13.51-.04.17-.14.57-.18.73-.06.23-.24.31-.43.23-1.2-.49-1.76-1.81-1.76-3.3 0-2.44 2.06-5.37 6.16-5.37 3.31 0 5.49 2.4 5.49 4.98 0 3.41-1.89 5.96-4.66 5.96-.93 0-1.81-.5-2.11-1.07l-.58 2.2c-.21.8-.77 1.8-1.15 2.41.87.27 1.79.42 2.75.42 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.facebook_url != blank %}
+            <a href="{{ section.settings.facebook_url }}" class="mobile-menu__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if shop.enabled_currencies.size > 1 %}
+        <div class="mobile-menu__currency">
+          {% form 'currency' %}
+            <select name="currency" class="mobile-menu__select" onchange="this.form.submit()">
+              {% for currency in shop.enabled_currencies %}
+                <option value="{{ currency.iso_code }}" {% if currency == cart.currency %}selected{% endif %}>
+                  {{ currency.iso_code }} {{ currency.symbol }}
+                </option>
+              {% endfor %}
+            </select>
+          {% endform %}
+        </div>
+      {% endif %}
+
+      <p class="mobile-menu__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    pointer-events: none;
+  }
+
+  .mobile-menu.is-open {
+    pointer-events: all;
+  }
+
+  .mobile-menu__panel {
+    position: fixed;
+    inset: 0;
+    background-color: #1E3A5F;
+    color: #F5F0E8;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  /* Transitions */
+  .menu-enter { transition: opacity 0.3s ease, transform 0.3s ease; }
+  .menu-enter-start { opacity: 0; transform: translateX(-20px); }
+  .menu-enter-end { opacity: 1; transform: translateX(0); }
+  .menu-leave { transition: opacity 0.25s ease; }
+  .menu-leave-start { opacity: 1; }
+  .menu-leave-end { opacity: 0; }
+
+  /* Header */
+  .mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu__logo {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .mobile-menu__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #F5F0E8;
+    padding: 6px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  .mobile-menu__close:hover { opacity: 1; }
+
+  /* Primary nav */
+  .mobile-menu__nav {
+    flex: 1;
+    padding: 32px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: #F5F0E8;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(245,240,232,0.08);
+    transition: opacity 0.2s ease;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .mobile-menu__link:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-menu__link:hover,
+  .mobile-menu__link.is-active {
+    opacity: 0.6;
+  }
+
+  .mobile-menu__link-icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    opacity: 0.5;
+  }
+
+  .mobile-menu__link-icon.is-rotated {
+    transform: rotate(180deg);
+  }
+
+  /* Subnav */
+  .mobile-menu__subnav {
+    padding: 8px 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mobile-menu__sublink {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: rgba(245,240,232,0.7);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .mobile-menu__sublink:hover {
+    color: #F5F0E8;
+  }
+
+  /* Divider */
+  .mobile-menu__divider {
+    height: 1px;
+    background-color: rgba(245,240,232,0.1);
+    margin: 0 24px;
+  }
+
+  /* Secondary nav */
+  .mobile-menu__secondary {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mobile-menu__secondary-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .mobile-menu__secondary-link:hover {
+    color: rgba(245,240,232,0.9);
+  }
+
+  /* Footer */
+  .mobile-menu__footer {
+    padding: 20px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: auto;
+    border-top: 1px solid rgba(245,240,232,0.1);
+  }
+
+  .mobile-menu__social {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mobile-menu__social-link {
+    color: rgba(245,240,232,0.6);
+    transition: color 0.2s ease;
+  }
+
+  .mobile-menu__social-link:hover {
+    color: #F5F0E8;
+  }
+
+  .mobile-menu__select {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.2);
+    color: rgba(245,240,232,0.7);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 6px 10px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+  }
+
+  .mobile-menu__select option {
+    background-color: #1E3A5F;
+    color: #F5F0E8;
+  }
+
+  .mobile-menu__copyright {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(245,240,232,0.3);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  /* Only show on mobile */
+  @media (min-width: 1025px) {
+    .mobile-menu {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function mobileMenu() {
+    return {
+      isOpen: false,
+      open() {
+        this.isOpen = true;
+        document.body.style.overflow = 'hidden';
+      },
+      close() {
+        this.isOpen = false;
+        document.body.style.overflow = '';
+      }
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Mobile Menu",
+  "tag": "div",
+  "class": "mobile-menu-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "METSIE"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Primary navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Secondary menu (help links)",
+      "default": "footer-help"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social links",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Menu",
+      "settings": {
+        "logo_text": "METSIE",
+        "menu": "main-menu",
+        "show_social": true
+      }
+    }
+  ]
+}
+{% endschema %}

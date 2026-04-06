@@ -1,0 +1,117 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": true,
+        "show_currency_selector": true
+      }
+    },
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Metsie creates mats designed to stay in the space",
+        "bg_color": "#2D4A6A",
+        "full_viewport": true,
+        "show_scroll_indicator": true
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "section_label": "THE COLLECTION",
+        "subheading": "A curated selection of essential designs in timeless tones",
+        "collection": "",
+        "products_to_show": 3,
+        "show_view_all": true,
+        "view_all_text": "VIEW ALL"
+      }
+    },
+    "brand-story": {
+      "type": "brand-story",
+      "settings": {
+        "label": "METSIE DESIGN STUDIOS",
+        "text": "<p>Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals</p>",
+        "button_text": "Our philosophy",
+        "button_link": "/pages/about",
+        "image": ""
+      }
+    },
+    "design-philosophy": {
+      "type": "design-philosophy",
+      "settings": {
+        "label": "DESIGN PHILOSOPHY",
+        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive"
+      }
+    },
+    "editorial-statement": {
+      "type": "editorial-statement",
+      "settings": {
+        "heading": "Crafted by balance. Created for living, spaces, and permanence.",
+        "button_text": "Explore",
+        "button_link": "/collections/all"
+      }
+    },
+    "service-features": {
+      "type": "service-features",
+      "settings": {
+        "label": "MAKING EXPERIENCE"
+      },
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "heading": "Free delivery",
+            "description": "Complimentary shipping on all orders across Europe"
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "heading": "Trade & studio orders",
+            "description": "Dedicated support and pricing for interior professionals"
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "heading": "Custom colors",
+            "description": "Bespoke colorway service for made-to-order pieces"
+          }
+        }
+      },
+      "blocks_order": ["feature-1", "feature-2", "feature-3"]
+    },
+    "editorial-grid": {
+      "type": "editorial-grid",
+      "settings": {
+        "label": "EDITORIAL",
+        "heading": "Moments where mats become part of the interior"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "newsletter_subtitle": "Subscribe to get a 10% discount on your first order!",
+        "newsletter_placeholder": "Your email address",
+        "newsletter_button": "SUBMIT",
+        "instagram_url": "",
+        "pinterest_url": ""
+      }
+    }
+  },
+  "order": [
+    "header",
+    "hero-banner",
+    "featured-collection",
+    "brand-story",
+    "design-philosophy",
+    "editorial-statement",
+    "service-features",
+    "editorial-grid",
+    "footer"
+  ]
+}

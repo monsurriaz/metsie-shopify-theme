@@ -1,0 +1,826 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Metsie",
+    "theme_version": "1.0.0",
+    "theme_author": "Metsie",
+    "theme_documentation_url": "https://metsie.com",
+    "theme_support_url": "https://metsie.com/support"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_deep_navy",
+        "label": "Deep Navy",
+        "info": "Used for hero backgrounds, navigation overlay, and footer.",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "color_navy_mid",
+        "label": "Navy Blue (Mid)",
+        "info": "Used for product accents and interactive elements.",
+        "default": "#1E3A5F"
+      },
+      {
+        "type": "color",
+        "id": "color_cream",
+        "label": "Cream / Ecru",
+        "info": "Primary body background.",
+        "default": "#F5F0E8"
+      },
+      {
+        "type": "color",
+        "id": "color_espresso",
+        "label": "Espresso / Dark Brown",
+        "info": "Used for accents and highlights.",
+        "default": "#2B1F18"
+      },
+      {
+        "type": "color",
+        "id": "color_light_gray",
+        "label": "Light Gray",
+        "info": "Card and surface backgrounds.",
+        "default": "#E8E8E4"
+      },
+      {
+        "type": "color",
+        "id": "color_white",
+        "label": "White",
+        "info": "Text on dark backgrounds.",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_near_black",
+        "label": "Near Black",
+        "info": "Primary body text color.",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "header",
+        "content": "Button Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_button_primary_bg",
+        "label": "Primary Button Background",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "color_button_primary_text",
+        "label": "Primary Button Text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_button_primary_hover",
+        "label": "Primary Button Hover Background",
+        "default": "#1E3A5F"
+      },
+      {
+        "type": "color",
+        "id": "color_button_secondary_border",
+        "label": "Secondary Button Border",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "color_button_secondary_text",
+        "label": "Secondary Button Text",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "header",
+        "content": "Link & Accent Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_link",
+        "label": "Link Color",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "color_link_hover",
+        "label": "Link Hover Color",
+        "default": "#1E3A5F"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border / Divider Color",
+        "default": "#E8E8E4"
+      },
+      {
+        "type": "color",
+        "id": "color_error",
+        "label": "Error / Alert Color",
+        "default": "#C0392B"
+      },
+      {
+        "type": "color",
+        "id": "color_success",
+        "label": "Success Color",
+        "default": "#27AE60"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Heading Font"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "info": "Display font for headings and hero text. Cormorant Garamond is the recommended Metsie brand font.",
+        "default": "cormorant_garamond_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_heading_scale",
+        "label": "Heading Size Scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      },
+      {
+        "type": "checkbox",
+        "id": "font_heading_capitalize",
+        "label": "Capitalize headings",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Body Font"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "info": "Used for navigation, labels, and body text. Inter is the recommended Metsie brand font.",
+        "default": "inter_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_body_scale",
+        "label": "Body Size Scale",
+        "min": 80,
+        "max": 130,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      },
+      {
+        "type": "header",
+        "content": "Google Fonts"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_google_fonts",
+        "label": "Load Cormorant Garamond & Inter from Google Fonts",
+        "info": "Recommended for best brand consistency. Disable to use system fonts.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Page Layout"
+      },
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page Max Width",
+        "min": 1000,
+        "max": 1600,
+        "step": 40,
+        "default": 1440,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "spacing_sections",
+        "label": "Section Vertical Spacing",
+        "min": 24,
+        "max": 96,
+        "step": 8,
+        "default": 64,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "spacing_grid_horizontal",
+        "label": "Grid Horizontal Gutter",
+        "min": 8,
+        "max": 48,
+        "step": 4,
+        "default": 24,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Image",
+        "info": "Recommended: SVG or PNG with transparent background. Max 400px wide."
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_dark",
+        "label": "Logo (Light / Inverted)",
+        "info": "Used on dark/navy backgrounds."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo Width",
+        "min": 80,
+        "max": 280,
+        "step": 8,
+        "default": 120,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Favicon"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Recommended: 32×32 or 64×64 px PNG or ICO file."
+      },
+      {
+        "type": "header",
+        "content": "Header Appearance"
+      },
+      {
+        "type": "select",
+        "id": "header_style",
+        "label": "Header Style",
+        "options": [
+          { "value": "transparent", "label": "Transparent (overlays hero)" },
+          { "value": "filled", "label": "Filled / Solid" },
+          { "value": "sticky", "label": "Sticky (scroll with page)" }
+        ],
+        "default": "transparent"
+      },
+      {
+        "type": "checkbox",
+        "id": "header_sticky",
+        "label": "Sticky header on scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_icon",
+        "label": "Show cart icon in header",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_search_icon",
+        "label": "Show search icon in header",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Announcement Bar",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_announcement",
+        "label": "Show announcement bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Announcement text",
+        "default": "[FREE SHIPPING ON ORDERS OVER €150 | COMPLIMENTARY SAMPLES WITH EVERY ORDER]"
+      },
+      {
+        "type": "url",
+        "id": "announcement_link",
+        "label": "Announcement link (optional)"
+      },
+      {
+        "type": "color",
+        "id": "announcement_bg",
+        "label": "Announcement bar background",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "announcement_text_color",
+        "label": "Announcement bar text color",
+        "default": "#FFFFFF"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Footer Content"
+      },
+      {
+        "type": "richtext",
+        "id": "footer_tagline",
+        "label": "Footer tagline / brand description",
+        "default": "<p>[CRAFTED FOR QUIET LIVING. PREMIUM FLOOR MATS & RUGS DESIGNED IN SCANDINAVIA.]</p>"
+      },
+      {
+        "type": "image_picker",
+        "id": "footer_logo",
+        "label": "Footer logo (light version)"
+      },
+      {
+        "type": "header",
+        "content": "Newsletter"
+      },
+      {
+        "type": "checkbox",
+        "id": "footer_show_newsletter",
+        "label": "Show newsletter signup in footer",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "footer_newsletter_heading",
+        "label": "Newsletter heading",
+        "default": "[STAY IN THE KNOW]"
+      },
+      {
+        "type": "text",
+        "id": "footer_newsletter_subtext",
+        "label": "Newsletter subtext",
+        "default": "[NEW COLLECTIONS, DESIGN STORIES, AND EXCLUSIVE OFFERS — DELIVERED QUIETLY.]"
+      },
+      {
+        "type": "text",
+        "id": "footer_newsletter_placeholder",
+        "label": "Email input placeholder",
+        "default": "[YOUR EMAIL ADDRESS]"
+      },
+      {
+        "type": "header",
+        "content": "Footer Colors"
+      },
+      {
+        "type": "color",
+        "id": "footer_bg_color",
+        "label": "Footer background color",
+        "default": "#2D4A6A"
+      },
+      {
+        "type": "color",
+        "id": "footer_text_color",
+        "label": "Footer text color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "footer_border_color",
+        "label": "Footer border/divider color",
+        "default": "#1E3A5F"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social Links"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL",
+        "info": "Full URL, e.g. https://instagram.com/metsie"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin",
+        "label": "LinkedIn URL"
+      }
+    ]
+  },
+  {
+    "name": "GEO & Internationalization",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Currency"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_currency_conversion",
+        "label": "Enable currency conversion",
+        "info": "Automatically converts prices based on visitor location. Requires Shopify Markets or a currency app.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_currency_selector",
+        "label": "Show currency selector in header",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Language"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_language_switcher",
+        "label": "Enable language switcher",
+        "info": "Shows language toggle in header/footer. Requires Shopify Markets with multiple languages.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_language_selector",
+        "label": "Show language selector in header",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "default_language",
+        "label": "Default language",
+        "options": [
+          { "value": "en", "label": "English" },
+          { "value": "de", "label": "Deutsch" },
+          { "value": "fr", "label": "Français" }
+        ],
+        "default": "en"
+      },
+      {
+        "type": "header",
+        "content": "GEO Detection"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_geo_redirect",
+        "label": "Enable GEO-based redirect suggestion",
+        "info": "Detects visitor country and suggests the correct regional storefront. Uses ipapi.co.",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "GDPR / Cookie Consent"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_gdpr_banner",
+        "label": "Show GDPR cookie consent banner",
+        "info": "Required for EU visitors. Disabling this may violate GDPR regulations.",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "gdpr_banner_text",
+        "label": "Cookie banner text",
+        "default": "[WE USE COOKIES TO ENHANCE YOUR EXPERIENCE AND ANALYSE SITE TRAFFIC. BY CONTINUING, YOU AGREE TO OUR COOKIE POLICY.]"
+      },
+      {
+        "type": "url",
+        "id": "gdpr_policy_link",
+        "label": "Cookie / Privacy Policy page URL"
+      },
+      {
+        "type": "text",
+        "id": "gdpr_accept_label",
+        "label": "Accept button label",
+        "default": "[ACCEPT ALL]"
+      },
+      {
+        "type": "text",
+        "id": "gdpr_decline_label",
+        "label": "Decline / Manage button label",
+        "default": "[MANAGE PREFERENCES]"
+      },
+      {
+        "type": "color",
+        "id": "gdpr_banner_bg",
+        "label": "Cookie banner background",
+        "default": "#2B1F18"
+      },
+      {
+        "type": "color",
+        "id": "gdpr_banner_text_color",
+        "label": "Cookie banner text color",
+        "default": "#FFFFFF"
+      }
+    ]
+  },
+  {
+    "name": "Product Pages",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product Display"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show product vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sku",
+        "label": "Show product SKU",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "product_image_ratio",
+        "label": "Product image aspect ratio",
+        "options": [
+          { "value": "square", "label": "Square (1:1)" },
+          { "value": "portrait", "label": "Portrait (3:4)" },
+          { "value": "landscape", "label": "Landscape (4:3)" }
+        ],
+        "default": "portrait"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_zoom",
+        "label": "Enable image zoom on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quantity_selector",
+        "label": "Show quantity selector",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_atc",
+        "label": "Enable sticky Add to Cart button",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Inventory"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_inventory_count",
+        "label": "Show inventory count when low",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "inventory_threshold",
+        "label": "Low inventory threshold",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "default": 5
+      }
+    ]
+  },
+  {
+    "name": "Collection Pages",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Grid Layout"
+      },
+      {
+        "type": "select",
+        "id": "collection_columns_desktop",
+        "label": "Products per row (desktop)",
+        "options": [
+          { "value": "2", "label": "2 columns" },
+          { "value": "3", "label": "3 columns" },
+          { "value": "4", "label": "4 columns" }
+        ],
+        "default": "3"
+      },
+      {
+        "type": "select",
+        "id": "collection_columns_mobile",
+        "label": "Products per row (mobile)",
+        "options": [
+          { "value": "1", "label": "1 column" },
+          { "value": "2", "label": "2 columns" }
+        ],
+        "default": "2"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "label": "Products per page",
+        "min": 12,
+        "max": 48,
+        "step": 4,
+        "default": 24
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_filter",
+        "label": "Show filter sidebar",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_sort",
+        "label": "Show sort dropdown",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Slide-out drawer" },
+          { "value": "page", "label": "Full cart page" },
+          { "value": "notification", "label": "Notification popup" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_recommendations",
+        "label": "Show product recommendations in cart",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_note_label",
+        "label": "Order note label",
+        "default": "[ADD A NOTE TO YOUR ORDER]"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_note",
+        "label": "Enable order notes",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "SEO & Analytics",
+    "settings": [
+      {
+        "type": "header",
+        "content": "SEO"
+      },
+      {
+        "type": "text",
+        "id": "meta_title_suffix",
+        "label": "Meta title suffix",
+        "default": "| Metsie"
+      },
+      {
+        "type": "textarea",
+        "id": "meta_description_default",
+        "label": "Default meta description",
+        "default": "[METSIE — PREMIUM FLOOR MATS AND RUGS DESIGNED IN SCANDINAVIA. CRAFTED FOR QUIET, CONSIDERED LIVING.]"
+      },
+      {
+        "type": "image_picker",
+        "id": "og_image_default",
+        "label": "Default Open Graph image",
+        "info": "Used for social sharing when no page-specific image exists. Recommended: 1200×630px."
+      },
+      {
+        "type": "header",
+        "content": "Analytics"
+      },
+      {
+        "type": "text",
+        "id": "google_analytics_id",
+        "label": "Google Analytics Measurement ID",
+        "info": "Format: G-XXXXXXXXXX"
+      },
+      {
+        "type": "text",
+        "id": "facebook_pixel_id",
+        "label": "Facebook Pixel ID"
+      },
+      {
+        "type": "text",
+        "id": "gtm_id",
+        "label": "Google Tag Manager ID",
+        "info": "Format: GTM-XXXXXXX. Overrides Google Analytics if both are set."
+      },
+      {
+        "type": "textarea",
+        "id": "custom_head_scripts",
+        "label": "Custom <head> scripts",
+        "info": "Additional scripts to inject in <head>. Use with caution."
+      },
+      {
+        "type": "textarea",
+        "id": "custom_body_scripts",
+        "label": "Custom scripts after <body>",
+        "info": "Scripts to inject immediately after the opening <body> tag."
+      }
+    ]
+  },
+  {
+    "name": "Advanced",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Performance"
+      },
+      {
+        "type": "checkbox",
+        "id": "lazy_load_images",
+        "label": "Enable lazy image loading",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "preload_hero_image",
+        "label": "Preload hero/banner image",
+        "info": "Improves LCP (Largest Contentful Paint) score.",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Accessibility"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_skip_link",
+        "label": "Show skip to content link",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "high_contrast_mode",
+        "label": "Enable high contrast mode support",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Custom CSS"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_css",
+        "label": "Custom CSS",
+        "info": "Additional CSS injected in <head>. Use sparingly."
+      }
+    ]
+  }
+]

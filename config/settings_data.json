@@ -1,0 +1,115 @@
+{
+  "current": {
+    "colors": {
+      "color_deep_navy": "#2D4A6A",
+      "color_navy_mid": "#1E3A5F",
+      "color_cream": "#F5F0E8",
+      "color_espresso": "#2B1F18",
+      "color_light_gray": "#E8E8E4",
+      "color_white": "#FFFFFF",
+      "color_near_black": "#1A1A1A",
+      "color_button_primary_bg": "#2D4A6A",
+      "color_button_primary_text": "#FFFFFF",
+      "color_button_primary_hover": "#1E3A5F",
+      "color_button_secondary_border": "#2D4A6A",
+      "color_button_secondary_text": "#2D4A6A",
+      "color_link": "#2D4A6A",
+      "color_link_hover": "#1E3A5F",
+      "color_border": "#E8E8E4",
+      "color_error": "#C0392B",
+      "color_success": "#27AE60",
+      "announcement_bg": "#2D4A6A",
+      "announcement_text_color": "#FFFFFF",
+      "footer_bg_color": "#2D4A6A",
+      "footer_text_color": "#FFFFFF",
+      "footer_border_color": "#1E3A5F",
+      "gdpr_banner_bg": "#2B1F18",
+      "gdpr_banner_text_color": "#FFFFFF"
+    },
+    "typography": {
+      "font_heading": "cormorant_garamond_n4",
+      "font_heading_scale": 100,
+      "font_heading_capitalize": false,
+      "font_body": "inter_n4",
+      "font_body_scale": 100,
+      "use_google_fonts": true
+    },
+    "layout": {
+      "page_width": 1440,
+      "spacing_sections": 64,
+      "spacing_grid_horizontal": 24
+    },
+    "header": {
+      "logo_width": 120,
+      "header_style": "transparent",
+      "header_sticky": true,
+      "show_cart_icon": true,
+      "show_search_icon": true
+    },
+    "announcement_bar": {
+      "show_announcement": true,
+      "announcement_text": "[FREE SHIPPING ON ORDERS OVER €150 | COMPLIMENTARY SAMPLES WITH EVERY ORDER]"
+    },
+    "footer": {
+      "footer_tagline": "<p>[CRAFTED FOR QUIET LIVING. PREMIUM FLOOR MATS & RUGS DESIGNED IN SCANDINAVIA.]</p>",
+      "footer_show_newsletter": true,
+      "footer_newsletter_heading": "[STAY IN THE KNOW]",
+      "footer_newsletter_subtext": "[NEW COLLECTIONS, DESIGN STORIES, AND EXCLUSIVE OFFERS — DELIVERED QUIETLY.]",
+      "footer_newsletter_placeholder": "[YOUR EMAIL ADDRESS]"
+    },
+    "social_media": {
+      "social_instagram": "",
+      "social_pinterest": "",
+      "social_facebook": "",
+      "social_tiktok": "",
+      "social_youtube": "",
+      "social_linkedin": ""
+    },
+    "geo_i18n": {
+      "enable_currency_conversion": true,
+      "show_currency_selector": true,
+      "enable_language_switcher": true,
+      "show_language_selector": true,
+      "default_language": "en",
+      "enable_geo_redirect": true,
+      "enable_gdpr_banner": true,
+      "gdpr_banner_text": "[WE USE COOKIES TO ENHANCE YOUR EXPERIENCE AND ANALYSE SITE TRAFFIC. BY CONTINUING, YOU AGREE TO OUR COOKIE POLICY.]",
+      "gdpr_accept_label": "[ACCEPT ALL]",
+      "gdpr_decline_label": "[MANAGE PREFERENCES]"
+    },
+    "product_pages": {
+      "show_vendor": false,
+      "show_sku": true,
+      "product_image_ratio": "portrait",
+      "enable_zoom": true,
+      "show_quantity_selector": true,
+      "enable_sticky_atc": true,
+      "show_inventory_count": true,
+      "inventory_threshold": 5
+    },
+    "collection_pages": {
+      "collection_columns_desktop": "3",
+      "collection_columns_mobile": "2",
+      "products_per_page": 24,
+      "show_collection_filter": true,
+      "show_collection_sort": true
+    },
+    "cart": {
+      "cart_type": "drawer",
+      "cart_show_recommendations": true,
+      "cart_note_label": "[ADD A NOTE TO YOUR ORDER]",
+      "enable_cart_note": true
+    },
+    "seo_analytics": {
+      "meta_title_suffix": "| Metsie",
+      "meta_description_default": "[METSIE — PREMIUM FLOOR MATS AND RUGS DESIGNED IN SCANDINAVIA. CRAFTED FOR QUIET, CONSIDERED LIVING.]"
+    },
+    "advanced": {
+      "lazy_load_images": true,
+      "preload_hero_image": true,
+      "enable_skip_link": true,
+      "high_contrast_mode": false
+    }
+  },
+  "presets": {}
+}

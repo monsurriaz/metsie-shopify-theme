@@ -1,0 +1,185 @@
+<section class="service-features" data-section-id="{{ section.id }}">
+  <div class="service-features__inner">
+
+    <div class="service-features__header">
+      <p class="service-features__label">{{ section.settings.label | default: 'MAKING EXPERIENCE' | upcase }}</p>
+    </div>
+
+    <div class="service-features__grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'feature' %}
+          <div class="service-features__item" {{ block.shopify_attributes }}>
+            <h3 class="service-features__item-heading">{{ block.settings.heading | default: '[Feature]' }}</h3>
+            {% if block.settings.description != blank %}
+              <p class="service-features__item-description">{{ block.settings.description }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        {%- comment -%} Default placeholder features when no blocks {%- endcomment -%}
+        <div class="service-features__item">
+          <h3 class="service-features__item-heading">Free delivery</h3>
+          <p class="service-features__item-description">Complimentary shipping on all orders across Europe</p>
+        </div>
+        <div class="service-features__item">
+          <h3 class="service-features__item-heading">Trade & studio orders</h3>
+          <p class="service-features__item-description">Dedicated support and pricing for interior professionals</p>
+        </div>
+        <div class="service-features__item">
+          <h3 class="service-features__item-heading">Custom colors</h3>
+          <p class="service-features__item-description">Bespoke colorway service for made-to-order pieces</p>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .service-features {
+    padding: 72px 0;
+    background-color: #FFFFFF;
+    border-top: 1px solid #E8E8E4;
+  }
+
+  .service-features__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .service-features__header {
+    margin-bottom: 48px;
+  }
+
+  .service-features__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #2D4A6A;
+    margin: 0;
+  }
+
+  .service-features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .service-features__item {
+    border-top: 1px solid #E8E8E4;
+    padding-top: 24px;
+  }
+
+  .service-features__item-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #1A1A1A;
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .service-features__item-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #666;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .service-features {
+      padding: 56px 0;
+    }
+    .service-features__inner {
+      padding: 0 24px;
+    }
+    .service-features__grid {
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .service-features__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .service-features__inner {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Service Features",
+  "tag": "section",
+  "class": "service-features-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "MAKING EXPERIENCE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Feature heading",
+          "default": "Free delivery"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Feature description",
+          "default": "Complimentary shipping on all orders across Europe"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Service Features",
+      "settings": {
+        "label": "MAKING EXPERIENCE"
+      },
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "heading": "Free delivery",
+            "description": "Complimentary shipping on all orders across Europe"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "heading": "Trade & studio orders",
+            "description": "Dedicated support and pricing for interior professionals"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "heading": "Custom colors",
+            "description": "Bespoke colorway service for made-to-order pieces"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

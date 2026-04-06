@@ -1,0 +1,303 @@
+{%- comment -%}
+  ================================================================================
+  geo-shipping-info.liquid — Metsie Theme
+  ================================================================================
+  Dynamic shipping information display based on detected visitor location.
+
+  USAGE:
+    On product page:
+      {% render 'geo-shipping-info', context: 'product' %}
+
+    On cart page:
+      {% render 'geo-shipping-info', context: 'cart' %}
+
+    Inline (compact):
+      {% render 'geo-shipping-info', context: 'inline' %}
+
+  PARAMETERS:
+    context (string) — 'product' | 'cart' | 'inline'
+
+  SHIPPING ZONES:
+    EU          → Free shipping over €X | 2-4 business days
+    US          → Flat rate $X          | 7-12 business days
+    UK          → Flat rate £X          | 5-8 business days
+    Switzerland → Flat rate CHF X       | 3-5 business days
+    Scandinavia → Free over €X          | 4-7 business days
+    Rest        → Flat rate €X          | 10-18 business days
+
+  NOTES:
+    - Default zone shown on first render (EU)
+    - JS layer updates based on sessionStorage geo data
+    - Listens to 'geo:detected' event to update dynamically
+    - Threshold amounts should be updated in the JS config object
+  ================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign context = context | default: 'product'
+-%}
+
+<div
+  class="geo-shipping geo-shipping--{{ context }}"
+  data-geo-shipping
+  data-context="{{ context }}"
+  aria-live="polite"
+  aria-atomic="true"
+>
+
+  {%- comment -%}
+    Default render: EU zone. JavaScript updates this once geo is detected.
+    Using data attributes so JS can find and update each piece.
+  {%- endcomment -%}
+
+  {%- if context == 'product' or context == 'cart' -%}
+
+    <div class="geo-shipping__icon" aria-hidden="true">
+      {%- render 'svg-icons', icon: 'truck', size: 18 -%}
+    </div>
+
+    <div class="geo-shipping__content">
+      <p class="geo-shipping__free-shipping" data-shipping-free>
+        [FREE SHIPPING WITHIN EU ON ORDERS OVER €150]
+      </p>
+
+      <p class="geo-shipping__delivery" data-shipping-delivery>
+        [ESTIMATED DELIVERY: 2–4 BUSINESS DAYS]
+      </p>
+
+      <p class="geo-shipping__destination" data-shipping-destination>
+        {%- comment -%} JS will replace with: [SHIPPING TO: {DETECTED COUNTRY}] {%- endcomment -%}
+        [SHIPPING TO: EUROPEAN UNION]
+      </p>
+    </div>
+
+  {%- elsif context == 'inline' -%}
+
+    {%- comment -%} Compact single-line for announcement bar, etc. {%- endcomment -%}
+    <span class="geo-shipping__inline-text" data-shipping-inline>
+      {%- render 'svg-icons', icon: 'truck', size: 14 -%}
+      [FREE EU SHIPPING ON ORDERS OVER €150]
+    </span>
+
+  {%- endif -%}
+
+</div>
+
+
+{%- comment -%} ── Styles ── {%- endcomment -%}
+{%- unless geo_shipping_styles_rendered -%}
+  {%- assign geo_shipping_styles_rendered = true -%}
+  <style>
+    /* ── geo-shipping-info ── */
+    .geo-shipping {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Product & Cart: vertical info block */
+    .geo-shipping--product,
+    .geo-shipping--cart {
+      padding: 14px 16px;
+      background: rgba(245, 240, 232, 0.6);
+      border: 1px solid rgba(45, 74, 106, 0.1);
+      border-radius: 2px;
+    }
+
+    .geo-shipping__icon {
+      color: #2D4A6A;
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    .geo-shipping__content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .geo-shipping__free-shipping,
+    .geo-shipping__delivery,
+    .geo-shipping__destination {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+
+    .geo-shipping__free-shipping {
+      color: #2D4A6A;
+      font-weight: 600;
+    }
+
+    .geo-shipping__delivery {
+      color: #1A1A1A;
+      opacity: 0.75;
+    }
+
+    .geo-shipping__destination {
+      color: #1A1A1A;
+      opacity: 0.45;
+      font-size: 10px;
+    }
+
+    /* Inline compact */
+    .geo-shipping--inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .geo-shipping__inline-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #2D4A6A;
+    }
+
+    /* Loading state — shown briefly while geo detects */
+    .geo-shipping.is-loading .geo-shipping__content,
+    .geo-shipping.is-loading .geo-shipping__inline-text {
+      opacity: 0.4;
+    }
+  </style>
+{%- endunless -%}
+
+
+{%- comment -%} ── JavaScript ── {%- endcomment -%}
+{%- unless geo_shipping_js_rendered -%}
+  {%- assign geo_shipping_js_rendered = true -%}
+  <script>
+    /**
+     * geo-shipping-info.js — Metsie Theme
+     *
+     * Shipping zone configuration. Update thresholds and messaging here.
+     * Listens to 'geo:detected' to update all shipping widgets on the page.
+     */
+    (function () {
+      'use strict';
+
+      // ── Shipping zone config ─────────────────────────────────────────────────
+      // Update these values to match Shopify shipping rate settings
+      var SHIPPING_ZONES = {
+        EU: {
+          // Eurozone + EU countries
+          countries: [
+            'AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI',
+            'FR','GR','HR','HU','IE','IT','LT','LU','LV','MT',
+            'NL','PL','PT','RO','SE','SI','SK'
+          ],
+          freeThreshold:  150,
+          currency:       'EUR',
+          freeLabel:      '[FREE SHIPPING WITHIN EU ON ORDERS OVER €150]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 2–4 BUSINESS DAYS]',
+          zoneName:       'EUROPEAN UNION'
+        },
+        US: {
+          countries: ['US'],
+          flatRate:       25,
+          currency:       'USD',
+          freeLabel:      '[FLAT RATE SHIPPING: $25]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 7–12 BUSINESS DAYS]',
+          zoneName:       'UNITED STATES'
+        },
+        GB: {
+          countries: ['GB'],
+          flatRate:       15,
+          currency:       'GBP',
+          freeLabel:      '[FLAT RATE SHIPPING: £15]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 5–8 BUSINESS DAYS]',
+          zoneName:       'UNITED KINGDOM'
+        },
+        CH: {
+          countries: ['CH'],
+          flatRate:       18,
+          currency:       'CHF',
+          freeLabel:      '[FLAT RATE SHIPPING: CHF 18]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 3–5 BUSINESS DAYS]',
+          zoneName:       'SWITZERLAND'
+        },
+        NO: {
+          countries: ['NO'],
+          freeThreshold:  150,
+          currency:       'EUR',
+          freeLabel:      '[FREE SHIPPING ON ORDERS OVER €150]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 4–7 BUSINESS DAYS]',
+          zoneName:       'NORWAY'
+        },
+        DEFAULT: {
+          countries:     [],
+          flatRate:       25,
+          currency:       'EUR',
+          freeLabel:      '[INTERNATIONAL SHIPPING: €25]',
+          deliveryLabel:  '[ESTIMATED DELIVERY: 10–18 BUSINESS DAYS]',
+          zoneName:       'YOUR REGION'
+        }
+      };
+
+      function getZoneForCountry(countryCode) {
+        for (var zone in SHIPPING_ZONES) {
+          if (zone === 'DEFAULT') continue;
+          if (SHIPPING_ZONES[zone].countries.indexOf(countryCode) > -1) {
+            return SHIPPING_ZONES[zone];
+          }
+        }
+        return SHIPPING_ZONES.DEFAULT;
+      }
+
+      function updateShippingWidgets(geoData) {
+        var zone        = getZoneForCountry(geoData.country_code);
+        var countryName = geoData.country_name || zone.zoneName;
+
+        document.querySelectorAll('[data-geo-shipping]').forEach(function (widget) {
+          widget.classList.remove('is-loading');
+
+          var context = widget.dataset.context;
+
+          if (context === 'inline') {
+            var inlineEl = widget.querySelector('[data-shipping-inline]');
+            if (inlineEl) {
+              inlineEl.textContent = zone.freeLabel;
+            }
+            return;
+          }
+
+          var freeEl  = widget.querySelector('[data-shipping-free]');
+          var delivEl = widget.querySelector('[data-shipping-delivery]');
+          var destEl  = widget.querySelector('[data-shipping-destination]');
+
+          if (freeEl)  freeEl.textContent  = zone.freeLabel;
+          if (delivEl) delivEl.textContent  = zone.deliveryLabel;
+          if (destEl)  destEl.textContent   = '[SHIPPING TO: ' + countryName.toUpperCase() + ']';
+        });
+      }
+
+      // ── Listen for geo:detected ───────────────────────────────────────────────
+      document.addEventListener('geo:detected', function (e) {
+        if (e.detail && e.detail.country_code) {
+          updateShippingWidgets(e.detail);
+        }
+      });
+
+      // ── Check sessionStorage on load ─────────────────────────────────────────
+      // In case geo:detected fired before this script initialized
+      (function () {
+        var cached = sessionStorage.getItem('metsie_geo_data');
+        if (!cached) return;
+        try {
+          var geo = JSON.parse(cached);
+          if (geo && geo.country_code) updateShippingWidgets(geo);
+        } catch(e) {}
+      })();
+
+    })();
+  </script>
+{%- endunless -%}
