@@ -28,7 +28,7 @@
 
     {%- comment -%} Header row {%- endcomment -%}
     <div class="mobile-menu__header">
-      <a href="/" class="mobile-menu__logo" @click="close()" aria-label="{{ shop.name }} — Home">
+      <a href="{{ routes.root_url }}" class="mobile-menu__logo" @click="close()" aria-label="{{ shop.name }} — Home">
         <svg viewBox="0 0 100 24" fill="none" height="20" aria-label="{{ shop.name }}" role="img">
           <text
             x="0" y="20"
@@ -90,7 +90,7 @@
           {% endif %}
         {% endfor %}
       {% else %}
-        <a href="/collections/all" class="mobile-menu__link" @click="close()">SHOP</a>
+        <a href="{{ routes.all_products_collection_url }}" class="mobile-menu__link" @click="close()">SHOP</a>
         <a href="/collections/geometric" class="mobile-menu__link" @click="close()">GEOMETRIC</a>
         <a href="/collections/organic" class="mobile-menu__link" @click="close()">ORGANIC</a>
         <a href="/collections/wavy" class="mobile-menu__link" @click="close()">WAVY</a>
@@ -425,8 +425,7 @@
     {
       "type": "link_list",
       "id": "secondary_menu",
-      "label": "Secondary menu (help links)",
-      "default": "footer-help"
+      "label": "Secondary menu (help links)"
     },
     {
       "type": "header",

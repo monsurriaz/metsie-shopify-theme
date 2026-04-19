@@ -246,7 +246,11 @@
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": {{ request.origin | append: '/search?q={search_term_string}' | json }}
+      
+      {%- assign search_placeholder = '{search_term_string}' -%}
+      {%- assign search_url = request.origin | append: "/search?q=" | append: search_placeholder -%}
+
+      "urlTemplate": {{ search_url | json }}
     },
     "query-input": "required name=search_term_string"
   }

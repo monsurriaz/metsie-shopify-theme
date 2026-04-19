@@ -34,9 +34,6 @@
         "help_menu": "footer-help",
         "contact_email": "[hello@metsie.com]",
         "show_social": true,
-        "instagram_url": "[INSTAGRAM URL]",
-        "pinterest_url": "[PINTEREST URL]",
-        "facebook_url": "[FACEBOOK URL]",
         "show_payment_icons": true,
         "show_currency_selector": true,
         "copyright_text": "ALL RIGHTS RESERVED"

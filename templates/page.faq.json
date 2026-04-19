@@ -25,7 +25,7 @@
           "settings": {
             "category": "ORDERING",
             "question": "[HOW DO I PLACE AN ORDER?]",
-            "answer": "[DESCRIBE THE ORDERING PROCESS — BROWSE, SELECT SIZE AND COLOR, ADD TO CART, AND CHECKOUT.]"
+            "answer": "<p>[DESCRIBE THE ORDERING PROCESS — BROWSE, SELECT SIZE AND COLOR, ADD TO CART, AND CHECKOUT.]</p>"
           }
         },
         "faq-2": {
@@ -33,7 +33,7 @@
           "settings": {
             "category": "SHIPPING",
             "question": "[HOW LONG DOES SHIPPING TAKE?]",
-            "answer": "[PROVIDE SHIPPING TIMEFRAMES FOR DIFFERENT REGIONS — E.G. EUROPE 3–5 BUSINESS DAYS, INTERNATIONAL 7–14 DAYS.]"
+            "answer": "<p>[PROVIDE SHIPPING TIMEFRAMES FOR DIFFERENT REGIONS — E.G. EUROPE 3–5 BUSINESS DAYS, INTERNATIONAL 7–14 DAYS.]</p>"
           }
         },
         "faq-3": {
@@ -41,7 +41,7 @@
           "settings": {
             "category": "SHIPPING",
             "question": "[DO YOU OFFER FREE SHIPPING?]",
-            "answer": "[DESCRIBE FREE SHIPPING THRESHOLD — E.G. FREE SHIPPING ON ALL ORDERS OVER €150 WITHIN EUROPE.]"
+            "answer": "<p>[DESCRIBE FREE SHIPPING THRESHOLD — E.G. FREE SHIPPING ON ALL ORDERS OVER €150 WITHIN EUROPE.]</p>"
           }
         },
         "faq-4": {
@@ -49,7 +49,7 @@
           "settings": {
             "category": "RETURNS",
             "question": "[WHAT IS YOUR RETURN POLICY?]",
-            "answer": "[DESCRIBE RETURN POLICY — E.G. FREE RETURNS WITHIN 30 DAYS OF DELIVERY FOR UNUSED ITEMS IN ORIGINAL PACKAGING.]"
+            "answer": "<p>[DESCRIBE RETURN POLICY — E.G. FREE RETURNS WITHIN 30 DAYS OF DELIVERY FOR UNUSED ITEMS IN ORIGINAL PACKAGING.]</p>"
           }
         },
         "faq-5": {
@@ -57,7 +57,7 @@
           "settings": {
             "category": "PRODUCTS",
             "question": "[HOW DO I CARE FOR MY METSIE MAT?]",
-            "answer": "[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH A DAMP CLOTH AND MILD SOAP. AVOID HARSH CHEMICALS. PROFESSIONAL CLEANING RECOMMENDED FOR DEEP CLEANS.]"
+            "answer": "<p>[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH A DAMP CLOTH AND MILD SOAP. AVOID HARSH CHEMICALS. PROFESSIONAL CLEANING RECOMMENDED FOR DEEP CLEANS.]</p>"
           }
         },
         "faq-6": {
@@ -65,7 +65,7 @@
           "settings": {
             "category": "PRODUCTS",
             "question": "[WHAT SIZES ARE AVAILABLE?]",
-            "answer": "[LIST AVAILABLE SIZES — E.G. SMALL (60×90CM), MEDIUM (90×150CM), LARGE (120×180CM), EXTRA LARGE (160×230CM).]"
+            "answer": "<p>[LIST AVAILABLE SIZES — E.G. SMALL (60×90CM), MEDIUM (90×150CM), LARGE (120×180CM), EXTRA LARGE (160×230CM).]</p>"
           }
         }
       },
@@ -79,9 +79,6 @@
         "help_menu": "footer-help",
         "contact_email": "[hello@metsie.com]",
         "show_social": true,
-        "instagram_url": "[INSTAGRAM URL]",
-        "pinterest_url": "[PINTEREST URL]",
-        "facebook_url": "[FACEBOOK URL]",
         "show_payment_icons": true,
         "show_currency_selector": true,
         "copyright_text": "ALL RIGHTS RESERVED"

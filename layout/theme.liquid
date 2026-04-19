@@ -382,7 +382,7 @@
   {%- comment -%} ============================================================
     HEADER
   ============================================================ {%- endcomment -%}
-  {% render 'header' %}
+  {% section 'header' %}
 
   {%- comment -%} ============================================================
     MAIN CONTENT
@@ -394,20 +394,20 @@
   {%- comment -%} ============================================================
     FOOTER
   ============================================================ {%- endcomment -%}
-  {% render 'footer' %}
+  {% comment %} {% section 'footer' %} {% endcomment %}
 
   {%- comment -%} ============================================================
     CART DRAWER (if cart type = drawer)
   ============================================================ {%- endcomment -%}
   {%- if settings.cart_type == 'drawer' -%}
-    {% render 'cart-drawer' %}
+    {% comment %} {% section 'cart-drawer' %} {% endcomment %}
   {%- endif -%}
 
   {%- comment -%} ============================================================
     GDPR COOKIE BANNER
   ============================================================ {%- endcomment -%}
   {%- if settings.enable_gdpr_banner -%}
-    {% render 'gdpr-banner' %}
+    {% render 'gdpr-cookie-banner' %}
   {%- endif -%}
 
   {%- comment -%} ============================================================

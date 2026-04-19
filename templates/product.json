@@ -29,7 +29,7 @@
           "type": "accordion",
           "settings": {
             "heading": "KEY FEATURES",
-            "content": "[LIST KEY PRODUCT FEATURES HERE — E.G. HAND-TUFTED, NON-SLIP BACKING, ECO-FRIENDLY MATERIALS]",
+            "content": "<p>[LIST KEY PRODUCT FEATURES HERE — E.G. HAND-TUFTED, NON-SLIP BACKING, ECO-FRIENDLY MATERIALS]</p>",
             "open_by_default": true
           }
         },
@@ -37,7 +37,7 @@
           "type": "accordion",
           "settings": {
             "heading": "MATERIALS",
-            "content": "[DESCRIBE MATERIALS USED — E.G. 100% WOOL PILE, COTTON BACKING, NATURAL DYES]",
+            "content": "<p>[DESCRIBE MATERIALS USED — E.G. 100% WOOL PILE, COTTON BACKING, NATURAL DYES]</p>",
             "open_by_default": false
           }
         },
@@ -45,7 +45,7 @@
           "type": "accordion",
           "settings": {
             "heading": "CARE INSTRUCTIONS",
-            "content": "[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH DAMP CLOTH, PROFESSIONAL CLEANING RECOMMENDED]",
+            "content": "<p>[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH DAMP CLOTH, PROFESSIONAL CLEANING RECOMMENDED]</p>",
             "open_by_default": false
           }
         },
@@ -53,7 +53,7 @@
           "type": "accordion",
           "settings": {
             "heading": "RETURNS & EXCHANGES",
-            "content": "[DESCRIBE RETURN AND EXCHANGE POLICY — E.G. FREE RETURNS WITHIN 30 DAYS]",
+            "content": "<p>[DESCRIBE RETURN AND EXCHANGE POLICY — E.G. FREE RETURNS WITHIN 30 DAYS]</p>",
             "open_by_default": false
           }
         }
@@ -81,9 +81,6 @@
         "help_menu": "footer-help",
         "contact_email": "[hello@metsie.com]",
         "show_social": true,
-        "instagram_url": "[INSTAGRAM URL]",
-        "pinterest_url": "[PINTEREST URL]",
-        "facebook_url": "[FACEBOOK URL]",
         "show_payment_icons": true,
         "show_currency_selector": true,
         "copyright_text": "ALL RIGHTS RESERVED"

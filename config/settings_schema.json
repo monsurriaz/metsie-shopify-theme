@@ -144,8 +144,8 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Heading Font",
-        "info": "Display font for headings and hero text. Cormorant Garamond is the recommended Metsie brand font.",
-        "default": "cormorant_garamond_n4"
+        "info": "Display font for headings and hero text. Cormorant Garamond [cormorant_garamond_n4] is the recommended Metsie brand font.",
+        "default": "assistant_n6"
       },
       {
         "type": "range",
@@ -171,7 +171,7 @@
         "type": "font_picker",
         "id": "font_body",
         "label": "Body Font",
-        "info": "Used for navigation, labels, and body text. Inter is the recommended Metsie brand font.",
+        "info": "Used for navigation, labels, and body text. Inter [inter_n4] is the recommended Metsie brand font.",
         "default": "inter_n4"
       },
       {
