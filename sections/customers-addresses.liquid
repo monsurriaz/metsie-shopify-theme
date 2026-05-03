@@ -332,7 +332,7 @@
 <script>
   function addressManager() {
     return {
-      showNew: {{ customer.addresses.size == 0 | json }},
+      showNew: {% if customer.addresses.size == 0 %}true{% else %}false{% endif %},
       editId: null,
       openNew() { this.showNew = true; this.editId = null; },
       openEdit(id) { this.editId = id; this.showNew = false; }
