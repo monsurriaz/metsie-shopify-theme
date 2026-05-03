@@ -1,0 +1,21 @@
+# Ignore everything
+*
+
+# Keep Shopify theme core directories
+!assets/
+!assets/**
+!config/
+!config/**
+!layout/
+!layout/**
+!locales/
+!locales/**
+!sections/
+!sections/**
+!snippets/
+!snippets/**
+!templates/
+!templates/**
+
+# Keep this file
+!.gitignore
