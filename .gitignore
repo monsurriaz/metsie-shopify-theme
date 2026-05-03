@@ -4,6 +4,8 @@
 # Keep Shopify theme core directories
 !assets/
 !assets/**
+!blocks/
+!blocks/**
 !config/
 !config/**
 !layout/
