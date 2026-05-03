@@ -1011,6 +1011,8 @@ function initStickyAtc() {
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('is-loaded');
+
   // Remove no-js class (also done inline in theme.liquid)
   document.documentElement.classList.remove('no-js');
 

@@ -1,0 +1,39 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_bar": false,
+        "text": "FREE SHIPPING ON ORDERS OVER €150",
+        "bg_color": "#2D4A6A",
+        "text_color": "#F5F0E8",
+        "show_close": true
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "logo_text": "METSIE",
+        "sticky": true,
+        "transparent_on_hero": true,
+        "show_currency_selector": true
+      }
+    },
+    "mobile-menu": {
+      "type": "mobile-menu",
+      "settings": {
+        "logo_text": "METSIE",
+        "menu": "main-menu",
+        "show_social": true
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "mobile-menu"
+  ]
+}

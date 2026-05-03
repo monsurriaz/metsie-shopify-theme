@@ -311,7 +311,18 @@
   },
 
   "gift_cards": {
-    "issued": "[YOUR GIFT CARD FOR {{ shop }}]",
+    "issued": {
+      "title": "[{{ value }} GIFT CARD — {{ shop }}]",
+      "gift_card": "[GIFT CARD]",
+      "expired": "[EXPIRED]",
+      "initial_value": "[ORIGINAL VALUE:]",
+      "copy_code": "[COPY CODE]",
+      "copied": "[COPIED!]",
+      "expiration_date": "[EXPIRES]",
+      "qr_image_alt": "[QR CODE]",
+      "shop_link": "[SHOP NOW]",
+      "print": "[PRINT]"
+    },
     "subtext": "[SHARE THIS CODE TO REDEEM YOUR GIFT.]",
     "code_label": "[GIFT CARD CODE]",
     "amount": "[AMOUNT: {{ amount }}]",

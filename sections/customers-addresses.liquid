@@ -1,0 +1,348 @@
+<div class="customers-page" data-section-id="{{ section.id }}" x-data="addressManager()">
+  <div class="customers-page__container">
+
+    <div class="customers-addresses__header">
+      <a href="{{ routes.account_url }}" class="customers-link customers-link--muted">
+        &larr; {{ 'customer.account.title' | t | default: 'My Account' }}
+      </a>
+      <h1 class="customers-page__title">
+        {{ 'customer.addresses.title' | t | default: '[ADDRESSES]' }}
+      </h1>
+      <button class="customers-btn customers-btn--secondary" @click="openNew()">
+        {{ 'customer.addresses.add_new' | t | default: '+ Add address' }}
+      </button>
+    </div>
+
+    {%- comment -%} New address form {%- endcomment -%}
+    <div class="customers-addresses__form-wrap" x-show="showNew" x-transition>
+      <h2 class="customers-section-title">{{ 'customer.addresses.add_new' | t | default: 'New Address' }}</h2>
+      {%- form 'customer_address', customer.new_address -%}
+        {%- if form.errors -%}
+          <div class="customers-form__errors" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        {%- render 'customers-address-fields', form: form -%}
+        <div class="customers-form__actions">
+          <button type="submit" class="customers-btn customers-btn--primary">
+            {{ 'customer.addresses.add' | t | default: '[ADD ADDRESS]' }}
+          </button>
+          <button type="button" class="customers-btn customers-btn--secondary" @click="showNew = false">
+            {{ 'general.cancel' | t | default: 'Cancel' }}
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} Existing addresses {%- endcomment -%}
+    {%- if customer.addresses.size > 0 -%}
+      <div class="customers-addresses__grid">
+        {%- for address in customer.addresses -%}
+          <div class="customers-address-card">
+
+            {%- if address == customer.default_address -%}
+              <span class="customers-address-card__badge">
+                {{ 'customer.addresses.default' | t | default: 'Default' }}
+              </span>
+            {%- endif -%}
+
+            <address class="customers-address-card__body">
+              {{ address | format_address }}
+            </address>
+
+            <div class="customers-address-card__actions">
+              <button
+                class="customers-link"
+                @click="openEdit('{{ address.id }}')"
+              >
+                {{ 'customer.addresses.edit' | t | default: 'Edit' }}
+              </button>
+
+              {%- form 'customer_address', address, method: 'delete' -%}
+                <button
+                  type="submit"
+                  class="customers-link customers-link--danger"
+                  onclick="return confirm('{{ 'customer.addresses.delete_confirm' | t | default: 'Delete this address?' | escape }}')"
+                >
+                  {{ 'customer.addresses.delete' | t | default: 'Delete' }}
+                </button>
+              {%- endform -%}
+
+              {%- unless address == customer.default_address -%}
+                {%- form 'customer_address', address -%}
+                  <input type="hidden" name="address[default]" value="1">
+                  <button type="submit" class="customers-link customers-link--muted">
+                    {{ 'customer.addresses.set_default' | t | default: 'Set default' }}
+                  </button>
+                {%- endform -%}
+              {%- endunless -%}
+            </div>
+
+            {%- comment -%} Edit form (toggled by Alpine) {%- endcomment -%}
+            <div class="customers-addresses__form-wrap" x-show="editId === '{{ address.id }}'" x-transition>
+              <h3 class="customers-section-title">{{ 'customer.addresses.edit' | t | default: 'Edit Address' }}</h3>
+              {%- form 'customer_address', address -%}
+                {%- render 'customers-address-fields', form: form, address: address -%}
+                <div class="customers-form__actions">
+                  <button type="submit" class="customers-btn customers-btn--primary">
+                    {{ 'customer.addresses.update' | t | default: '[UPDATE]' }}
+                  </button>
+                  <button type="button" class="customers-btn customers-btn--secondary" @click="editId = null">
+                    {{ 'general.cancel' | t | default: 'Cancel' }}
+                  </button>
+                </div>
+              {%- endform -%}
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="customers-addresses__empty">
+        {{ 'customer.addresses.none' | t | default: 'No saved addresses yet.' }}
+      </p>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<style>
+  .customers-page {
+    padding: 80px 20px;
+    min-height: 60vh;
+  }
+
+  .customers-page__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .customers-page__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--color-near-black);
+    margin: 8px 0 40px;
+  }
+
+  .customers-addresses__header {
+    margin-bottom: 40px;
+  }
+
+  .customers-section-title {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-near-black);
+    opacity: 0.5;
+    margin: 0 0 16px;
+  }
+
+  .customers-addresses__form-wrap {
+    background: var(--color-light-gray, #E8E8E4);
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+
+  .customers-addresses__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .customers-address-card {
+    border: 1px solid var(--color-border, rgba(0,0,0,0.1));
+    padding: 24px;
+    position: relative;
+  }
+
+  .customers-address-card__badge {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--color-near-black);
+    color: #fff;
+    padding: 3px 8px;
+    margin-bottom: 16px;
+  }
+
+  .customers-address-card__body {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--color-near-black);
+    font-style: normal;
+    margin-bottom: 16px;
+  }
+
+  .customers-address-card__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--color-border, rgba(0,0,0,0.08));
+    padding-top: 12px;
+  }
+
+  .customers-addresses__empty {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-near-black);
+    opacity: 0.55;
+    margin: 0;
+  }
+
+  .customers-form__errors {
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid rgba(192, 57, 43, 0.3);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #c0392b;
+    margin-bottom: 24px;
+  }
+
+  .customers-form__errors ul { list-style: none; margin: 0; padding: 0; }
+
+  .customers-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .customers-form__label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-near-black);
+    opacity: 0.6;
+  }
+
+  .customers-form__input,
+  .customers-form__select {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-near-black);
+    background: #fff;
+    border: 1px solid var(--color-border, rgba(0,0,0,0.18));
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+
+  .customers-form__input:focus,
+  .customers-form__select:focus {
+    border-color: var(--color-near-black);
+  }
+
+  .customers-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .customers-form__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  .customers-btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    background: none;
+  }
+
+  .customers-btn--primary {
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+    border-color: var(--color-btn-primary-bg);
+  }
+
+  .customers-btn--primary:hover {
+    background-color: var(--color-btn-primary-hover);
+    border-color: var(--color-btn-primary-hover);
+  }
+
+  .customers-btn--secondary {
+    background-color: transparent;
+    color: var(--color-btn-secondary-text);
+    border-color: var(--color-btn-secondary-border);
+  }
+
+  .customers-btn--secondary:hover {
+    background-color: var(--color-btn-secondary-border);
+    color: #fff;
+  }
+
+  .customers-link {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-near-black);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .customers-link:hover { opacity: 0.6; }
+
+  .customers-link--muted {
+    opacity: 0.5;
+    text-decoration: none;
+  }
+
+  .customers-link--muted:hover { opacity: 1; }
+
+  .customers-link--danger { color: #c0392b; }
+
+  @media (max-width: 640px) {
+    .customers-page { padding: 48px 16px; }
+    .customers-addresses__form-wrap { padding: 24px 16px; }
+    .customers-form__row { grid-template-columns: 1fr; gap: 0; }
+  }
+</style>
+
+<script>
+  function addressManager() {
+    return {
+      showNew: {{ customer.addresses.size == 0 | json }},
+      editId: null,
+      openNew() { this.showNew = true; this.editId = null; },
+      openEdit(id) { this.editId = id; this.showNew = false; }
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Addresses",
+  "settings": []
+}
+{% endschema %}

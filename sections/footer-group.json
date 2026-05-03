@@ -1,0 +1,17 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "newsletter_subtitle": "Subscribe to get a 10% discount on your first order!",
+        "newsletter_placeholder": "Your email address",
+        "newsletter_button": "SUBMIT"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

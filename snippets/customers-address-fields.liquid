@@ -1,0 +1,148 @@
+{%- comment -%}
+  Address form fields — shared by new and edit address forms.
+  Expects: address (Shopify address object or customer.new_address)
+{%- endcomment -%}
+
+<div class="customers-form__row">
+  <div class="customers-form__field">
+    <label for="address_first_name_{{ address.id }}" class="customers-form__label">
+      {{ 'customer.addresses.first_name' | t | default: 'First name' }}
+    </label>
+    <input
+      type="text"
+      id="address_first_name_{{ address.id }}"
+      name="address[first_name]"
+      class="customers-form__input"
+      value="{{ address.first_name }}"
+      autocomplete="given-name"
+    >
+  </div>
+  <div class="customers-form__field">
+    <label for="address_last_name_{{ address.id }}" class="customers-form__label">
+      {{ 'customer.addresses.last_name' | t | default: 'Last name' }}
+    </label>
+    <input
+      type="text"
+      id="address_last_name_{{ address.id }}"
+      name="address[last_name]"
+      class="customers-form__input"
+      value="{{ address.last_name }}"
+      autocomplete="family-name"
+    >
+  </div>
+</div>
+
+<div class="customers-form__field">
+  <label for="address_company_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.company' | t | default: 'Company (optional)' }}
+  </label>
+  <input
+    type="text"
+    id="address_company_{{ address.id }}"
+    name="address[company]"
+    class="customers-form__input"
+    value="{{ address.company }}"
+    autocomplete="organization"
+  >
+</div>
+
+<div class="customers-form__field">
+  <label for="address_address1_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.address1' | t | default: 'Address' }}
+  </label>
+  <input
+    type="text"
+    id="address_address1_{{ address.id }}"
+    name="address[address1]"
+    class="customers-form__input"
+    value="{{ address.address1 }}"
+    autocomplete="address-line1"
+    required
+  >
+</div>
+
+<div class="customers-form__field">
+  <label for="address_address2_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.address2' | t | default: 'Apartment, suite, etc. (optional)' }}
+  </label>
+  <input
+    type="text"
+    id="address_address2_{{ address.id }}"
+    name="address[address2]"
+    class="customers-form__input"
+    value="{{ address.address2 }}"
+    autocomplete="address-line2"
+  >
+</div>
+
+<div class="customers-form__row">
+  <div class="customers-form__field">
+    <label for="address_city_{{ address.id }}" class="customers-form__label">
+      {{ 'customer.addresses.city' | t | default: 'City' }}
+    </label>
+    <input
+      type="text"
+      id="address_city_{{ address.id }}"
+      name="address[city]"
+      class="customers-form__input"
+      value="{{ address.city }}"
+      autocomplete="address-level2"
+      required
+    >
+  </div>
+  <div class="customers-form__field">
+    <label for="address_zip_{{ address.id }}" class="customers-form__label">
+      {{ 'customer.addresses.zip' | t | default: 'Postal / ZIP code' }}
+    </label>
+    <input
+      type="text"
+      id="address_zip_{{ address.id }}"
+      name="address[zip]"
+      class="customers-form__input"
+      value="{{ address.zip }}"
+      autocomplete="postal-code"
+    >
+  </div>
+</div>
+
+<div class="customers-form__field">
+  <label for="address_country_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.country' | t | default: 'Country' }}
+  </label>
+  <select
+    id="address_country_{{ address.id }}"
+    name="address[country]"
+    class="customers-form__select"
+    data-default="{{ address.country_code }}"
+    autocomplete="country"
+  >
+    {{ all_country_option_tags }}
+  </select>
+</div>
+
+<div class="customers-form__field" id="address_province_container_{{ address.id }}">
+  <label for="address_province_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.province' | t | default: 'State / Province' }}
+  </label>
+  <select
+    id="address_province_{{ address.id }}"
+    name="address[province]"
+    class="customers-form__select"
+    data-default="{{ address.province_code }}"
+    autocomplete="address-level1"
+  ></select>
+</div>
+
+<div class="customers-form__field">
+  <label for="address_phone_{{ address.id }}" class="customers-form__label">
+    {{ 'customer.addresses.phone' | t | default: 'Phone (optional)' }}
+  </label>
+  <input
+    type="tel"
+    id="address_phone_{{ address.id }}"
+    name="address[phone]"
+    class="customers-form__input"
+    value="{{ address.phone }}"
+    autocomplete="tel"
+  >
+</div>

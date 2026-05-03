@@ -1,15 +1,5 @@
 {
   "sections": {
-    "header": {
-      "type": "header",
-      "settings": {
-        "menu": "main-menu",
-        "logo_text": "METSIE",
-        "sticky": true,
-        "transparent_on_hero": true,
-        "show_currency_selector": true
-      }
-    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
@@ -91,27 +81,15 @@
         "label": "EDITORIAL",
         "heading": "Moments where mats become part of the interior"
       }
-    },
-    "footer": {
-      "type": "footer",
-      "settings": {
-        "newsletter_subtitle": "Subscribe to get a 10% discount on your first order!",
-        "newsletter_placeholder": "Your email address",
-        "newsletter_button": "SUBMIT",
-        "instagram_url": "",
-        "pinterest_url": ""
-      }
     }
   },
   "order": [
-    "header",
     "hero-banner",
     "featured-collection",
     "brand-story",
     "design-philosophy",
     "editorial-statement",
     "service-features",
-    "editorial-grid",
-    "footer"
+    "editorial-grid"
   ]
 }

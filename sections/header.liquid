@@ -4,7 +4,7 @@
   data-sticky="{{ section.settings.sticky }}"
   data-transparent="{{ section.settings.transparent_on_hero }}"
   x-data="siteHeader()"
-  :class="{ 'is-sticky': isSticky, 'is-transparent': isTransparent, 'is-scrolled': isScrolled }"
+  :class="{ 'is-sticky': isSticky, 'is-transparent': isTransparent, 'is-scrolled': isScrolled, 'is-hidden': isHidden }"
 >
   <div class="site-header__inner">
 
@@ -94,7 +94,7 @@
     left: 0;
     right: 0;
     z-index: 90;
-    transition: background-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
+    transition: background-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease, transform 0.35s ease;
     background-color: #FFFFFF;
     color: #1A1A1A;
   }
@@ -108,6 +108,10 @@
     background-color: #FFFFFF;
     color: #1A1A1A;
     box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+
+  .site-header.is-hidden {
+    transform: translateY(-100%);
   }
 
   .site-header__inner {
@@ -315,22 +319,34 @@
   function siteHeader() {
     return {
       isSticky: {{ section.settings.sticky | json }},
-      isTransparent: {{ section.settings.transparent_on_hero | json }},
+      _transparentEnabled: {{ section.settings.transparent_on_hero | json }},
+      hideOnScroll: {{ section.settings.hide_on_scroll | json }},
+      isTransparent: false,
       isScrolled: false,
+      isHidden: false,
+      lastScrollY: 0,
+      _hasHero: false,
       init() {
-        if (this.isSticky || this.isTransparent) {
-          window.addEventListener('scroll', () => {
-            this.isScrolled = window.scrollY > 20;
-            if (this.isTransparent) {
-              this.isTransparent = window.scrollY < 60;
-            }
-          }, { passive: true });
+        this._hasHero = !!document.querySelector('.hero-banner');
+        this.isTransparent = this._transparentEnabled && this._hasHero;
 
-          // Check if hero is present (for transparent header)
-          const hero = document.querySelector('.hero-banner');
-          if (!hero) {
-            this.isTransparent = false;
-          }
+        if (this.isSticky || this._transparentEnabled || this.hideOnScroll) {
+          window.addEventListener('scroll', () => {
+            const currentY = window.scrollY;
+            this.isScrolled = currentY > 20;
+
+            if (this._transparentEnabled && this._hasHero) {
+              this.isTransparent = currentY < 50;
+            }
+
+            if (this.hideOnScroll && currentY > 80) {
+              this.isHidden = currentY > this.lastScrollY;
+            } else {
+              this.isHidden = false;
+            }
+
+            this.lastScrollY = currentY;
+          }, { passive: true });
         }
       }
     }
@@ -381,6 +397,12 @@
       "id": "transparent_on_hero",
       "label": "Transparent when over hero banner",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_scroll",
+      "label": "Hide header when scrolling down",
+      "default": false
     },
     {
       "type": "checkbox",

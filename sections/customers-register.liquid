@@ -1,0 +1,242 @@
+<div class="customers-page" data-section-id="{{ section.id }}">
+  <div class="customers-page__container customers-page__container--narrow">
+
+    <h1 class="customers-page__title">
+      {{ 'customer.register.title' | t | default: '[CREATE ACCOUNT]' }}
+    </h1>
+
+    {%- form 'create_customer' -%}
+      {%- if form.errors -%}
+        <div class="customers-form__errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="customers-form__row">
+        <div class="customers-form__field">
+          <label for="FirstName" class="customers-form__label">
+            {{ 'customer.register.first_name' | t | default: 'First name' }}
+          </label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="FirstName"
+            class="customers-form__input"
+            autocomplete="given-name"
+            value="{{ form.first_name }}"
+          >
+        </div>
+        <div class="customers-form__field">
+          <label for="LastName" class="customers-form__label">
+            {{ 'customer.register.last_name' | t | default: 'Last name' }}
+          </label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="LastName"
+            class="customers-form__input"
+            autocomplete="family-name"
+            value="{{ form.last_name }}"
+          >
+        </div>
+      </div>
+
+      <div class="customers-form__field">
+        <label for="Email" class="customers-form__label">
+          {{ 'customer.register.email' | t | default: 'Email' }}
+        </label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="Email"
+          class="customers-form__input"
+          autocomplete="email"
+          value="{{ form.email }}"
+          required
+        >
+      </div>
+
+      <div class="customers-form__field">
+        <label for="Password" class="customers-form__label">
+          {{ 'customer.register.password' | t | default: 'Password' }}
+        </label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="Password"
+          class="customers-form__input"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <div class="customers-form__actions">
+        <button type="submit" class="customers-btn customers-btn--primary customers-btn--full">
+          {{ 'customer.register.submit' | t | default: '[CREATE ACCOUNT]' }}
+        </button>
+      </div>
+    {%- endform -%}
+
+    <div class="customers-page__divider"></div>
+
+    <div class="customers-page__alt">
+      <p class="customers-page__alt-text">
+        {{ 'customer.register.login_link' | t | default: 'Already have an account?' }}
+      </p>
+      <a href="{{ routes.account_login_url }}" class="customers-btn customers-btn--secondary customers-btn--full">
+        {{ 'customer.login.title' | t | default: '[SIGN IN]' }}
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .customers-page {
+    padding: 80px 20px;
+    min-height: 60vh;
+  }
+
+  .customers-page__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .customers-page__container--narrow {
+    max-width: 480px;
+  }
+
+  .customers-page__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--color-near-black);
+    margin: 0 0 40px;
+  }
+
+  .customers-form__errors {
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid rgba(192, 57, 43, 0.3);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #c0392b;
+    margin-bottom: 24px;
+  }
+
+  .customers-form__errors ul { list-style: none; margin: 0; padding: 0; }
+
+  .customers-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .customers-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .customers-form__label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-near-black);
+    opacity: 0.6;
+  }
+
+  .customers-form__input {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-near-black);
+    background: transparent;
+    border: 1px solid var(--color-border, rgba(0,0,0,0.18));
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+
+  .customers-form__input:focus {
+    border-color: var(--color-near-black);
+  }
+
+  .customers-form__actions {
+    margin-top: 8px;
+  }
+
+  .customers-page__divider {
+    height: 1px;
+    background: var(--color-border, rgba(0,0,0,0.1));
+    margin: 32px 0;
+  }
+
+  .customers-page__alt-text {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-near-black);
+    opacity: 0.6;
+    margin: 0 0 16px;
+    text-align: center;
+  }
+
+  .customers-btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+  }
+
+  .customers-btn--primary {
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+    border-color: var(--color-btn-primary-bg);
+  }
+
+  .customers-btn--primary:hover {
+    background-color: var(--color-btn-primary-hover);
+    border-color: var(--color-btn-primary-hover);
+  }
+
+  .customers-btn--secondary {
+    background-color: transparent;
+    color: var(--color-btn-secondary-text);
+    border-color: var(--color-btn-secondary-border);
+  }
+
+  .customers-btn--secondary:hover {
+    background-color: var(--color-btn-secondary-border);
+    color: #fff;
+  }
+
+  .customers-btn--full { width: 100%; display: block; }
+
+  @media (max-width: 640px) {
+    .customers-page { padding: 48px 16px; }
+    .customers-form__row { grid-template-columns: 1fr; gap: 0; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Register",
+  "settings": []
+}
+{% endschema %}

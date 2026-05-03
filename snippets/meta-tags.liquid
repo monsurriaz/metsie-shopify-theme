@@ -94,8 +94,8 @@
     assign og_image = collection.image | image_url: width: 1200
   elsif template.name == 'article' and article.image
     assign og_image = article.image | image_url: width: 1200
-  elsif settings.share_image
-    assign og_image = settings.share_image | image_url: width: 1200
+  elsif settings.og_image_default
+    assign og_image = settings.og_image_default | image_url: width: 1200
   endif
 
   # ── OG type ──────────────────────────────────────────────────────────────────
@@ -194,9 +194,10 @@
 {%- endif -%}
 
 {%- comment -%} ── Resource Hints ── {%- endcomment -%}
-{%- comment -%} Google Fonts {%- endcomment -%}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{%- if settings.use_google_fonts -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{%- endif -%}
 
 {%- comment -%} Shopify CDN {%- endcomment -%}
 <link rel="preconnect" href="https://cdn.shopify.com">
@@ -223,12 +224,12 @@
   {%- if shop.email != blank -%}
   ,"email": {{ shop.email | json }}
   {%- endif -%}
-  {%- if settings.social_instagram_link != blank -%}
+  {%- if settings.social_instagram != blank -%}
   ,"sameAs": [
-    {{ settings.social_instagram_link | json }}
-    {%- if settings.social_facebook_link != blank -%},{{ settings.social_facebook_link | json }}{%- endif -%}
-    {%- if settings.social_pinterest_link != blank -%},{{ settings.social_pinterest_link | json }}{%- endif -%}
-    {%- if settings.social_twitter_link != blank -%},{{ settings.social_twitter_link | json }}{%- endif -%}
+    {{ settings.social_instagram | json }}
+    {%- if settings.social_facebook != blank -%},{{ settings.social_facebook | json }}{%- endif -%}
+    {%- if settings.social_pinterest != blank -%},{{ settings.social_pinterest | json }}{%- endif -%}
+    {%- if settings.social_twitter != blank -%},{{ settings.social_twitter | json }}{%- endif -%}
   ]
   {%- endif -%}
 }
