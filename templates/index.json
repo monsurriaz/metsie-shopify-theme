@@ -13,7 +13,6 @@
       "type": "featured-collection",
       "settings": {
         "section_label": "THE COLLECTION",
-        "subheading": "A curated selection of essential designs in timeless tones",
         "collection": "",
         "products_to_show": 3,
         "show_view_all": true,
@@ -22,12 +21,35 @@
     },
     "brand-story": {
       "type": "brand-story",
+      "blocks": {
+        "label_8nfetG": {
+          "type": "label",
+          "settings": {
+            "text": "METSIE DESIGN STUDIOS"
+          }
+        },
+        "text_zWx7bi": {
+          "type": "text",
+          "settings": {
+            "body_text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals"
+          }
+        },
+        "button_pbT6fi": {
+          "type": "button",
+          "settings": {
+            "text": "Our philosophy",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "label_8nfetG",
+        "text_zWx7bi",
+        "button_pbT6fi"
+      ],
       "settings": {
-        "label": "METSIE DESIGN STUDIOS",
-        "text": "<p>Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals</p>",
-        "button_text": "Our philosophy",
-        "button_link": "/pages/about",
-        "image": ""
+        "image_alt": "",
+        "section_style": "equal_width"
       }
     },
     "design-philosophy": {
@@ -39,10 +61,34 @@
     },
     "editorial-statement": {
       "type": "editorial-statement",
+      "blocks": {
+        "label_Vznfhw": {
+          "type": "label",
+          "settings": {
+            "text": "A piece of your space"
+          }
+        },
+        "heading_NXnHh9": {
+          "type": "heading",
+          "settings": {
+            "text": "Crafted by balance. Created for living, spaces, and permanence."
+          }
+        },
+        "button_8eq3MY": {
+          "type": "button",
+          "settings": {
+            "text": "Explore",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "label_Vznfhw",
+        "heading_NXnHh9",
+        "button_8eq3MY"
+      ],
       "settings": {
-        "heading": "Crafted by balance. Created for living, spaces, and permanence.",
-        "button_text": "Explore",
-        "button_link": "/collections/all"
+        
       }
     },
     "service-features": {
@@ -51,36 +97,70 @@
         "label": "MAKING EXPERIENCE"
       },
       "blocks": {
-        "feature-1": {
+        "feature_YDPih8": {
           "type": "feature",
           "settings": {
             "heading": "Free delivery",
-            "description": "Complimentary shipping on all orders across Europe"
+            "description": "Free standard delivery on orders over €200.",
+            "label": "View shipping details",
+            "url": ""
           }
         },
-        "feature-2": {
+        "feature_Mb6MDK": {
           "type": "feature",
           "settings": {
             "heading": "Trade & studio orders",
-            "description": "Dedicated support and pricing for interior professionals"
+            "description": "For hotels, studios, and interior projects.",
+            "label": "Inquire here",
+            "url": ""
           }
         },
-        "feature-3": {
+        "feature_7WG66i": {
           "type": "feature",
           "settings": {
             "heading": "Custom colors",
-            "description": "Bespoke colorway service for made-to-order pieces"
+            "description": "Interested in a specific shade? Write to us.",
+            "label": "Get in touch",
+            "url": ""
           }
         }
       },
-      "blocks_order": ["feature-1", "feature-2", "feature-3"]
+      "block_order": [
+        "feature_YDPih8",
+        "feature_Mb6MDK",
+        "feature_7WG66i"
+      ],
     },
     "editorial-grid": {
       "type": "editorial-grid",
       "settings": {
         "label": "EDITORIAL",
         "heading": "Moments where mats become part of the interior"
-      }
+      },
+      "blocks": {
+        "image_1": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_3": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_4": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "image_1",
+        "image_2",
+        "image_3",
+        "image_4"
+      ]
     }
   },
   "order": [

@@ -54,57 +54,10 @@
   {%- endif -%}
 
   {%- comment -%} ============================================================
-    CSS CUSTOM PROPERTIES (Design Tokens from Theme Settings)
+    CSS CUSTOM PROPERTIES (Design Tokens)
+    Centralized in snippets/css-variables.liquid
   ============================================================ {%- endcomment -%}
-  <style>
-    :root {
-      /* Brand Colors */
-      --color-deep-navy: {{ settings.color_deep_navy }};
-      --color-navy-mid: {{ settings.color_navy_mid }};
-      --color-cream: {{ settings.color_cream }};
-      --color-espresso: {{ settings.color_espresso }};
-      --color-light-gray: {{ settings.color_light_gray }};
-      --color-white: {{ settings.color_white }};
-      --color-near-black: {{ settings.color_near_black }};
-
-      /* Button Colors */
-      --color-btn-primary-bg: {{ settings.color_button_primary_bg }};
-      --color-btn-primary-text: {{ settings.color_button_primary_text }};
-      --color-btn-primary-hover: {{ settings.color_button_primary_hover }};
-      --color-btn-secondary-border: {{ settings.color_button_secondary_border }};
-      --color-btn-secondary-text: {{ settings.color_button_secondary_text }};
-
-      /* UI Colors */
-      --color-link: {{ settings.color_link }};
-      --color-link-hover: {{ settings.color_link_hover }};
-      --color-border: {{ settings.color_border }};
-      --color-error: {{ settings.color_error }};
-      --color-success: {{ settings.color_success }};
-
-      /* Announcement Bar */
-      --color-announcement-bg: {{ settings.announcement_bg }};
-      --color-announcement-text: {{ settings.announcement_text_color }};
-
-      /* Footer */
-      --color-footer-bg: {{ settings.footer_bg_color }};
-      --color-footer-text: {{ settings.footer_text_color }};
-      --color-footer-border: {{ settings.footer_border_color }};
-
-      /* Typography */
-      --font-heading: 'Cormorant Garamond', Georgia, serif;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
-      --font-body-scale: {{ settings.font_body_scale | divided_by: 100.0 }};
-
-      /* Layout */
-      --page-width: {{ settings.page_width }}px;
-      --spacing-sections: {{ settings.spacing_sections }}px;
-      --grid-gutter: {{ settings.spacing_grid_horizontal }}px;
-
-      /* Logo */
-      --logo-width: {{ settings.logo_width }}px;
-    }
-  </style>
+  {%- render 'css-variables' -%}
 
   {%- comment -%} ============================================================
     THEME STYLESHEET

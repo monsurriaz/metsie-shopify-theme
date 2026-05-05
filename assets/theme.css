@@ -34,116 +34,21 @@
 /* ============================================================
    1. CSS CUSTOM PROPERTIES (Design Tokens)
    ============================================================
-   Note: Color and typography tokens are also set inline in
-   theme.liquid <style> from Shopify settings. These are the
-   fallback defaults and extended token set.
+   All CSS custom properties are now centralized in:
+   snippets/css-variables.liquid
+
+   This includes:
+   - Brand colors (from settings)
+   - Typography (from settings)
+   - Layout dimensions (from settings)
+   - Static design system tokens (spacing, shadows, z-index, etc.)
+
+   This approach allows:
+   ✓ Single source of truth for all variables
+   ✓ Easy future integration with schema_settings.json
+   ✓ Dynamic merchant-customizable values
+   ✓ Better maintainability and organization
    ============================================================ */
-
-:root {
-  /* ---------- Brand Colors ---------- */
-  --color-deep-navy:   #2E4356;
-  --color-navy-mid:    #243848;
-  --color-cream:       #F5F0E8;
-  --color-espresso:    #2B1F18;
-  --color-light-gray:  #E8E8E4;
-  --color-white:       #FFFFFF;
-  --color-near-black:  #1A1A1A;
-
-  /* ---------- Button Colors ---------- */
-  --color-btn-primary-bg:      var(--color-deep-navy);
-  --color-btn-primary-text:    var(--color-white);
-  --color-btn-primary-hover:   var(--color-navy-mid);
-  --color-btn-secondary-border: var(--color-deep-navy);
-  --color-btn-secondary-text:  var(--color-deep-navy);
-
-  /* ---------- UI Colors ---------- */
-  --color-link:          var(--color-deep-navy);
-  --color-link-hover:    var(--color-navy-mid);
-  --color-border:        var(--color-light-gray);
-  --color-error:         #C0392B;
-  --color-success:       #27AE60;
-  --color-warning:       #E67E22;
-
-  /* ---------- Announcement / Footer ---------- */
-  --color-announcement-bg:    var(--color-deep-navy);
-  --color-announcement-text:  var(--color-white);
-  --color-footer-bg:          var(--color-deep-navy);
-  --color-footer-text:        var(--color-white);
-  --color-footer-border:      var(--color-navy-mid);
-
-  /* ---------- Typography ---------- */
-  --font-heading:       'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --font-body:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-heading-scale: 1;
-  --font-body-scale:    1;
-
-  /* ---------- Type Scale (mobile-first) ---------- */
-  --text-xs:     0.6875rem;   /* 11px */
-  --text-sm:     0.8125rem;   /* 13px */
-  --text-base:   1rem;        /* 16px */
-  --text-md:     1.125rem;    /* 18px */
-  --text-lg:     1.25rem;     /* 20px */
-  --text-xl:     1.5rem;      /* 24px */
-  --text-2xl:    1.875rem;    /* 30px */
-  --text-3xl:    2.5rem;      /* 40px */
-  --text-4xl:    3.25rem;     /* 52px */
-  --text-5xl:    4.25rem;     /* 68px */
-  --text-hero:   clamp(3rem, 8vw, 6.5rem);
-
-  /* ---------- Spacing Scale ---------- */
-  --space-1:    0.25rem;   /*  4px */
-  --space-2:    0.5rem;    /*  8px */
-  --space-3:    0.75rem;   /* 12px */
-  --space-4:    1rem;      /* 16px */
-  --space-5:    1.25rem;   /* 20px */
-  --space-6:    1.5rem;    /* 24px */
-  --space-8:    2rem;      /* 32px */
-  --space-10:   2.5rem;    /* 40px */
-  --space-12:   3rem;      /* 48px */
-  --space-14:   3.5rem;    /* 56px */
-  --space-16:   4rem;      /* 64px */
-  --space-20:   5rem;      /* 80px */
-  --space-24:   6rem;      /* 96px */
-
-  /* ---------- Section Spacing ---------- */
-  --section-padding-sm:  var(--space-12);
-  --section-padding:     var(--spacing-sections, var(--space-16));
-  --section-padding-lg:  var(--space-24);
-
-  /* ---------- Layout ---------- */
-  --page-width:       1440px;
-  --container-px:     var(--space-6);    /* 24px mobile padding */
-  --grid-gutter:      var(--space-6);
-  --logo-width:       120px;
-
-  /* ---------- Component Tokens ---------- */
-  --radius-sm:      2px;
-  --radius-md:      4px;
-  --radius-full:    9999px;
-  --border-width:   1px;
-
-  /* ---------- Z-Index Layers ---------- */
-  --z-below:        -1;
-  --z-base:          0;
-  --z-raised:       10;
-  --z-dropdown:    100;
-  --z-sticky:      200;
-  --z-overlay:     300;
-  --z-modal:       400;
-  --z-toast:       500;
-
-  /* ---------- Transitions ---------- */
-  --transition-fast:    150ms ease;
-  --transition-base:    250ms ease;
-  --transition-slow:    400ms ease;
-  --transition-reveal:  600ms cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* ---------- Shadows ---------- */
-  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
-  --shadow-lg:   0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-card: 0 2px 8px rgba(45, 74, 106, 0.06);
-}
 
 
 /* ============================================================
@@ -277,9 +182,10 @@ details > summary::-webkit-details-marker {
 .h1, h1 {
   font-family: var(--font-heading);
   font-size: calc(var(--text-3xl) * var(--font-heading-scale));
-  font-weight: 300;
-  letter-spacing: 0.02em;
+  font-weight: 500;
   color: var(--color-near-black);
+  letter-spacing: 0.02em;
+  line-height: var(--lh-tight);
 }
 
 .h2, h2 {
@@ -318,11 +224,46 @@ details > summary::-webkit-details-marker {
   text-transform: uppercase;
 }
 
+/* --- reuseable class --- */
+.text-up {text-transform: var(--text-up);}
+.font-light {font-weight: 300;}
+.font-regular {font-weight: 400;}
+.font-medium {font-weight: 500;}
+.font-semi {font-weight: 600;}
+
+/* --- Body Text Utilities (from Figma design system) --- */
+.text-body-primary {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--lh-relaxed);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.text-body-light {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-light);
+  line-height: var(--lh-relaxed);
+  letter-spacing: 0;
+}
+
+.text-heading-primary {
+  font-family: var(--font-heading);
+  font-size: calc(var(--text-3xl) * var(--font-heading-scale));
+  font-weight: 500;
+  color: var(--color-near-black);
+  letter-spacing: 0.02em;
+  line-height: var(--lh-tight);
+  margin: var(--gap-sm) 0 0;
+}
+
 /* --- Display Hero --- */
 .display-heading {
   font-family: var(--font-heading);
   font-size: var(--text-hero);
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1.0;
   letter-spacing: -0.01em;
 }
@@ -336,16 +277,63 @@ details > summary::-webkit-details-marker {
 .section-label {
   display: inline-block;
   font-family: var(--font-body);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-deep-navy);
+  line-height: var(--lh-normal);
 }
 
 .label--muted {
   color: rgba(26, 26, 26, 0.5);
 }
+
+/* --- Section Header (reusable label + heading block across all sections) --- */
+.section-header {
+  margin-bottom: var(--gap-lg);
+}
+
+.section-header--centered {
+  text-align: center;
+}
+
+.section-subheading {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--color-near-black);
+  opacity: 0.6;
+  margin: var(--space-4) 0 0;
+  line-height: var(--lh-normal);
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .section-subheading {
+    line-height: var(--lh-relaxed);
+  }
+}
+
+/* --- View All Link (reusable across sections) --- */
+.view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-deep-navy);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+  transition: gap 0.2s ease;
+}
+
+.view-all-link:hover { gap: var(--space-4); }
 
 /* --- Body Text Variants --- */
 .body-lg { font-size: var(--text-md); line-height: 1.7; }
@@ -389,6 +377,14 @@ details > summary::-webkit-details-marker {
   .h2, h2 { font-size: calc(var(--text-4xl) * var(--font-heading-scale)); }
 }
 
+/* Mobile overrides for body text utilities */
+@media (max-width: 767px) {
+  .text-body-primary,
+  .text-body-light {
+    line-height: var(--lh-normal);
+  }
+}
+
 
 /* ============================================================
    4. LAYOUT & GRID
@@ -407,6 +403,11 @@ details > summary::-webkit-details-marker {
 
 .container--mid {
   max-width: 1100px;
+}
+
+.container--lg {
+  max-width: 100%;
+  padding-inline: var(--container-px);
 }
 
 /* Grid system */
@@ -449,7 +450,7 @@ details > summary::-webkit-details-marker {
 }
 
 .section--lg {
-  padding-block: var(--section-padding-lg);
+  padding-block: var(--section-py);
 }
 
 /* Aspect ratio wrappers */
@@ -467,12 +468,12 @@ details > summary::-webkit-details-marker {
 
 /* Responsive grid breakpoints */
 @media (min-width: 375px) {
-  :root { --container-px: var(--space-6); }
+  :root { --container-px: var(--space-4); }
 }
 
 @media (min-width: 768px) {
   :root {
-    --container-px: var(--space-10);
+    --container-px: var(--space-6);
     --grid-gutter: var(--space-8);
   }
   .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
@@ -482,21 +483,13 @@ details > summary::-webkit-details-marker {
 
 @media (min-width: 1024px) {
   :root {
-    --container-px: var(--space-12);
+    --container-px: var(--space-10);
     --grid-gutter: var(--space-8);
   }
   .lg\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
   .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
   .lg\:grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
-}
-
-@media (min-width: 1280px) {
-  :root { --container-px: var(--space-16); }
-}
-
-@media (min-width: 1440px) {
-  :root { --container-px: var(--space-16); }
 }
 
 
@@ -737,9 +730,11 @@ details > summary::-webkit-details-marker {
 }
 
 .btn--lg {
-  padding: 1.125rem 2.5rem;
-  font-size: 0.8125rem;
-  letter-spacing: 0.16em;
+  padding: 0.875rem 3rem;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-light);
+  line-height: 1.7;
+  letter-spacing: 0;
 }
 
 .btn--full {
@@ -1096,9 +1091,12 @@ details > summary::-webkit-details-marker {
 .site-header {
   position: relative;
   z-index: var(--z-sticky);
-  background-color: var(--color-cream);
-  border-bottom: var(--border-width) solid var(--color-border);
+  border-bottom: 0px solid var(--color-border);
   transition: background-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.site-header:not(.is-initializing) {
+  /* background-color: var(--color-cream); */
 }
 
 /* Transparent header over hero */
@@ -2142,6 +2140,11 @@ details > summary::-webkit-details-marker {
 
 [data-reveal="slide-right"] {
   transform: translateX(-32px);
+  transition: opacity var(--transition-reveal), transform var(--transition-reveal);
+}
+
+[data-reveal="slide-down"] {
+  transform: translateY(-32px);
   transition: opacity var(--transition-reveal), transform var(--transition-reveal);
 }
 

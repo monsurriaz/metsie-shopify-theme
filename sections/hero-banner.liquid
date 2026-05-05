@@ -4,18 +4,57 @@
   style="background-color: {{ section.settings.bg_color }};"
 >
 
-  {%- comment -%} Metsie "M" monogram — upper-left per Figma {%- endcomment -%}
-  <div class="hero-banner__monogram" aria-hidden="true">
-    <img
-      src="{{ 'monogram-white.svg' | asset_url }}"
-      alt=""
-      class="hero-monogram-img"
-      width="420"
-      height="auto"
-      loading="eager"
-    >
+  {%- comment -%} BACKGROUND — video → image → bg_color fallback {%- endcomment -%}
+  {%- if section.settings.video != blank -%}
+    <div class="hero-banner__bg">
+      {{- section.settings.video | video_tag:
+        autoplay: true,
+        loop: true,
+        muted: true,
+        controls: false,
+        class: 'hero-banner__video',
+        preload: 'auto'
+      -}}
+    </div>
+  {%- elsif section.settings.image != blank -%}
+    <div class="hero-banner__bg">
+      {{- section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'hero-banner__bg-image',
+          widths: '750, 1100, 1500, 1780, 2000, 3840',
+          sizes: '100vw'
+      -}}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Overlay — darkens image/video for text legibility {%- endcomment -%}
+  {%- if section.settings.overlay_opacity > 0 -%}
+    <div class="hero-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+  {%- endif -%}
+
+  {%- comment -%} Monogram icon {%- endcomment -%}
+  <div class="hero-banner__monogram" aria-hidden="true" style="top: {{ section.settings.monogram_top }}%;">
+    {%- if section.settings.monogram_image != blank -%}
+      <img
+        src="{{ section.settings.monogram_image | image_url: width: 200 }}"
+        alt=""
+        class="hero-monogram-img"
+        loading="eager"
+      >
+    {%- else -%}
+      <img
+        src="{{ 'monogram-white.svg' | asset_url }}"
+        alt=""
+        class="hero-monogram-img"
+        loading="eager"
+      >
+    {%- endif -%}
   </div>
 
+  {%- comment -%} Heading content {%- endcomment -%}
   <div class="hero-banner__content">
     <h1 class="hero-banner__heading">
       {{ section.settings.heading | default: 'Metsie creates mats designed to stay in the space' }}
@@ -23,11 +62,11 @@
   </div>
 
   {%- comment -%} Scroll indicator {%- endcomment -%}
-  {% if section.settings.show_scroll_indicator %}
+  {%- if section.settings.show_scroll_indicator -%}
     <div class="hero-banner__scroll-indicator" aria-hidden="true">
       <span class="scroll-indicator__line"></span>
     </div>
-  {% endif %}
+  {%- endif -%}
 
 </section>
 
@@ -45,31 +84,59 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    margin-top: -72px; /* Pull under fixed header */
     color: #F5F0E8;
   }
 
+  /* Background media container */
+  .hero-banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-banner__bg-image,
+  .hero-banner__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Overlay */
+  .hero-banner__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: #000;
+  }
+
+  /* Monogram — centered, top position from inline style */
   .hero-banner__monogram {
     position: absolute;
-    left: 80px;
-    top: 120px;
-    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
   }
 
   .hero-monogram-img {
-    width: 80px;
+    width: {{ section.settings.monogram_size }}px;
     height: auto;
-    opacity: 1;
+    display: block;
   }
 
+  /* Heading content */
   .hero-banner__content {
     position: absolute;
-    bottom: 100px;
-    left: 0;
-    right: 0;
+    bottom: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1000px;
     z-index: 2;
     color: #F5F0E8;
-    padding: 0 40px;
+    padding: 0 var(--container-px);
     text-align: center;
   }
 
@@ -83,6 +150,7 @@
     color: inherit;
   }
 
+  /* Scroll indicator */
   .hero-banner__scroll-indicator {
     position: absolute;
     bottom: 40px;
@@ -101,40 +169,42 @@
 
   @keyframes scrollPulse {
     0%, 100% { opacity: 0.4; transform: scaleY(1); }
-    50% { opacity: 1; transform: scaleY(1.15); }
+    50%       { opacity: 1;   transform: scaleY(1.15); }
   }
 
   @media (max-width: 1024px) {
-    .hero-banner {
-      margin-top: -64px;
-    }
-    .hero-banner__monogram {
-      left: 40px;
-      top: 100px;
-    }
     .hero-monogram-img {
-      width: 60px;
+      width: {{ section.settings.monogram_size | times: 0.75 | round }}px;
     }
     .hero-banner__content {
-      bottom: 80px;
+      bottom: 22%;
       padding: 0 32px;
     }
   }
 
   @media (max-width: 640px) {
-    .hero-banner__monogram {
-      top: 80px;
-      left: 24px;
-    }
     .hero-monogram-img {
-      width: 50px;
+      width: {{ section.settings.monogram_size | times: 0.6 | round }}px;
     }
     .hero-banner__content {
-      bottom: 60px;
+      bottom: unset;
       padding: 0 20px;
     }
   }
 </style>
+
+<script>
+  {% if settings.header_style == 'transparent' %}
+  (function () {
+    function init() { document.body.classList.add('hero-page'); }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  {% endif %}
+</script>
 
 {% schema %}
 {
@@ -154,6 +224,65 @@
     },
     {
       "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Background video (takes priority over image)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fallback background color",
+      "default": "#2E4356"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity (darkens image/video for text legibility)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Monogram"
+    },
+    {
+      "type": "image_picker",
+      "id": "monogram_image",
+      "label": "Monogram icon (uses built-in if blank)"
+    },
+    {
+      "type": "range",
+      "id": "monogram_size",
+      "min": 40,
+      "max": 160,
+      "step": 5,
+      "unit": "px",
+      "label": "Monogram size (desktop)",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "monogram_top",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "label": "Monogram vertical position",
+      "default": 20
+    },
+    {
+      "type": "header",
       "content": "Layout"
     },
     {
@@ -167,16 +296,6 @@
       "id": "show_scroll_indicator",
       "label": "Show scroll indicator",
       "default": true
-    },
-    {
-      "type": "header",
-      "content": "Background"
-    },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "Background color",
-      "default": "#2E4356"
     }
   ],
   "presets": [
@@ -185,6 +304,9 @@
       "settings": {
         "heading": "Metsie creates mats designed to stay in the space",
         "bg_color": "#2E4356",
+        "overlay_opacity": 0,
+        "monogram_size": 80,
+        "monogram_top": 20,
         "full_viewport": true,
         "show_scroll_indicator": true
       }

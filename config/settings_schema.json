@@ -19,7 +19,7 @@
         "id": "color_deep_navy",
         "label": "Deep Navy",
         "info": "Used for hero backgrounds, navigation overlay, and footer.",
-        "default": "#2D4A6A"
+        "default": "#2E4356"
       },
       {
         "type": "color",
@@ -144,7 +144,7 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Heading Font",
-        "info": "Display font for headings and hero text. Cormorant Garamond [cormorant_garamond_n4] is the recommended Metsie brand font.",
+        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Display font for headings and hero text. Default: Cormorant Garamond [cormorant_garamond_n4]",
         "default": "assistant_n6"
       },
       {
@@ -171,7 +171,7 @@
         "type": "font_picker",
         "id": "font_body",
         "label": "Body Font",
-        "info": "Used for navigation, labels, and body text. Inter [inter_n4] is the recommended Metsie brand font.",
+        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Used for navigation, labels, and body text. Default: Inter [inter_n4]",
         "default": "inter_n4"
       },
       {
@@ -186,13 +186,13 @@
       },
       {
         "type": "header",
-        "content": "Google Fonts"
+        "content": "Font Loading Strategy"
       },
       {
         "type": "checkbox",
         "id": "use_google_fonts",
         "label": "Load Cormorant Garamond & Inter from Google Fonts",
-        "info": "Recommended for best brand consistency. Disable to use system fonts.",
+        "info": "✓ ENABLED (recommended): Uses brand fonts (Cormorant Garamond for headings, Inter for body). Ignores font picker settings below.\n✗ DISABLED: Uses fonts selected below via font picker. Useful for custom typography.",
         "default": true
       }
     ]

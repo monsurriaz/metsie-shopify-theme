@@ -2,7 +2,7 @@
   <div class="site-footer__inner">
 
     {%- comment -%} 4-column grid {%- endcomment -%}
-    <div class="site-footer__grid">
+    <div class="site-footer__grid" data-reveal-group>
 
       {%- comment -%} Column 1: CUSTOMER CARE {%- endcomment -%}
       <div class="site-footer__col">
@@ -102,9 +102,9 @@
   }
 
   .site-footer__inner {
-    max-width: 1440px;
+    max-width: var(--page-width);
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--container-px);
   }
 
   /* Grid */

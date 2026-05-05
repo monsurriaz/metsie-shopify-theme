@@ -1,14 +1,49 @@
 <header
-  class="site-header"
+  class="site-header is-initializing"
   data-section-id="{{ section.id }}"
-  data-sticky="{{ section.settings.sticky }}"
-  data-transparent="{{ section.settings.transparent_on_hero }}"
+  data-reveal="slide-down"
   x-data="siteHeader()"
-  :class="{ 'is-sticky': isSticky, 'is-transparent': isTransparent, 'is-scrolled': isScrolled, 'is-hidden': isHidden }"
+  :class="{ 'is-transparent': isTransparent, 'is-sticky': isSticky, 'is-scrolled': isScrolled, 'is-hidden': isHidden }"
 >
   <div class="site-header__inner">
 
-    {%- comment -%} LEFT: Navigation links (desktop) {%- endcomment -%}
+    {%- comment -%} HAMBURGER — hidden desktop, left column on mobile {%- endcomment -%}
+    <button
+      class="site-header__hamburger"
+      aria-label="Open menu"
+      @click="$dispatch('open-mobile-menu')"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    {%- comment -%} LOGO — left on desktop, centered on mobile {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — Home">
+      {%- if settings.logo != blank -%}
+        <img
+          src="{{ settings.logo | image_url: width: settings.logo_width }}"
+          alt="{{ shop.name }}"
+          width="{{ settings.logo_width }}"
+          height="auto"
+          loading="eager"
+          class="site-header__logo-img site-header__logo-img--dark"
+        >
+        {%- if settings.logo_dark != blank -%}
+          <img
+            src="{{ settings.logo_dark | image_url: width: settings.logo_width }}"
+            alt="{{ shop.name }}"
+            width="{{ settings.logo_width }}"
+            height="auto"
+            loading="eager"
+            class="site-header__logo-img site-header__logo-img--light"
+          >
+        {%- endif -%}
+      {%- else -%}
+        <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} NAV — centered on desktop, hidden on mobile {%- endcomment -%}
     <nav class="site-header__nav" aria-label="Main navigation">
       {% if section.settings.menu != blank %}
         {% for link in linklists[section.settings.menu].links %}
@@ -17,38 +52,18 @@
           </a>
         {% endfor %}
       {% else %}
-        <a href="/collections/all" class="site-header__nav-link">SHOP</a>
+        <a href="{{ routes.all_products_collection_url }}" class="site-header__nav-link">SHOP</a>
         <a href="/pages/about" class="site-header__nav-link">ABOUT</a>
         <a href="/pages/inspiration" class="site-header__nav-link">INSPIRATION</a>
         <a href="/blogs/news" class="site-header__nav-link">BLOG</a>
       {% endif %}
     </nav>
 
-    {%- comment -%} MOBILE ONLY: METSIE wordmark logo — hidden on desktop {%- endcomment -%}
-    <a href="/" class="site-header__mobile-logo" aria-label="{{ shop.name }} — Home">
-      <img
-        src="{{ 'logo-black.svg' | asset_url }}"
-        alt="{{ shop.name }}"
-        height="15"
-        width="auto"
-        loading="eager"
-        class="site-header__mobile-logo-img site-header__mobile-logo-img--dark"
-      >
-      <img
-        src="{{ 'logo-white.svg' | asset_url }}"
-        alt="{{ shop.name }}"
-        height="15"
-        width="auto"
-        loading="eager"
-        class="site-header__mobile-logo-img site-header__mobile-logo-img--light"
-      >
-    </a>
+    {%- comment -%} ACTIONS — currency + cart, right column {%- endcomment -%}
+    <div class="site-header__actions">
 
-    {%- comment -%} RIGHT: Currency selector + CART (0) {%- endcomment -%}
-    <div class="site-header__right">
-
-      {%- comment -%} Currency selector (small) {%- endcomment -%}
-      {% if section.settings.show_currency_selector and shop.enabled_currencies.size > 1 %}
+      {%- comment -%} Currency selector {%- endcomment -%}
+      {% if settings.show_currency_selector and shop.enabled_currencies.size > 1 %}
         <div class="site-header__currency">
           {% form 'currency' %}
             <select name="currency" class="header-currency-select" onchange="this.form.submit()" aria-label="Select currency">
@@ -62,26 +77,16 @@
         </div>
       {% endif %}
 
-      {%- comment -%} CART (0) link {%- endcomment -%}
+      {%- comment -%} Cart link {%- endcomment -%}
       <a
-        href="/cart"
-        class="site-header__cart-link"
+        href="{{ routes.cart_url }}"
+        class="site-header__cart"
         aria-label="Cart ({{ cart.item_count }} items)"
         @click.prevent="$dispatch('open-cart-drawer')"
       >
-        <span class="site-header__cart-text">CART ({{ cart.item_count }})</span>
+        <span class="site-header__cart-text">CART (<span id="cart-count">{{ cart.item_count }}</span>)</span>
       </a>
 
-      {%- comment -%} Mobile hamburger {%- endcomment -%}
-      <button
-        class="site-header__hamburger"
-        aria-label="Open menu"
-        @click="$dispatch('open-mobile-menu')"
-      >
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </button>
     </div>
 
   </div>
@@ -99,9 +104,14 @@
     color: #1A1A1A;
   }
 
+  .site-header.is-initializing {
+    transition: none !important;
+  }
+
   .site-header.is-transparent {
     background-color: transparent;
     color: #F5F0E8;
+    box-shadow: none;
   }
 
   .site-header.is-scrolled {
@@ -114,50 +124,59 @@
     transform: translateY(-100%);
   }
 
+  /* 3-column grid */
   .site-header__inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: var(--logo-width, 120px) 1fr auto;
+    grid-template-areas: "logo nav actions";
     align-items: center;
-    justify-content: space-between;
-    max-width: 1440px;
+    max-width: var(--page-width, 1440px);
     margin: 0 auto;
-    padding: 0 40px;
-    height: 72px;
+    padding: 0 var(--container-px);
+    height: 65px;
   }
 
-  /* MOBILE-ONLY: METSIE logo — hidden on desktop */
-  .site-header__mobile-logo {
-    display: none;
-    align-items: center;
-  }
-  .site-header__mobile-logo-img {
-    height: 15px;
-    width: auto;
-  }
-  .site-header__mobile-logo-img--light {
-    display: none;
-  }
-  .site-header.is-transparent .site-header__mobile-logo-img--dark {
-    display: none;
-  }
-  .site-header.is-transparent .site-header__mobile-logo-img--light {
-    display: block;
-  }
-  .site-header.is-scrolled .site-header__mobile-logo-img--dark {
-    display: block;
-  }
-  .site-header.is-scrolled .site-header__mobile-logo-img--light {
-    display: none;
-  }
-
-  /* LEFT: Nav */
-  .site-header__nav {
+  /* Logo */
+  .site-header__logo {
+    grid-area: logo;
     display: flex;
-    gap: 36px;
     align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-header__logo-img {
+    width: var(--logo-width, 120px);
+    height: auto;
+  }
+
+  .site-header__logo-img--light { display: none; }
+
+  .site-header.is-transparent .site-header__logo-img--dark { display: none; }
+  .site-header.is-transparent .site-header__logo-img--light { display: block; }
+  .site-header.is-scrolled .site-header__logo-img--dark { display: block; }
+  .site-header.is-scrolled .site-header__logo-img--light { display: none; }
+
+  .site-header__logo-text {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: inherit;
+  }
+
+  /* Nav */
+  .site-header__nav {
+    grid-area: nav;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
   }
 
   .site-header__nav-link {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-nav, 'Inter', sans-serif);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -190,15 +209,15 @@
     width: 100%;
   }
 
-  /* RIGHT: Currency + Cart */
-  .site-header__right {
+  /* Actions */
+  .site-header__actions {
+    grid-area: actions;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     gap: 20px;
   }
 
-  /* Currency selector */
+  /* Currency */
   .site-header__currency {
     display: flex;
     align-items: center;
@@ -208,7 +227,7 @@
     background: transparent;
     border: none;
     color: inherit;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-nav, 'Inter', sans-serif);
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -221,12 +240,10 @@
     transition: opacity 0.2s ease;
   }
 
-  .header-currency-select:hover {
-    opacity: 1;
-  }
+  .header-currency-select:hover { opacity: 1; }
 
-  /* CART link */
-  .site-header__cart-link {
+  /* Cart */
+  .site-header__cart {
     display: flex;
     align-items: center;
     color: inherit;
@@ -234,23 +251,22 @@
   }
 
   .site-header__cart-text {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-nav, 'Inter', sans-serif);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: inherit;
-    transition: opacity 0.2s ease;
     opacity: 0.85;
+    transition: opacity 0.2s ease;
   }
 
-  .site-header__cart-link:hover .site-header__cart-text {
-    opacity: 1;
-  }
+  .site-header__cart:hover .site-header__cart-text { opacity: 1; }
 
-  /* Mobile hamburger — hidden on desktop */
+  /* Hamburger — hidden on desktop */
   .site-header__hamburger {
     display: none;
+    grid-area: hamburger;
     flex-direction: column;
     gap: 5px;
     background: none;
@@ -268,58 +284,34 @@
     transition: transform 0.25s ease, opacity 0.25s ease;
   }
 
-  /* Body offset for fixed header */
-  body {
-    padding-top: 72px;
-  }
-
-  /* Transparent header — no padding needed (hero fills viewport) */
-  body.hero-page {
-    padding-top: 0;
-  }
+  /* Body offset for fixed header — JS keeps --header-height in sync across breakpoints */
+  body { padding-top: var(--header-height); }
+  body.hero-page { padding-top: 0; }
 
   @media (max-width: 1024px) {
     .site-header__inner {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "hamburger logo actions";
       padding: 0 24px;
-      height: 64px;
+      height: 56px;
     }
 
-    .site-header__nav {
-      display: none;
-    }
-
-    .site-header__mobile-logo {
-      display: flex;
-    }
-
-    .site-header__hamburger {
-      display: flex;
-    }
-
-    /* On mobile, show CART (0) and hamburger side by side */
-    .site-header__right {
-      gap: 16px;
-    }
-
-    body { padding-top: 64px; }
-    body.hero-page { padding-top: 0; }
+    .site-header__logo { justify-self: center; }
+    .site-header__nav { display: none; }
+    .site-header__hamburger { display: flex; }
+    .site-header__currency { display: none; }
   }
 
   @media (max-width: 640px) {
-    .site-header__inner {
-      padding: 0 16px;
-    }
-    .site-header__currency {
-      display: none;
-    }
+    .site-header__inner { padding: 0 16px; }
   }
 </style>
 
 <script>
   function siteHeader() {
     return {
-      isSticky: {{ section.settings.sticky | json }},
-      _transparentEnabled: {{ section.settings.transparent_on_hero | json }},
+      isSticky: {{ settings.header_sticky | json }},
+      _transparentEnabled: {% if settings.header_style == 'transparent' %}true{% else %}false{% endif %},
       hideOnScroll: {{ section.settings.hide_on_scroll | json }},
       isTransparent: false,
       isScrolled: false,
@@ -329,6 +321,14 @@
       init() {
         this._hasHero = !!document.querySelector('.hero-banner');
         this.isTransparent = this._transparentEnabled && this._hasHero;
+        this.$el.classList.remove('is-initializing');
+
+        const headerEl = this.$el;
+        const setHeaderHeight = () => {
+          document.documentElement.style.setProperty('--header-height', headerEl.offsetHeight + 'px');
+        };
+        setHeaderHeight();
+        window.addEventListener('resize', setHeaderHeight, { passive: true });
 
         if (this.isSticky || this._transparentEnabled || this.hideOnScroll) {
           window.addEventListener('scroll', () => {
@@ -366,60 +366,17 @@
       "default": "main-menu"
     },
     {
-      "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo image (optional — text logo used if blank)"
-    },
-    {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Logo text (shown if no image uploaded)",
-      "default": "METSIE"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "min": 60,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Logo image width",
-      "default": 120
-    },
-    {
-      "type": "checkbox",
-      "id": "sticky",
-      "label": "Sticky header on scroll",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_on_hero",
-      "label": "Transparent when over hero banner",
-      "default": true
-    },
-    {
       "type": "checkbox",
       "id": "hide_on_scroll",
       "label": "Hide header when scrolling down",
       "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_currency_selector",
-      "label": "Show currency selector in header",
-      "default": true
     }
   ],
   "presets": [
     {
       "name": "Header",
       "settings": {
-        "menu": "main-menu",
-        "logo_text": "METSIE",
-        "sticky": true,
-        "transparent_on_hero": true,
-        "show_currency_selector": true
+        "menu": "main-menu"
       }
     }
   ]

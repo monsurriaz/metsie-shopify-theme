@@ -107,7 +107,7 @@
             | image_tag:
               class: 'product-card__image product-card__image--primary',
               loading: loading_attr,
-              alt: featured_image.alt | escape | default: product.title | escape,
+              alt: featured_image.alt | escape | default: product.title,
               width: featured_image.width,
               height: featured_image.height,
               widths: '300, 400, 500, 600, 800',
@@ -122,7 +122,7 @@
               | image_tag:
                 class: 'product-card__image product-card__image--hover',
                 loading: 'lazy',
-                alt: hover_image.alt | escape | default: product.title | escape,
+                alt: hover_image.alt | escape | default: product.title,
                 width: hover_image.width,
                 height: hover_image.height,
                 widths: '300, 400, 500, 600, 800',
@@ -210,7 +210,7 @@
     {%- endif -%}
 
     {%- comment -%} Title — h3 for semantic grid context {%- endcomment -%}
-    <h3 class="product-card__title">
+    <h3 class="product-card__title text-body-primary">
       <a
         href="{{ product.url }}"
         class="product-card__title-link"
@@ -370,6 +370,7 @@
       width: 50%;
       height: 50%;
       opacity: 0.3;
+      background-color: var(--color-cream);
     }
 
     /* ── Badges ── */
@@ -507,7 +508,7 @@
       padding: 12px 2px 0;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 0px;
     }
 
     .product-card__vendor {
@@ -530,7 +531,7 @@
       margin: 0;
     }
 
-    .product-card__title {
+    /* .product-card__title {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: clamp(15px, 1.5vw, 18px);
       font-weight: 400;
@@ -538,7 +539,7 @@
       margin: 0;
       color: #1A1A1A;
       letter-spacing: 0.01em;
-    }
+    } */
 
     .product-card__title-link {
       text-decoration: none;
@@ -586,7 +587,7 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 4px;
+      /* margin-top: 4px; */
     }
 
     .product-card__price {
