@@ -27,9 +27,9 @@
         "section_label": "THE COLLECTION",
         "heading": "A curated selection of essential designs in timeless tones",
         "subheading": "A curated selection of essential designs in timeless tones",
-        "collection": "",
+        "collection": "featured",
         "products_to_show": 3,
-        "show_view_all": true,
+        "show_view_all": false,
         "view_all_text": "VIEW ALL"
       }
     },
