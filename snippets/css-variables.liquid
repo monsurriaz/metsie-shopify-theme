@@ -1,0 +1,214 @@
+{%- comment -%}
+  ================================================================================
+  css-variables.liquid — Metsie Theme
+  ================================================================================
+  Central repository for all CSS custom properties (design tokens).
+  Consolidates static design system tokens + settings-driven dynamic values.
+
+  STRUCTURE:
+  - Brand Colors (from settings)
+  - Button Colors (from settings)
+  - UI Colors (from settings)
+  - Section-Specific Colors (from settings)
+  - Typography (fonts + scales from settings)
+  - Type Scale (static design system)
+  - Line Heights (static)
+  - Spacing Scale (static)
+  - Section Spacing (derived from settings)
+  - Layout (from settings)
+  - Component Tokens (static)
+  - Z-Index Layers (static)
+  - Transitions (static)
+  - Shadows (static)
+
+  FUTURE SCHEMA INTEGRATION:
+  Additional colors and spacing values can be added to settings_schema.json
+  and referenced here via {{ settings.* }} Liquid syntax.
+  ================================================================================
+{%- endcomment -%}
+
+<style>
+  :root {
+    /* ========== BRAND COLORS (from settings) ========== */
+    --color-deep-navy:   {{ settings.color_deep_navy }};
+    --color-navy-mid:    {{ settings.color_navy_mid }};
+    --color-cream:       {{ settings.color_cream }};
+    --color-espresso:    {{ settings.color_espresso }};
+    --color-light-gray:  {{ settings.color_light_gray }};
+    --color-white:       {{ settings.color_white }};
+    --color-near-black:  {{ settings.color_near_black }};
+    --color-black:       #000000;
+
+    /* ========== BUTTON COLORS (from settings) ========== */
+    --color-btn-primary-bg:      {{ settings.color_button_primary_bg }};
+    --color-btn-primary-text:    {{ settings.color_button_primary_text }};
+    --color-btn-primary-hover:   {{ settings.color_button_primary_hover }};
+    --color-btn-secondary-border: {{ settings.color_button_secondary_border }};
+    --color-btn-secondary-text:  {{ settings.color_button_secondary_text }};
+
+    /* ========== UI COLORS (from settings) ========== */
+    --color-link:          {{ settings.color_link }};
+    --color-link-hover:    {{ settings.color_link_hover }};
+    --color-border:        {{ settings.color_border }};
+    --color-error:         {{ settings.color_error }};
+    --color-success:       {{ settings.color_success }};
+
+    /* ========== ANNOUNCEMENT BAR (from settings) ========== */
+    --color-announcement-bg:    {{ settings.announcement_bg }};
+    --color-announcement-text:  {{ settings.announcement_text_color }};
+
+    /* ========== FOOTER (from settings) ========== */
+    --color-footer-bg:     {{ settings.footer_bg_color }};
+    --color-footer-text:   {{ settings.footer_text_color }};
+    --color-footer-border: {{ settings.footer_border_color }};
+
+    /* ========== GDPR BANNER (from settings) ========== */
+    --color-gdpr-bg:   {{ settings.gdpr_banner_bg }};
+    --color-gdpr-text: {{ settings.gdpr_banner_text_color }};
+
+    /* ========== TYPOGRAPHY (from settings) ========== */
+    {%- if settings.use_google_fonts -%}
+      /* Using brand Google Fonts (Cormorant Garamond + Inter) */
+      --font-heading:       'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --font-body:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    {%- else -%}
+      /* Using merchant-selected fonts from schema settings */
+      --font-heading:       {{ settings.font_heading }};
+      --font-body:          {{ settings.font_body }};
+    {%- endif -%}
+    --font-nav:           'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-menu:          'Cormorant Garamond', Georgia, serif;
+    --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+    --font-body-scale:    {{ settings.font_body_scale | divided_by: 100.0 }};
+    --font-weight-light:    300;
+    --font-weight-regular:  400;
+    --font-weight-medium:   500;
+    --font-weight-semi:     600;
+    --font-weight-bold:     700;
+    --font-weight-black:    900;
+
+    /* ========== TYPE SCALE (desktop-first) ========== */
+    --text-xs:     0.75rem;     /* 12px */
+    --text-sm:     0.875rem;    /* 14px */
+    --text-base:   1rem;        /* 16px */
+    --text-md:     1.125rem;    /* 18px */
+    --text-lg:     1.25rem;     /* 20px */
+    --text-xl:     1.5rem;      /* 24px */
+    --text-2xl:    1.875rem;    /* 30px */
+    --text-3xl:    2.5rem;      /* 40px */
+    --text-4xl:    3.25rem;     /* 52px */
+    --text-5xl:    4.25rem;     /* 68px */
+    --text-hero:   clamp(3rem, 8vw, 6.5rem);
+
+    /* ========== LINE HEIGHTS (static) ========== */
+    --lh-tight:    1.2;   /* 120% */
+    --lh-normal:   1.3;   /* 130% */
+    --lh-relaxed:  1.7;   /* 170% */
+
+    /* ========== LETTER SPACING (static) ========== */
+    --ls-tight:    -0.01rem;   /* 120% */
+    --ls-normal:   0;          /* 130% */
+    --ls-relaxed:  0.1rem;     /* 170% */
+
+    /* ========== SPACING SCALE (desktop-first) ========== */
+    --space-1:    0.25rem;   /*   4px */
+    --space-2:    0.5rem;    /*   8px */
+    --space-2-5:  0.625rem;  /*  10px */
+    --space-3:    0.75rem;   /*  12px */
+    --space-4:    1rem;      /*  16px */
+    --space-5:    1.25rem;   /*  20px */
+    --space-6:    1.5rem;    /*  24px */
+    --space-8:    2rem;      /*  32px */
+    --space-10:   2.5rem;    /*  40px */
+    --space-12:   3rem;      /*  48px */
+    --space-14:   3.5rem;    /*  56px */
+    --space-15:   3.75rem;   /*  60px */
+    --space-16:   4rem;      /*  64px */
+    --space-20:   5rem;      /*  80px */
+    --space-24:   6rem;      /*  96px */
+    --space-25:   6.25rem;   /* 100px */
+    --space-30:   7.5rem;    /* 120px */
+    --space-40:   10rem;     /* 160px */
+
+    /* ========== FLEX Gap (desktop-first) ========== */
+    --gap-sm:   var(--space-5);
+    --gap:      var(--space-8);
+    --gap-lg:   var(--space-15);
+
+    /* ========== SECTION SPACING (derived from settings) ========== */
+    --section-padding-sm:  var(--space-25);
+    --section-padding:     {{ settings.spacing_sections | default: 64 }}px;
+    --section-py:  var(--space-40);
+    --section-px: var(--space-10);
+
+    /* ========== LAYOUT (from settings) ========== */
+    --page-width:       {{ settings.page_width | default: 1440 }}px;
+    --container-px:     var(--space-6);    /* 24px mobile padding */
+    --grid-gutter:      {{ settings.spacing_grid_horizontal | default: 24 }}px;
+    --logo-width:       {{ settings.logo_width | default: 120 }}px;
+
+    /* ========== HEADER (JS updates this on init/resize) ========== */
+    --header-height:    65px;
+
+    /* ========== COMPONENT TOKENS (static) ========== */
+    --radius-sm:      2px;
+    --radius-md:      4px;
+    --radius-full:    9999px;
+    --border-width:   1px;
+
+    /* ========== Z-INDEX LAYERS (static) ========== */
+    --z-below:        -1;
+    --z-base:          0;
+    --z-raised:       10;
+    --z-dropdown:    100;
+    --z-sticky:      200;
+    --z-overlay:     300;
+    --z-modal:       400;
+    --z-toast:       500;
+
+    /* ========== TRANSITIONS (static) ========== */
+    --transition-fast:    150ms ease;
+    --transition-base:    250ms ease;
+    --transition-slow:    400ms ease;
+    --transition-reveal:  600ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ========== SHADOWS (static) ========== */
+    --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --shadow-lg:   0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-card: 0 2px 8px rgba(45, 74, 106, 0.06);
+
+    /* ========== Font Style =============== */
+    --text-up: uppercase;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     MOBILE OVERRIDES (max-width: 767px)
+     All components automatically adapt when these variables override
+  ══════════════════════════════════════════════════════════════ */
+  @media (max-width: 767px) {
+    :root {
+      /* ========== TYPE SCALE (mobile overrides) ========== */
+      --text-xs:     0.625rem;    /* 10px (from 11px) */
+      --text-sm:     0.75rem;     /* 12px (from 14px) */
+      --text-base:   0.9375rem;   /* 15px (from 16px) */
+      --text-md:     1rem;        /* 16px (from 18px) */
+      --text-lg:     1.125rem;    /* 18px (from 20px) */
+      --text-xl:     1.375rem;    /* 22px (from 24px) */
+      --text-2xl:    1.625rem;    /* 26px (from 30px) */
+      --text-3xl:    1.375rem;    /* 22px (from 40px) */
+      --text-4xl:    2.125rem;    /* 34px (from 52px) */
+      --text-5xl:    3rem;        /* 48px (from 68px) */
+
+      /* ========== FLEX Gap (desktop-first) ========== */
+      --gap-sm:   var(--space-2-5);
+      --gap:      var(--space-5);
+      --gap-lg:   var(--space-10);
+
+      /* ========== SECTION SPACING (mobile overrides) ========== */
+      --section-padding-sm:  var(--space-20);
+      --section-py:  var(--space-20);
+      --section-px: var(--space-4);
+    }
+  }
+</style>

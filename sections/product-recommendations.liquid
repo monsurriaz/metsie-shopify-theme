@@ -13,9 +13,9 @@
 
     {%- comment -%} Initial placeholder (shown before JS loads) {%- endcomment -%}
     {% if recommendations.performed and recommendations.products_count > 0 %}
-      <header class="section-header">
-        <h2 class="section-heading">{{ section.settings.heading | default: 'YOU MAY ALSO LIKE' }}</h2>
-      </header>
+      <div class="section-header">
+        <h2 class="section-heading text-heading-primary">{{ section.settings.heading | default: 'YOU MAY ALSO LIKE' }}</h2>
+      </div>
       <ul class="recommendations-grid" role="list">
         {% for rec_product in recommendations.products limit: section.settings.products_to_show %}
           <li class="product-card-wrapper">
@@ -73,7 +73,7 @@
   .product-recommendations__inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--container-px);
   }
 
   .product-recommendations .section-header {
@@ -119,9 +119,9 @@
         if (!data.products || data.products.length === 0) return;
 
         let html = `
-          <header class="section-header">
-            <h2 class="section-heading">${heading}</h2>
-          </header>
+          <div class="section-header">
+            <h2 class="section-heading text-heading-primary">${heading}</h2>
+          </div>
           <ul class="recommendations-grid" role="list">
         `;
 

@@ -4,15 +4,15 @@
   <div class="product-grid-section__inner">
 
     {% if section.settings.section_heading != blank %}
-      <header class="section-header section-header--split">
-        <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+      <div class="section-header section-header--split">
+        <h2 class="section-heading text-heading-primary">{{ section.settings.section_heading }}</h2>
         {% if section.settings.show_explore_link %}
           <a href="{{ section.settings.explore_link | default: '/collections/all' }}" class="view-all-link">
             {{ section.settings.explore_text | default: 'EXPLORE ALL' | upcase }}
             <span aria-hidden="true">→</span>
           </a>
         {% endif %}
-      </header>
+      </div>
     {% endif %}
 
     {% if grid_collection != blank and grid_collection.products.size > 0 %}
@@ -115,7 +115,7 @@
   .product-grid-section__inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--container-px);
   }
 
   .section-header--split {

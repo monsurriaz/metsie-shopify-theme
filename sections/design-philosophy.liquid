@@ -1,67 +1,28 @@
-<section class="design-philosophy" data-section-id="{{ section.id }}">
-  <div class="design-philosophy__inner">
+<div class="design-philosophy" data-section-id="{{ section.id }}" data-reveal="slide-up">
+  <div class="design-philosophy__inner container">
 
-    <p class="design-philosophy__label">{{ section.settings.label | default: 'DESIGN PHILOSOPHY' | upcase }}</p>
+    <p class="design-philosophy__label text-body-primary">{{ section.settings.label | default: 'DESIGN PHILOSOPHY' | upcase }}</p>
 
-    <div class="design-philosophy__text">
+    <h2 class="design-philosophy__text text-heading-primary">
       {{ section.settings.text | default: 'Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive' }}
-    </div>
+    </h2>
 
   </div>
-</section>
+</div>
 
 <style>
   .design-philosophy {
-    padding: 120px 0;
+    padding: var(--section-py) 0;
     background-color: #FFFFFF;
   }
 
-  .design-philosophy__inner {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 40px;
-  }
-
   .design-philosophy__label {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #2D4A6A;
-    margin: 0 0 48px;
+    color: var(--color-near-black);
   }
 
   .design-philosophy__text {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(28px, 3.5vw, 52px);
-    font-weight: 300;
-    line-height: 1.2;
-    color: #1A1A1A;
-    letter-spacing: -0.01em;
+    color: var(--color-black);
     max-width: 900px;
-    text-align: left;
-  }
-
-  @media (max-width: 1024px) {
-    .design-philosophy {
-      padding: 96px 0;
-    }
-    .design-philosophy__inner {
-      padding: 0 24px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .design-philosophy {
-      padding: 72px 0;
-    }
-    .design-philosophy__inner {
-      padding: 0 16px;
-    }
-    .design-philosophy__label {
-      margin-bottom: 32px;
-    }
   }
 </style>
 

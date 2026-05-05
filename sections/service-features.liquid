@@ -1,65 +1,72 @@
-<section class="service-features" data-section-id="{{ section.id }}">
-  <div class="service-features__inner">
+<div class="service-features" data-section-id="{{ section.id }}">
+  <div class="{% if section.settings.section_width == 'natural' %}container--lg {% elsif section.settings.section_width == 'compact' %}container {% else %}service-features__inner{% endif %}">
+    <div class="{% unless section.settings.section_width == 'full_width' %}service-features__inner{% else %}container{% endunless %}">
 
-    <div class="service-features__header">
-      <p class="service-features__label">{{ section.settings.label | default: 'MAKING EXPERIENCE' | upcase }}</p>
-    </div>
+      {% if section.settings.section_width == "natural" %}
+        <div class="container">
+      {% endif %}
 
-    <div class="service-features__grid">
-      {% for block in section.blocks %}
-        {% if block.type == 'feature' %}
-          <div class="service-features__item" {{ block.shopify_attributes }}>
-            <h3 class="service-features__item-heading">{{ block.settings.heading | default: '[Feature]' }}</h3>
-            {% if block.settings.description != blank %}
-              <p class="service-features__item-description">{{ block.settings.description }}</p>
-            {% endif %}
+      <div class="service-features__header">
+        <p class="service-features__label text-body-primary">{{ section.settings.label | default: 'MAKING EXPERIENCE' | upcase }}</p>
+      </div>
+  
+      <div class="service-features__grid" data-reveal-group>
+        {% for block in section.blocks %}
+          {% if block.type == 'feature' %}
+            <div class="service-features__item" {{ block.shopify_attributes }}>
+              <h3 class="service-features__item-heading text-heading-primary">{{ block.settings.heading | default: '[Feature]' }}</h3>
+              {% if block.settings.description != blank %}
+                <p class="service-features__item-description text-body-light">{{ block.settings.description }}</p>
+                {% if block.settings.url != blank or block.settings.label != blank %}
+                  <a href="{{ block.settings.url }}" class="service-features__item-btn text-body-light">{{ block.settings.label }}</a>
+                {% endif %}
+              {% endif %}
+            </div>
+          {% endif %}
+        {% else %}
+          {%- comment -%} Default placeholder features when no blocks {%- endcomment -%}
+          <div class="service-features__item">
+            <h3 class="service-features__item-heading text-heading-primary">Free delivery</h3>
+            <p class="service-features__item-description text-body-light">Complimentary shipping on all orders across Europe</p>
           </div>
-        {% endif %}
-      {% else %}
-        {%- comment -%} Default placeholder features when no blocks {%- endcomment -%}
-        <div class="service-features__item">
-          <h3 class="service-features__item-heading">Free delivery</h3>
-          <p class="service-features__item-description">Complimentary shipping on all orders across Europe</p>
-        </div>
-        <div class="service-features__item">
-          <h3 class="service-features__item-heading">Trade & studio orders</h3>
-          <p class="service-features__item-description">Dedicated support and pricing for interior professionals</p>
-        </div>
-        <div class="service-features__item">
-          <h3 class="service-features__item-heading">Custom colors</h3>
-          <p class="service-features__item-description">Bespoke colorway service for made-to-order pieces</p>
-        </div>
-      {% endfor %}
-    </div>
+          <div class="service-features__item">
+            <h3 class="service-features__item-heading text-heading-primary">Trade & studio orders</h3>
+            <p class="service-features__item-description text-body-light">Dedicated support and pricing for interior professionals</p>
+          </div>
+          <div class="service-features__item">
+            <h3 class="service-features__item-heading text-heading-primary">Custom colors</h3>
+            <p class="service-features__item-description text-body-light">Bespoke colorway service for made-to-order pieces</p>
+          </div>
+        {% endfor %}
+      </div>
 
+      {% if section.settings.section_width == "natural" %}
+        </div>
+      {% endif %}
+
+    </div>
   </div>
-</section>
+</div>
 
 <style>
   .service-features {
-    padding: 72px 0;
-    background-color: #FFFFFF;
-    border-top: 1px solid #E8E8E4;
+    background-color: var(--color-white);
+    padding-top: 40px;
   }
 
   .service-features__inner {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 40px;
+    padding: var(--section-py) 0;
+    color: var(--color-white);
+    background-color: var(--color-deep-navy);
   }
 
   .service-features__header {
-    margin-bottom: 48px;
+    margin-bottom: 60px;
   }
 
   .service-features__label {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #2D4A6A;
-    margin: 0;
+    color: var(--color-white);
+    text-align: center;
   }
 
   .service-features__grid {
@@ -69,35 +76,34 @@
   }
 
   .service-features__item {
-    border-top: 1px solid #E8E8E4;
-    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding-inline: 20px;
   }
 
   .service-features__item-heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #1A1A1A;
-    margin: 0 0 12px;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
+    margin: 0 0 var(--gap-sm);
+    color: var(--color-white);
   }
 
   .service-features__item-description {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #666;
-    margin: 0;
+    
+  }
+
+  .service-features__item-btn {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .service-features__item-btn:hover {
+    color: var(--color-white);
+    opacity: 0.8;
   }
 
   @media (max-width: 1024px) {
-    .service-features {
-      padding: 56px 0;
-    }
-    .service-features__inner {
-      padding: 0 24px;
-    }
     .service-features__grid {
       gap: 32px;
     }
@@ -107,12 +113,6 @@
     .service-features__grid {
       grid-template-columns: 1fr;
       gap: 32px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .service-features__inner {
-      padding: 0 16px;
     }
   }
 </style>
@@ -128,6 +128,26 @@
       "id": "label",
       "label": "Section label",
       "default": "MAKING EXPERIENCE"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "full_width",
+          "label": "Full Width"
+        },
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "compact",
+          "label": "Compact"
+        }
+      ],
+      "default": "natural"
     }
   ],
   "blocks": [
@@ -146,6 +166,17 @@
           "id": "description",
           "label": "Feature description",
           "default": "Complimentary shipping on all orders across Europe"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "default": "View shipping details",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Button url"
         }
       ]
     }
@@ -161,21 +192,24 @@
           "type": "feature",
           "settings": {
             "heading": "Free delivery",
-            "description": "Complimentary shipping on all orders across Europe"
+            "description": "Free standard delivery on orders over €200.",
+            "label": "View shipping details"
           }
         },
         {
           "type": "feature",
           "settings": {
             "heading": "Trade & studio orders",
-            "description": "Dedicated support and pricing for interior professionals"
+            "description": "For hotels, studios, and interior projects.",
+            "label": "Inquire here"
           }
         },
         {
           "type": "feature",
           "settings": {
             "heading": "Custom colors",
-            "description": "Bespoke colorway service for made-to-order pieces"
+            "description": "Interested in a specific shade? Write to us.",
+            "label": "Get in touch"
           }
         }
       ]

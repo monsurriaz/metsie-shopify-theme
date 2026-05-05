@@ -83,9 +83,9 @@
     <div class="about-values">
       <div class="about-values__inner">
         {% if section.settings.values_heading != blank %}
-          <header class="section-header">
-            <h2 class="section-heading">{{ section.settings.values_heading }}</h2>
-          </header>
+          <div class="section-header">
+            <h2 class="section-heading text-heading-primary">{{ section.settings.values_heading }}</h2>
+          </div>
         {% endif %}
         <div class="about-values__grid">
           {% for block in value_blocks %}
@@ -110,9 +110,9 @@
     <div class="about-team">
       <div class="about-team__inner">
         {% if section.settings.team_heading != blank %}
-          <header class="section-header">
-            <h2 class="section-heading">{{ section.settings.team_heading }}</h2>
-          </header>
+          <div class="section-header">
+            <h2 class="section-heading text-heading-primary">{{ section.settings.team_heading }}</h2>
+          </div>
         {% endif %}
         <div class="about-team__grid">
           {% for block in team_blocks %}

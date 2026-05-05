@@ -1,47 +1,63 @@
-<section class="editorial-statement" data-section-id="{{ section.id }}">
+<div class="editorial-statement" data-section-id="{{ section.id }}" data-reveal="slide-up">
+  {% unless section.settings.full_width %}
+    <div class="container">
+      <div class="editorial-statement__inner">
+  {% endunless %}
 
-  {%- comment -%} Full-width image background {%- endcomment -%}
-  {% if section.settings.image != blank %}
-    <div class="editorial-statement__bg">
-      <img
-        src="{{ section.settings.image | img_url: '2000x' }}"
-        srcset="{{ section.settings.image | img_url: '800x' }} 800w, {{ section.settings.image | img_url: '1400x' }} 1400w, {{ section.settings.image | img_url: '2000x' }} 2000w"
-        sizes="100vw"
-        alt="{{ section.settings.image_alt | default: 'Metsie editorial' }}"
-        width="2000"
-        height="1200"
-        loading="lazy"
-        class="editorial-statement__bg-img"
-      >
-      <div class="editorial-statement__overlay"></div>
-    </div>
-  {% else %}
-    <div class="editorial-statement__bg editorial-statement__bg--placeholder">
-      {{ 'lifestyle-2' | placeholder_svg_tag: 'editorial-statement__placeholder-svg' }}
-      <div class="editorial-statement__overlay"></div>
-    </div>
-  {% endif %}
-
-  {%- comment -%} Centered overlaid content {%- endcomment -%}
-  <div class="editorial-statement__content">
-    <h2 class="editorial-statement__heading">
-      {{ section.settings.heading | default: 'Crafted by balance. Created for living, spaces, and permanence.' }}
-    </h2>
-
-    {% if section.settings.button_text != blank %}
-      <a
-        href="{{ section.settings.button_link | default: '/collections/all' }}"
-        class="editorial-statement__cta"
-      >
-        {{ section.settings.button_text }}
-      </a>
+    {%- comment -%} Full-width image background {%- endcomment -%}
+    {% if section.settings.image != blank %}
+      <div class="editorial-statement__bg">
+        <img
+          src="{{ section.settings.image | image_url: width: 2000 }}"
+          srcset="{{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1400 }} 1400w, {{ section.settings.image | image_url: width: 2000 }} 2000w"
+          sizes="100vw"
+          alt="{{ section.settings.image_alt | default: 'Metsie editorial' }}"
+          width="2000"
+          height="1200"
+          loading="lazy"
+          class="editorial-statement__bg-img"
+        >
+        <div class="editorial-statement__overlay"></div>
+      </div>
+    {% else %}
+      <div class="editorial-statement__bg editorial-statement__bg--placeholder">
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'editorial-statement__placeholder-svg' }}
+        <div class="editorial-statement__overlay"></div>
+      </div>
     {% endif %}
-  </div>
 
-</section>
+    {%- comment -%} Centered overlaid content (block-based) {%- endcomment -%}
+    <div class="editorial-statement__content">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'label' %}
+            <p class="editorial-statement__label text-body-primary">{{ block.settings.text | upcase }}</p>
+
+          {% when 'heading' %}
+            <h2 class="editorial-statement__heading text-heading-primary">
+              {{ block.settings.text }}
+            </h2>
+
+          {% when 'button' %}
+            <a
+              href="{{ block.settings.link }}"
+              class="editorial-statement__cta btn btn--white btn--lg"
+            >
+              {{ block.settings.text }}
+            </a>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+  {% unless section.settings.full_width %}
+      </div>
+    </div>
+  {% endunless %}
+
+</div>
 
 <style>
-  .editorial-statement {
+  .editorial-statement:not(:has(.editorial-statement__inner)) {
     position: relative;
     width: 100%;
     min-height: 80vh;
@@ -51,6 +67,20 @@
     overflow: hidden;
   }
 
+  .editorial-statement:has(.editorial-statement__inner) {
+    background-color: var(--color-white);
+  }
+  
+  .editorial-statement__inner {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #D9D9D9;
+  }
   .editorial-statement__bg {
     position: absolute;
     inset: 0;
@@ -58,7 +88,7 @@
   }
 
   .editorial-statement__bg--placeholder {
-    background-color: #2D4A6A;
+    background-color: var(--color-cream);
   }
 
   .editorial-statement__bg-img {
@@ -76,7 +106,7 @@
   .editorial-statement__overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(29, 40, 54, 0.55);
+    background-color: rgba(29, 40, 54, 0.05);
   }
 
   .editorial-statement__content {
@@ -87,6 +117,7 @@
     max-width: 800px;
     margin: 0 auto;
     color: #F5F0E8;
+    background-color: var(--color-deep-navy);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,17 +125,17 @@
   }
 
   .editorial-statement__heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    /* font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(28px, 4vw, 56px);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.01em;
-    margin: 0;
+    margin: 0; */
     color: inherit;
   }
 
   .editorial-statement__cta {
-    display: inline-block;
+    /* display: inline-block;
     font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 500;
@@ -115,11 +146,11 @@
     border: 1px solid rgba(245, 240, 232, 0.7);
     border-radius: 100px;
     padding: 14px 36px;
-    transition: background-color 0.25s ease, border-color 0.25s ease;
+    transition: background-color 0.25s ease, border-color 0.25s ease; */
   }
 
   .editorial-statement__cta:hover {
-    background-color: rgba(245, 240, 232, 0.15);
+    /* background-color: rgba(245, 240, 232, 0.15); */
     border-color: #F5F0E8;
   }
 
@@ -147,6 +178,12 @@
   "class": "editorial-statement-section",
   "settings": [
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Image"
     },
@@ -159,37 +196,75 @@
       "type": "text",
       "id": "image_alt",
       "label": "Image alt text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "label",
+      "name": "Label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Label text",
+          "default": "A piece of your space"
+        }
+      ]
     },
     {
-      "type": "header",
-      "content": "Content"
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading text",
+          "default": "Crafted by balance. Created for living, spaces, and permanence."
+        }
+      ]
     },
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Crafted by balance. Created for living, spaces, and permanence."
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button text",
-      "default": "Explore"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Button text",
+          "default": "Explore"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        }
+      ]
     }
   ],
   "presets": [
     {
       "name": "Editorial Statement",
-      "settings": {
-        "heading": "Crafted by balance. Created for living, spaces, and permanence.",
-        "button_text": "Explore",
-        "button_link": "/collections/all"
-      }
+      "blocks": [
+        {
+          "type": "label",
+          "settings": {
+            "text": "A piece of your space"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Crafted by balance. Created for living, spaces, and permanence."
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "Explore",
+            "link": "/collections/all"
+          }
+        }
+      ]
     }
   ]
 }
