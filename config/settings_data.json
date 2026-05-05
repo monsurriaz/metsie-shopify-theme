@@ -9,6 +9,8 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/Logo-Black.svg",
+    "logo_dark": "shopify://shop_images/Logo-white.svg",
     "colors": {
       "color_deep_navy": "#2D4A6A",
       "color_navy_mid": "#1E3A5F",
@@ -118,7 +120,21 @@
       "preload_hero_image": true,
       "enable_skip_link": true,
       "high_contrast_mode": false
-    }
+    },
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "empty_text": "YOUR CART IS EMPTY",
+          "start_shopping_text": "START SHOPPING",
+          "start_shopping_link": "",
+          "checkout_text": "PROCEED TO CHECKOUT",
+          "tax_note": "",
+          "free_shipping_threshold": 150
+        }
+      }
+    },
+    "content_for_index": []
   },
   "presets": {}
 }
