@@ -1,10 +1,22 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
         "heading": "Metsie creates mats designed to stay in the space",
-        "bg_color": "#2D4A6A",
+        "bg_color": "#2d4a6a",
+        "overlay_opacity": 0,
+        "monogram_size": 80,
+        "monogram_top": 20,
         "full_viewport": true,
         "show_scroll_indicator": true
       }
@@ -13,6 +25,8 @@
       "type": "featured-collection",
       "settings": {
         "section_label": "THE COLLECTION",
+        "heading": "A curated selection of essential designs in timeless tones",
+        "subheading": "A curated selection of essential designs in timeless tones",
         "collection": "",
         "products_to_show": 3,
         "show_view_all": true,
@@ -22,30 +36,30 @@
     "brand-story": {
       "type": "brand-story",
       "blocks": {
-        "label_8nfetG": {
+        "label_crThUD": {
           "type": "label",
           "settings": {
             "text": "METSIE DESIGN STUDIOS"
           }
         },
-        "text_zWx7bi": {
+        "text_RDDkgX": {
           "type": "text",
           "settings": {
             "body_text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals"
           }
         },
-        "button_pbT6fi": {
+        "button_LmMcyK": {
           "type": "button",
           "settings": {
             "text": "Our philosophy",
-            "link": "shopify://collections"
+            "link": ""
           }
         }
       },
       "block_order": [
-        "label_8nfetG",
-        "text_zWx7bi",
-        "button_pbT6fi"
+        "label_crThUD",
+        "text_RDDkgX",
+        "button_LmMcyK"
       ],
       "settings": {
         "image_alt": "",
@@ -62,105 +76,115 @@
     "editorial-statement": {
       "type": "editorial-statement",
       "blocks": {
-        "label_Vznfhw": {
+        "label_JJwFYA": {
           "type": "label",
           "settings": {
             "text": "A piece of your space"
           }
         },
-        "heading_NXnHh9": {
+        "heading_iritVN": {
           "type": "heading",
           "settings": {
             "text": "Crafted by balance. Created for living, spaces, and permanence."
           }
         },
-        "button_8eq3MY": {
+        "button_V4RBiC": {
           "type": "button",
           "settings": {
             "text": "Explore",
-            "link": "/collections/all"
+            "link": ""
           }
         }
       },
       "block_order": [
-        "label_Vznfhw",
-        "heading_NXnHh9",
-        "button_8eq3MY"
+        "label_JJwFYA",
+        "heading_iritVN",
+        "button_V4RBiC"
       ],
       "settings": {
-        
+        "full_width": false,
+        "image_alt": ""
       }
     },
     "service-features": {
       "type": "service-features",
-      "settings": {
-        "label": "MAKING EXPERIENCE"
-      },
       "blocks": {
-        "feature_YDPih8": {
+        "feature_UGhVVx": {
           "type": "feature",
           "settings": {
             "heading": "Free delivery",
-            "description": "Free standard delivery on orders over €200.",
+            "description": "Complimentary shipping on all orders across Europe",
             "label": "View shipping details",
             "url": ""
           }
         },
-        "feature_Mb6MDK": {
+        "feature_et3VML": {
           "type": "feature",
           "settings": {
-            "heading": "Trade & studio orders",
-            "description": "For hotels, studios, and interior projects.",
-            "label": "Inquire here",
+            "heading": "Free delivery",
+            "description": "Complimentary shipping on all orders across Europe",
+            "label": "View shipping details",
             "url": ""
           }
         },
-        "feature_7WG66i": {
+        "feature_8QeAcc": {
           "type": "feature",
           "settings": {
-            "heading": "Custom colors",
-            "description": "Interested in a specific shade? Write to us.",
-            "label": "Get in touch",
+            "heading": "Free delivery",
+            "description": "Complimentary shipping on all orders across Europe",
+            "label": "View shipping details",
             "url": ""
           }
         }
       },
       "block_order": [
-        "feature_YDPih8",
-        "feature_Mb6MDK",
-        "feature_7WG66i"
+        "feature_UGhVVx",
+        "feature_et3VML",
+        "feature_8QeAcc"
       ],
+      "settings": {
+        "label": "MAKING EXPERIENCE",
+        "section_width": "natural"
+      }
     },
     "editorial-grid": {
       "type": "editorial-grid",
-      "settings": {
-        "label": "EDITORIAL",
-        "heading": "Moments where mats become part of the interior"
-      },
       "blocks": {
-        "image_1": {
+        "image_3KPgVx": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image_alt": ""
+          }
         },
-        "image_2": {
+        "image_pthJdM": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image_alt": ""
+          }
         },
-        "image_3": {
+        "image_8FrijJ": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image_alt": ""
+          }
         },
-        "image_4": {
+        "image_aXtqMN": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image_alt": ""
+          }
         }
       },
       "block_order": [
-        "image_1",
-        "image_2",
-        "image_3",
-        "image_4"
-      ]
+        "image_3KPgVx",
+        "image_pthJdM",
+        "image_8FrijJ",
+        "image_aXtqMN"
+      ],
+      "settings": {
+        "label": "EDITORIAL",
+        "heading": "Moments where mats become part of the interior"
+      }
     }
   },
   "order": [
