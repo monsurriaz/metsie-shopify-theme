@@ -108,99 +108,6 @@
           </form>
         {% endif %}
 
-        {%- comment -%} Mobile accordion filter (hidden on desktop, visible on mobile <768px) {%- endcomment -%}
-        {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
-          <div class="filter-accordion-mobile" x-show="filtersOpenMobile" @click.outside="filtersOpenMobile = false" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
-            <form class="filter-form filter-form--mobile-accordion" method="GET" action="{{ collection.url }}">
-              <div class="filter-accordion__content">
-                {% for filter in collection.filters %}
-                  <div class="filter-accordion-item">
-                    <button
-                      type="button"
-                      class="filter-accordion-item__toggle"
-                      @click="toggleExpandedFilter('{{ filter.label }}')"
-                      :class="{ 'filter-accordion-item__toggle--open': expandedFilters['{{ filter.label }}'] }"
-                      aria-expanded="false"
-                      :aria-expanded="expandedFilters['{{ filter.label }}']"
-                    >
-                      <span>{{ filter.label | upcase }}</span>
-                      <svg class="filter-accordion-item__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                        <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-
-                    <div
-                      class="filter-accordion-item__content"
-                      x-show="expandedFilters['{{ filter.label }}']"
-                      x-transition:enter="dropdown-enter"
-                      x-transition:enter-start="dropdown-enter-start"
-                      x-transition:enter-end="dropdown-enter-end"
-                      x-transition:leave="dropdown-leave"
-                      x-transition:leave-start="dropdown-leave-start"
-                      x-transition:leave-end="dropdown-leave-end"
-                    >
-                      {% if filter.type == 'price_range' %}
-                        <div class="filter-panel__content">
-                          <div class="price-range-filter">
-                            <div class="price-range-inputs">
-                              <div class="price-input-group">
-                                <span class="price-input-symbol">{{ shop.currency }}</span>
-                                <input
-                                  type="number"
-                                  name="{{ filter.min_value.param_name }}"
-                                  value="{{ filter.min_value.value | divided_by: 100 | round }}"
-                                  min="0"
-                                  placeholder="{{ filter.range_min | divided_by: 100 | round }}"
-                                  class="price-input"
-                                  id="filter-min-mobile-{{ forloop.index }}"
-                                >
-                              </div>
-                              <span class="price-range-separator">—</span>
-                              <div class="price-input-group">
-                                <span class="price-input-symbol">{{ shop.currency }}</span>
-                                <input
-                                  type="number"
-                                  name="{{ filter.max_value.param_name }}"
-                                  value="{{ filter.max_value.value | divided_by: 100 | round }}"
-                                  max="{{ filter.range_max | divided_by: 100 | round }}"
-                                  placeholder="{{ filter.range_max | divided_by: 100 | round }}"
-                                  class="price-input"
-                                  id="filter-max-mobile-{{ forloop.index }}"
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      {% else %}
-                        <div class="filter-panel__content">
-                          <ul class="filter-options filter-options--mobile-accordion">
-                            {% for filter_value in filter.values %}
-                              <li class="filter-option">
-                                <label class="filter-option__label">
-                                  <input
-                                    type="checkbox"
-                                    name="{{ filter_value.param_name }}"
-                                    value="{{ filter_value.value }}"
-                                    {% if filter_value.active %}checked{% endif %}
-                                    class="filter-option__checkbox"
-                                    onchange="this.form.submit()"
-                                  >
-                                  <span class="filter-option__text">{{ filter_value.label }}</span>
-                                  <span class="filter-option__count">({{ filter_value.count }})</span>
-                                </label>
-                              </li>
-                            {% endfor %}
-                          </ul>
-                        </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
-            </form>
-          </div>
-        {% endif %}
-
         {%- comment -%} Sidebar toggle + product count (non top-bar styles) {%- endcomment -%}
         {% if section.settings.show_filters and section.settings.filter_style == 'sidebar' %}
           <button
@@ -249,6 +156,99 @@
         {% endif %}
       </div>
     </div>
+
+    {%- comment -%} Mobile accordion filter (shown on mobile <768px below toolbar) {%- endcomment -%}
+    {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
+      <div class="filter-accordion-mobile" x-show="filtersOpenMobile" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
+        <form class="filter-form filter-form--mobile-accordion" method="GET" action="{{ collection.url }}">
+          <div class="filter-accordion__content">
+            {% for filter in collection.filters %}
+              <div class="filter-accordion-item">
+                <button
+                  type="button"
+                  class="filter-accordion-item__toggle"
+                  @click="toggleExpandedFilter('{{ filter.label }}')"
+                  :class="{ 'filter-accordion-item__toggle--open': expandedFilters['{{ filter.label }}'] }"
+                  aria-expanded="false"
+                  :aria-expanded="expandedFilters['{{ filter.label }}']"
+                >
+                  <span>{{ filter.label | upcase }}</span>
+                  <svg class="filter-accordion-item__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+
+                <div
+                  class="filter-accordion-item__content"
+                  x-show="expandedFilters['{{ filter.label }}']"
+                  x-transition:enter="dropdown-enter"
+                  x-transition:enter-start="dropdown-enter-start"
+                  x-transition:enter-end="dropdown-enter-end"
+                  x-transition:leave="dropdown-leave"
+                  x-transition:leave-start="dropdown-leave-start"
+                  x-transition:leave-end="dropdown-leave-end"
+                >
+                  {% if filter.type == 'price_range' %}
+                    <div class="filter-panel__content">
+                      <div class="price-range-filter">
+                        <div class="price-range-inputs">
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.min_value.param_name }}"
+                              value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                              min="0"
+                              placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-min-mobile-{{ forloop.index }}"
+                            >
+                          </div>
+                          <span class="price-range-separator">—</span>
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.max_value.param_name }}"
+                              value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                              max="{{ filter.range_max | divided_by: 100 | round }}"
+                              placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-max-mobile-{{ forloop.index }}"
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="filter-panel__content">
+                      <ul class="filter-options filter-options--mobile-accordion">
+                        {% for filter_value in filter.values %}
+                          <li class="filter-option">
+                            <label class="filter-option__label">
+                              <input
+                                type="checkbox"
+                                name="{{ filter_value.param_name }}"
+                                value="{{ filter_value.value }}"
+                                {% if filter_value.active %}checked{% endif %}
+                                class="filter-option__checkbox"
+                                onchange="this.form.submit()"
+                              >
+                              <span class="filter-option__text">{{ filter_value.label }}</span>
+                              <span class="filter-option__count">({{ filter_value.count }})</span>
+                            </label>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </form>
+      </div>
+    {% endif %}
 
     {%- comment -%} Main layout: sidebar + grid {%- endcomment -%}
     <div class="collection-layout" :class="{ 'has-sidebar': isSidebar && filtersOpen, 'filter-style--sidebar': isSidebar, 'filter-style--top-bar': isTopBar }">
@@ -576,16 +576,10 @@
   /* Mobile accordion container */
   .filter-accordion-mobile {
     display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     background: white;
-    border-top: 1px solid #E8E8E4;
-    border-radius: 12px 12px 0 0;
-    max-height: 70vh;
-    overflow-y: auto;
-    z-index: var(--z-modal);
+    border-bottom: 1px solid #E8E8E4;
+    margin-bottom: 24px;
   }
 
   .filter-accordion__content {
@@ -1164,18 +1158,21 @@
 
     .filter-toggle-mobile {
       display: flex;
-      border: 1px solid #E8E8E4;
-      padding: 8px 12px;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid #E8E8E4;
+      padding: 12px 0;
       background: white;
     }
 
     .filter-toggle-mobile:hover {
-      border-color: #2D4A6A;
       color: #2D4A6A;
     }
 
     .filter-accordion-mobile {
       display: block;
+      border-top: 1px solid #E8E8E4;
     }
 
     .filter-bar__inner {
