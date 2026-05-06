@@ -6,14 +6,14 @@
       <div class="collection-toolbar__left">
         {%- comment -%} Top-bar filters (inline in toolbar) {%- endcomment -%}
         {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
-          <span class="toolbar-label toolbar-label--desktop">FILTER FOR</span>
+          <span class="toolbar-label toolbar-label--desktop text-body-primary">FILTER FOR</span>
           <button
             type="button"
             class="filter-toggle-mobile"
             @click="filtersOpenMobile = !filtersOpenMobile"
             :aria-expanded="filtersOpenMobile"
           >
-            <span>FILTER FOR</span>
+            <span class="text-body-primary">FILTER FOR</span>
             <svg class="filter-toggle-mobile__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
               <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -33,7 +33,7 @@
                       aria-expanded="false"
                       :aria-expanded="expandedFilters['{{ filter.label }}']"
                     >
-                      <span>{{ filter.label | upcase }}</span>
+                      <span class="text-body-primary">{{ filter.label | upcase }}</span>
                       <svg class="filter-accordion-item__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
                         <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -95,8 +95,8 @@
                                     class="filter-option__checkbox"
                                     onchange="this.form.submit()"
                                   >
-                                  <span class="filter-option__text">{{ filter_value.label }}</span>
-                                  <span class="filter-option__count">({{ filter_value.count }})</span>
+                                  <span class="filter-option__text text-body-light">{{ filter_value.label }}</span>
+                                  <span class="filter-option__count text-body-light">({{ filter_value.count }})</span>
                                 </label>
                               </li>
                             {% endfor %}
@@ -122,7 +122,7 @@
                     aria-expanded="false"
                     :aria-expanded="openFilterKey === '{{ filter.label }}'"
                   >
-                    <span class="filter-dropdown__label">{{ filter.label | upcase }}</span>
+                    <span class="filter-dropdown__label text-body-primary">{{ filter.label | upcase }}</span>
                     <svg class="filter-dropdown__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
                       <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -219,7 +219,7 @@
         {% endif %}
 
         {% if section.settings.show_product_count %}
-          <p class="collection-count">
+          <p class="collection-count text-body-primary">
             {{ collection.products_count }}
             {% if collection.products_count == 1 %}PRODUCT{% else %}PRODUCTS{% endif %}
           </p>
@@ -229,7 +229,7 @@
       <div class="collection-toolbar__right">
         {% if section.settings.show_sort %}
           <div class="sort-wrapper">
-            <label for="sort-{{ section.id }}" class="sort-label sort-label--desktop">SORT</label>
+            <label for="sort-{{ section.id }}" class="sort-label sort-label--desktop text-body-primary">SORT</label>
             <select
               id="sort-{{ section.id }}"
               class="sort-select"
@@ -253,7 +253,7 @@
             @click="sortOpenMobile = !sortOpenMobile"
             :aria-expanded="sortOpenMobile"
           >
-            <span>SORT BY</span>
+            <span class="text-body-primary">SORT BY</span>
             <svg class="sort-toggle-mobile__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
               <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -263,25 +263,25 @@
             <div class="sort-accordion__content">
               {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=manual" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'manual' }">Featured</a>
+                <a href="{{ collection.url }}?sort_by=manual" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'manual' }">Featured</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=best-selling" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'best-selling' }">Best Selling</a>
+                <a href="{{ collection.url }}?sort_by=best-selling" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'best-selling' }">Best Selling</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=title-ascending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-ascending' }">A → Z</a>
+                <a href="{{ collection.url }}?sort_by=title-ascending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-ascending' }">A → Z</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=title-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-descending' }">Z → A</a>
+                <a href="{{ collection.url }}?sort_by=title-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-descending' }">Z → A</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=price-ascending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-ascending' }">Price: Low → High</a>
+                <a href="{{ collection.url }}?sort_by=price-ascending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-ascending' }">Price: Low → High</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=price-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-descending' }">Price: High → Low</a>
+                <a href="{{ collection.url }}?sort_by=price-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-descending' }">Price: High → Low</a>
               </div>
               <div class="sort-accordion-item">
-                <a href="{{ collection.url }}?sort_by=created-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'created-descending' }">Newest</a>
+                <a href="{{ collection.url }}?sort_by=created-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'created-descending' }">Newest</a>
               </div>
             </div>
           </div>
@@ -306,7 +306,7 @@
           x-transition:leave-end="sidebar-leave-end"
         >
           <div class="filter-sidebar__inner">
-            <h2 class="filter-sidebar__heading">FILTER</h2>
+            <h2 class="filter-sidebar__heading text-body-primary">FILTER</h2>
 
             {%- comment -%} Active filters {%- endcomment -%}
             {% if current_filters.size > 0 %}
@@ -321,7 +321,7 @@
                     </a>
                   {% endfor %}
                 {% endfor %}
-                <a href="{{ collection.url }}" class="clear-filters">CLEAR ALL</a>
+                <a href="{{ collection.url }}" class="clear-filters text-body-primary">CLEAR ALL</a>
               </div>
             {% endif %}
 
@@ -329,7 +329,7 @@
             <form class="filter-form" method="GET" action="{{ collection.url }}">
               {% for filter in collection.filters %}
                 <details class="filter-group" open>
-                  <summary class="filter-group__summary">
+                  <summary class="filter-group__summary text-body-primary">
                     {{ filter.label | upcase }}
                     <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                       <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -380,8 +380,8 @@
                                 class="filter-option__checkbox"
                                 onchange="this.form.submit()"
                               >
-                              <span class="filter-option__text">{{ filter_value.label }}</span>
-                              <span class="filter-option__count">({{ filter_value.count }})</span>
+                              <span class="filter-option__text text-body-light">{{ filter_value.label }}</span>
+                              <span class="filter-option__count text-body-light">({{ filter_value.count }})</span>
                             </label>
                           </li>
                         {% endfor %}
@@ -496,8 +496,8 @@
 
           {% else %}
             <div class="collection-empty">
-              <p class="collection-empty__heading">[NO PRODUCTS FOUND]</p>
-              <p class="collection-empty__text">[TRY ADJUSTING YOUR FILTERS OR BROWSE ALL PRODUCTS]</p>
+              <p class="collection-empty__heading text-body-primary">[NO PRODUCTS FOUND]</p>
+              <p class="collection-empty__text text-body-light">[TRY ADJUSTING YOUR FILTERS OR BROWSE ALL PRODUCTS]</p>
               <a href="{{ collection.url }}" class="btn btn--outline">CLEAR FILTERS</a>
             </div>
           {% endif %}
