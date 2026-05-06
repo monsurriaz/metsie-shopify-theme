@@ -1,10 +1,104 @@
 <section class="collection-products" data-section-id="{{ section.id }}" x-data="collectionFilters()">
   <div class="collection-products__inner">
 
-    {%- comment -%} Toolbar: count + sort {%- endcomment -%}
+    {%- comment -%} Toolbar: filters + sort {%- endcomment -%}
     <div class="collection-toolbar">
       <div class="collection-toolbar__left">
-        {% if section.settings.show_filters %}
+        {%- comment -%} Top-bar filters (inline in toolbar) {%- endcomment -%}
+        {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
+          <span class="toolbar-label">FILTER FOR</span>
+          <form class="filter-form filter-form--top-bar" method="GET" action="{{ collection.url }}">
+            <div class="filter-bar__inner">
+              {% for filter in collection.filters %}
+                <div class="filter-dropdown">
+                  <button
+                    type="button"
+                    class="filter-dropdown__trigger"
+                    @click="openFilterKey = openFilterKey === '{{ filter.label }}' ? null : '{{ filter.label }}'"
+                    :class="{ 'filter-dropdown__trigger--active': openFilterKey === '{{ filter.label }}' }"
+                    aria-expanded="false"
+                    :aria-expanded="openFilterKey === '{{ filter.label }}'"
+                  >
+                    <span class="filter-dropdown__label">{{ filter.label | upcase }}</span>
+                    <svg class="filter-dropdown__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+
+                  <div
+                    class="filter-dropdown__panel"
+                    x-show="openFilterKey === '{{ filter.label }}'"
+                    @click.outside="openFilterKey = null"
+                    x-transition:enter="dropdown-enter"
+                    x-transition:enter-start="dropdown-enter-start"
+                    x-transition:enter-end="dropdown-enter-end"
+                    x-transition:leave="dropdown-leave"
+                    x-transition:leave-start="dropdown-leave-start"
+                    x-transition:leave-end="dropdown-leave-end"
+                  >
+                    {% if filter.type == 'price_range' %}
+                      <div class="filter-panel__content">
+                        <div class="price-range-filter">
+                          <div class="price-range-inputs">
+                            <div class="price-input-group">
+                              <span class="price-input-symbol">{{ shop.currency }}</span>
+                              <input
+                                type="number"
+                                name="{{ filter.min_value.param_name }}"
+                                value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                                min="0"
+                                placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                                class="price-input"
+                                id="filter-min-top-{{ forloop.index }}"
+                              >
+                            </div>
+                            <span class="price-range-separator">—</span>
+                            <div class="price-input-group">
+                              <span class="price-input-symbol">{{ shop.currency }}</span>
+                              <input
+                                type="number"
+                                name="{{ filter.max_value.param_name }}"
+                                value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                                max="{{ filter.range_max | divided_by: 100 | round }}"
+                                placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                                class="price-input"
+                                id="filter-max-top-{{ forloop.index }}"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="filter-panel__content">
+                        <ul class="filter-options filter-options--dropdown">
+                          {% for filter_value in filter.values %}
+                            <li class="filter-option">
+                              <label class="filter-option__label">
+                                <input
+                                  type="checkbox"
+                                  name="{{ filter_value.param_name }}"
+                                  value="{{ filter_value.value }}"
+                                  {% if filter_value.active %}checked{% endif %}
+                                  class="filter-option__checkbox"
+                                  onchange="this.form.submit()"
+                                >
+                                <span class="filter-option__text">{{ filter_value.label }}</span>
+                                <span class="filter-option__count">({{ filter_value.count }})</span>
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </form>
+        {% endif %}
+
+        {%- comment -%} Sidebar toggle + product count (non top-bar styles) {%- endcomment -%}
+        {% if section.settings.show_filters and section.settings.filter_style == 'sidebar' %}
           <button
             class="filter-toggle"
             @click="filtersOpen = !filtersOpen"
@@ -52,101 +146,7 @@
       </div>
     </div>
 
-    {%- comment -%} Top-bar filters (only for top-bar style) {%- endcomment -%}
-    {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
-      <div class="filter-bar">
-        <form class="filter-form filter-form--top-bar" method="GET" action="{{ collection.url }}">
-          <div class="filter-bar__inner">
-            {% for filter in collection.filters %}
-              <div class="filter-dropdown">
-                <button
-                  type="button"
-                  class="filter-dropdown__trigger"
-                  @click="openFilterKey = openFilterKey === '{{ filter.label }}' ? null : '{{ filter.label }}'"
-                  :class="{ 'filter-dropdown__trigger--active': openFilterKey === '{{ filter.label }}' }"
-                  aria-expanded="false"
-                  :aria-expanded="openFilterKey === '{{ filter.label }}'"
-                >
-                  <span class="filter-dropdown__label">{{ filter.label | upcase }}</span>
-                  <svg class="filter-dropdown__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-
-                <div
-                  class="filter-dropdown__panel"
-                  x-show="openFilterKey === '{{ filter.label }}'"
-                  @click.outside="openFilterKey = null"
-                  x-transition:enter="dropdown-enter"
-                  x-transition:enter-start="dropdown-enter-start"
-                  x-transition:enter-end="dropdown-enter-end"
-                  x-transition:leave="dropdown-leave"
-                  x-transition:leave-start="dropdown-leave-start"
-                  x-transition:leave-end="dropdown-leave-end"
-                >
-                  {% if filter.type == 'price_range' %}
-                    <div class="filter-panel__content">
-                      <div class="price-range-filter">
-                        <div class="price-range-inputs">
-                          <div class="price-input-group">
-                            <span class="price-input-symbol">{{ shop.currency }}</span>
-                            <input
-                              type="number"
-                              name="{{ filter.min_value.param_name }}"
-                              value="{{ filter.min_value.value | divided_by: 100 | round }}"
-                              min="0"
-                              placeholder="{{ filter.range_min | divided_by: 100 | round }}"
-                              class="price-input"
-                              id="filter-min-top-{{ forloop.index }}"
-                            >
-                          </div>
-                          <span class="price-range-separator">—</span>
-                          <div class="price-input-group">
-                            <span class="price-input-symbol">{{ shop.currency }}</span>
-                            <input
-                              type="number"
-                              name="{{ filter.max_value.param_name }}"
-                              value="{{ filter.max_value.value | divided_by: 100 | round }}"
-                              max="{{ filter.range_max | divided_by: 100 | round }}"
-                              placeholder="{{ filter.range_max | divided_by: 100 | round }}"
-                              class="price-input"
-                              id="filter-max-top-{{ forloop.index }}"
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  {% else %}
-                    <div class="filter-panel__content">
-                      <ul class="filter-options filter-options--dropdown">
-                        {% for filter_value in filter.values %}
-                          <li class="filter-option">
-                            <label class="filter-option__label">
-                              <input
-                                type="checkbox"
-                                name="{{ filter_value.param_name }}"
-                                value="{{ filter_value.value }}"
-                                {% if filter_value.active %}checked{% endif %}
-                                class="filter-option__checkbox"
-                                onchange="this.form.submit()"
-                              >
-                              <span class="filter-option__text">{{ filter_value.label }}</span>
-                              <span class="filter-option__count">({{ filter_value.count }})</span>
-                            </label>
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    </div>
-                  {% endif %}
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-        </form>
-      </div>
-    {% endif %}
-
-    {%- comment -%} Main layout: sidebar + grid or top-bar {%- endcomment -%}
+    {%- comment -%} Main layout: sidebar + grid {%- endcomment -%}
     <div class="collection-layout" :class="{ 'has-sidebar': isSidebar && filtersOpen, 'filter-style--sidebar': isSidebar, 'filter-style--top-bar': isTopBar }">
 
       {%- comment -%} Filter sidebar (only for sidebar style) {%- endcomment -%}
@@ -388,11 +388,39 @@
     gap: 16px;
   }
 
-  .collection-toolbar__left,
+  .collection-toolbar__left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
   .collection-toolbar__right {
     display: flex;
     align-items: center;
     gap: 20px;
+  }
+
+  /* Top-bar filters in toolbar */
+  .toolbar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #888;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .filter-form--top-bar {
+    display: contents;
+  }
+
+  .filter-bar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
   }
 
   .filter-toggle {
@@ -762,23 +790,7 @@
     align-items: center;
   }
 
-  /* Top-bar filters */
-  .filter-bar {
-    margin-bottom: 32px;
-    position: relative;
-  }
-
-  .filter-form--top-bar {
-    display: contents;
-  }
-
-  .filter-bar__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
+  /* Filter dropdown styling */
   .filter-dropdown {
     position: relative;
   }
@@ -810,6 +822,10 @@
     background-color: #2D4A6A;
     border-color: #2D4A6A;
     color: #F5F0E8;
+  }
+
+  .filter-dropdown__trigger--active:hover {
+    color: var(--color-cream);
   }
 
   .filter-dropdown__icon {
