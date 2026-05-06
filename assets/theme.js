@@ -1007,102 +1007,6 @@ function initStickyAtc() {
 
 
 /* ============================================================
-   17B. AJAX FILTERING
-   ============================================================ */
-
-function initAjaxFilters() {
-  const section = document.querySelector('[data-ajax-filters]');
-  if (!section) return;
-
-  let controller = null;
-
-  function setLoading(on) {
-    section.querySelector('.collection-grid-wrap')?.classList.toggle('is-loading', on);
-  }
-
-  function updateDOM(sectionHtml) {
-    const doc = new DOMParser().parseFromString(sectionHtml, 'text/html');
-    ['.collection-grid-wrap', '.collection-count', '.active-filters'].forEach(sel => {
-      const fresh = doc.querySelector(sel);
-      const live = section.querySelector(sel);
-      if (fresh && live) live.replaceWith(fresh);
-    });
-    window.Metsie?.observeCards?.();
-    section.querySelector('.collection-grid-wrap')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function fetchFiltered(url, { pushHistory = true } = {}) {
-    if (controller) controller.abort();
-    controller = new AbortController();
-    setLoading(true);
-
-    const fetchUrl = new URL(url, window.location.origin);
-    fetchUrl.searchParams.set('sections', 'collection-products');
-
-    fetch(fetchUrl.toString(), { signal: controller.signal })
-      .then(r => r.json())
-      .then(data => {
-        updateDOM(data['collection-products']);
-        if (pushHistory) history.pushState({}, '', url);
-      })
-      .catch(err => {
-        if (err.name !== 'AbortError') window.location.href = url;
-      })
-      .finally(() => setLoading(false));
-  }
-
-  function mergeSortParam(baseUrl, sortValue) {
-    const sortUrl = new URL(sortValue, window.location.origin);
-    const current = new URL(baseUrl);
-    const params = new URLSearchParams(current.search);
-    const sortBy = sortUrl.searchParams.get('sort_by');
-    sortBy ? params.set('sort_by', sortBy) : params.delete('sort_by');
-    return `${current.pathname}?${params.toString()}`;
-  }
-
-  // Capture-phase: intercepts checkbox and sort-select before inline handlers fire
-  section.addEventListener('change', e => {
-    const select = e.target.closest('.sort-select');
-    if (select) {
-      e.stopPropagation();
-      fetchFiltered(mergeSortParam(window.location.href, select.value));
-      return;
-    }
-    const form = e.target.closest('.filter-form');
-    if (form && e.target.type === 'checkbox') {
-      e.stopPropagation();
-      const params = new URLSearchParams(new FormData(form));
-      fetchFiltered(`${form.action}?${params.toString()}`);
-    }
-  }, true);
-
-  // Delegated clicks: pagination, active filter removal, mobile sort, clear
-  section.addEventListener('click', e => {
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    if (
-      a.closest('.pagination') ||
-      a.closest('.active-filters') ||
-      a.closest('.collection-empty') ||
-      a.classList.contains('clear-filters')
-    ) {
-      e.preventDefault();
-      fetchFiltered(a.href);
-    } else if (a.closest('.sort-accordion')) {
-      e.preventDefault();
-      fetchFiltered(mergeSortParam(window.location.href, a.href));
-    }
-  });
-
-  // Browser back/forward
-  window.addEventListener('popstate', () => {
-    fetchFiltered(window.location.href, { pushHistory: false });
-  });
-}
-
-
-/* ============================================================
    18. MAIN INITIALIZATION
    ============================================================ */
 
@@ -1134,8 +1038,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Privacy / Legal
   initCookieConsent();
 
-  // Collection Filtering
-  initAjaxFilters();
 
   // GEO (async — does not block UI)
   if (window.__METSIE?.settings?.enableGeoRedirect) {
