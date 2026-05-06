@@ -229,7 +229,7 @@
       <div class="collection-toolbar__right">
         {% if section.settings.show_sort %}
           <div class="sort-wrapper">
-            <label for="sort-{{ section.id }}" class="sort-label">SORT</label>
+            <label for="sort-{{ section.id }}" class="sort-label sort-label--desktop">SORT</label>
             <select
               id="sort-{{ section.id }}"
               class="sort-select"
@@ -244,6 +244,46 @@
               <option value="{{ collection.url }}?sort_by=price-descending"{% if sort_by == 'price-descending' %}selected{% endif %}>Price: High → Low</option>
               <option value="{{ collection.url }}?sort_by=created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>Newest</option>
             </select>
+          </div>
+
+          {%- comment -%} Mobile sort accordion {%- endcomment -%}
+          <button
+            type="button"
+            class="sort-toggle-mobile"
+            @click="sortOpenMobile = !sortOpenMobile"
+            :aria-expanded="sortOpenMobile"
+          >
+            <span>SORT BY</span>
+            <svg class="sort-toggle-mobile__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="sort-accordion-mobile" x-show="sortOpenMobile" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
+            <div class="sort-accordion__content">
+              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=manual" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'manual' }">Featured</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=best-selling" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'best-selling' }">Best Selling</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=title-ascending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-ascending' }">A → Z</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=title-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-descending' }">Z → A</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=price-ascending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-ascending' }">Price: Low → High</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=price-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-descending' }">Price: High → Low</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=created-descending" class="sort-accordion-item__link" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'created-descending' }">Newest</a>
+              </div>
+            </div>
           </div>
         {% endif %}
       </div>
@@ -637,6 +677,77 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  /* Mobile sort accordion */
+  .sort-toggle-mobile {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+  }
+
+  .sort-toggle-mobile:hover {
+    color: #2D4A6A;
+  }
+
+  .sort-toggle-mobile__icon {
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+    color: #888;
+  }
+
+  [aria-expanded="true"] .sort-toggle-mobile__icon {
+    transform: rotate(180deg);
+  }
+
+  .sort-accordion-mobile {
+    display: none;
+  }
+
+  .sort-accordion__content {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sort-accordion-item {
+    border-bottom: 1px solid #E8E8E4;
+  }
+
+  .sort-accordion-item:last-child {
+    border-bottom: none;
+  }
+
+  .sort-accordion-item__link {
+    display: block;
+    padding: 12px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: #1A1A1A;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .sort-accordion-item__link:hover {
+    color: #2D4A6A;
+  }
+
+  .sort-accordion-item__link--active {
+    color: #2D4A6A;
+    font-weight: 500;
   }
 
   .filter-active-count {
@@ -1238,6 +1349,38 @@
 
     .sort-select {
       width: 100%;
+      display: none;
+    }
+
+    .sort-label--desktop {
+      display: none;
+    }
+
+    .sort-toggle-mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid #E8E8E4;
+      padding: 12px 0;
+      background: white;
+      flex-basis: 100%;
+    }
+
+    .sort-accordion-mobile {
+      display: block;
+      width: 100%;
+      flex-basis: 100%;
+      border-top: 1px solid #E8E8E4;
+      background: white;
+    }
+
+    .sort-accordion-item {
+      border: none;
+    }
+
+    .sort-accordion-item:last-child {
+      border-bottom: none;
     }
 
     .collection-layout.has-sidebar {
@@ -1312,9 +1455,33 @@
       font-size: 8px;
     }
 
+    .sort-label--desktop {
+      display: none;
+    }
+
     .sort-select {
       font-size: 11px;
       padding: 6px 28px 6px 10px;
+      display: none;
+    }
+
+    .sort-toggle-mobile {
+      font-size: 10px;
+      padding: 8px 0;
+      flex-basis: 100%;
+    }
+
+    .sort-accordion-mobile {
+      width: 100%;
+      flex-basis: 100%;
+    }
+
+    .sort-accordion-item {
+      border: none;
+    }
+
+    .sort-accordion-item__link {
+      padding: 8px 0;
     }
 
     .collection-grid { grid-template-columns: repeat(1, 1fr); gap: 12px; }
@@ -1333,6 +1500,7 @@
       openFilterKey: null,
       filtersOpenMobile: false,
       expandedFilters: {},
+      sortOpenMobile: false,
       toggleExpandedFilter(filterLabel) {
         if (!this.expandedFilters[filterLabel]) {
           this.$nextTick(() => {
