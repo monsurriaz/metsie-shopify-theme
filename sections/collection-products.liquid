@@ -526,7 +526,7 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: 24px;
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
     margin-bottom: 32px;
     gap: 16px;
   }
@@ -550,7 +550,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.2em;
-    color: #888;
+    color: var(--color-light-gray);
     white-space: nowrap;
     text-transform: uppercase;
   }
@@ -578,11 +578,11 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     padding: 0;
   }
 
-  .filter-toggle:hover { color: #2D4A6A; }
+  .filter-toggle:hover { color: var(--color-deep-navy); }
 
   /* Mobile accordion toggle button */
   .filter-toggle-mobile {
@@ -597,11 +597,11 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     padding: 8px 12px;
   }
 
-  .filter-toggle-mobile:hover { color: #2D4A6A; }
+  .filter-toggle-mobile:hover { color: var(--color-deep-navy); }
 
   .filter-toggle-mobile__icon {
     transition: transform var(--transition-fast);
@@ -623,11 +623,11 @@
 
   /* Accordion item (each filter group) */
   .filter-accordion-item {
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .filter-accordion-item:first-child {
-    border-top: 1px solid #E8E8E4;
+    border-top: 1px solid var(--color-border);
   }
 
   .filter-accordion-item__toggle {
@@ -644,22 +644,22 @@
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     text-align: left;
   }
 
   .filter-accordion-item__toggle:hover {
-    background-color: #F5F0E8;
+    background-color: var(--color-cream);
   }
 
   .filter-accordion-item__toggle--open {
-    background-color: #F5F0E8;
+    background-color: var(--color-cream);
   }
 
   .filter-accordion-item__icon {
     transition: transform var(--transition-fast);
     flex-shrink: 0;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   .filter-accordion-item__toggle--open .filter-accordion-item__icon {
@@ -694,17 +694,17 @@
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
   }
 
   .sort-toggle-mobile:hover {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
   }
 
   .sort-toggle-mobile__icon {
     transition: transform var(--transition-fast);
     flex-shrink: 0;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   [aria-expanded="true"] .sort-toggle-mobile__icon {
@@ -722,7 +722,7 @@
   }
 
   .sort-accordion-item {
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .sort-accordion-item:last-child {
@@ -735,30 +735,30 @@
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     letter-spacing: 0.06em;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     text-decoration: none;
     cursor: pointer;
     transition: color 0.2s ease;
   }
 
   .sort-accordion-item__link:hover {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
   }
 
   .sort-accordion-item__link--active {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
     font-weight: 500;
   }
 
   .filter-active-count {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
   }
 
   .collection-count {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
     letter-spacing: 0.1em;
-    color: #888;
+    color: var(--color-light-gray);
     margin: 0;
     text-transform: uppercase;
   }
@@ -774,7 +774,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.2em;
-    color: #888;
+    color: var(--color-light-gray);
     white-space: nowrap;
   }
 
@@ -782,10 +782,10 @@
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     letter-spacing: 0.06em;
-    border: 1px solid #E8E8E4;
+    border: 1px solid var(--color-border);
     background: white;
     padding: 8px 32px 8px 12px;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
@@ -819,7 +819,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.25em;
-    color: #888;
+    color: var(--color-light-gray);
     margin: 0 0 20px;
   }
 
@@ -830,7 +830,7 @@
     gap: 8px;
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .active-filter-tag {
@@ -841,27 +841,27 @@
     font-size: 10px;
     letter-spacing: 0.08em;
     padding: 4px 10px;
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
     text-decoration: none;
     transition: background-color 0.2s ease;
   }
 
-  .active-filter-tag:hover { background-color: #1E3A5F; }
+  .active-filter-tag:hover { background-color: var(--color-navy-mid); }
 
   .clear-filters {
     font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.12em;
-    color: #888;
+    color: var(--color-light-gray);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   /* Filter groups */
   .filter-group {
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
     padding: 0;
   }
 
@@ -875,7 +875,7 @@
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.15em;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     list-style: none;
   }
 
@@ -888,7 +888,7 @@
   .filter-group__icon {
     transition: transform 0.2s ease;
     flex-shrink: 0;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   .filter-group__body {
@@ -914,7 +914,7 @@
   .filter-option__checkbox {
     width: 14px;
     height: 14px;
-    accent-color: #2D4A6A;
+    accent-color: var(--color-deep-navy);
     flex-shrink: 0;
     cursor: pointer;
   }
@@ -922,14 +922,14 @@
   .filter-option__text {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     flex: 1;
   }
 
   .filter-option__count {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
-    color: #aaa;
+    color: var(--color-light-gray);
   }
 
   /* Price range */
@@ -942,7 +942,7 @@
   .price-input-group {
     display: flex;
     align-items: center;
-    border: 1px solid #E8E8E4;
+    border: 1px solid var(--color-border);
     flex: 1;
   }
 
@@ -950,7 +950,7 @@
     padding: 0 8px;
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   .price-input {
@@ -959,7 +959,7 @@
     padding: 8px 8px 8px 0;
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     outline: none;
     width: 60px;
     -moz-appearance: textfield;
@@ -971,7 +971,7 @@
   .price-range-separator {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #aaa;
+    color: var(--color-light-gray);
     flex-shrink: 0;
   }
 
@@ -1010,13 +1010,13 @@
   }
 
   .product-card__badge--sold-out {
-    background-color: #E8E8E4;
-    color: #888;
+    background-color: var(--color-border);
+    color: var(--color-light-gray);
   }
 
   .product-card__badge--sale {
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
   }
 
   /* Empty state */
@@ -1029,14 +1029,14 @@
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 32px;
     font-weight: 300;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     margin-bottom: 12px;
   }
 
   .collection-empty__text {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    color: #888;
+    color: var(--color-light-gray);
     margin-bottom: 32px;
   }
 
@@ -1055,16 +1055,16 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 1px solid #E8E8E4;
-    color: #1A1A1A;
+    border: 1px solid var(--color-border);
+    color: var(--color-near-black);
     text-decoration: none;
     transition: all 0.2s ease;
   }
 
   .pagination__btn:hover {
-    border-color: #2D4A6A;
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    border-color: var(--color-deep-navy);
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
   }
 
   .pagination__page {
@@ -1076,24 +1076,24 @@
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     text-decoration: none;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     transition: all 0.2s ease;
   }
 
   .pagination__page:hover:not(.pagination__page--current) {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
   }
 
   .pagination__page--current {
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
     pointer-events: none;
   }
 
   .pagination__ellipsis {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
-    color: #888;
+    color: var(--color-light-gray);
     padding: 0 4px;
     display: flex;
     align-items: center;
@@ -1110,27 +1110,27 @@
     gap: 6px;
     padding: 8px 12px;
     background: white;
-    border: 1px solid #E8E8E4;
+    border: 1px solid var(--color-border);
     font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     cursor: pointer;
     transition: all var(--transition-fast);
     white-space: nowrap;
   }
 
   .filter-dropdown__trigger:hover {
-    border-color: #2D4A6A;
-    color: #2D4A6A;
+    border-color: var(--color-deep-navy);
+    color: var(--color-deep-navy);
   }
 
   .filter-dropdown__trigger--active {
-    background-color: #2D4A6A;
-    border-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    border-color: var(--color-deep-navy);
+    color: var(--color-cream);
   }
 
   .filter-dropdown__trigger--active:hover {
@@ -1151,7 +1151,7 @@
     top: 100%;
     left: 0;
     background: white;
-    border: 1px solid #E8E8E4;
+    border: 1px solid var(--color-border);
     border-top: none;
     min-width: 200px;
     max-width: 300px;
@@ -1224,6 +1224,7 @@
       min-width: 160px;
       max-width: 250px;
       top: calc(100% + 4px);
+      border: 1px solid var(--color-border);
     }
 
     .collection-layout.has-sidebar {
@@ -1249,6 +1250,7 @@
 
     .collection-toolbar__right {
       width: 100%;
+      flex-direction: column;
     }
 
     .toolbar-label {
@@ -1268,21 +1270,21 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      border-bottom: 1px solid #E8E8E4;
+      border-bottom: 1px solid var(--color-border);
       padding: 12px 0;
       background: white;
       flex-basis: 100%;
     }
 
     .filter-toggle-mobile:hover {
-      color: #2D4A6A;
+      color: var(--color-deep-navy);
     }
 
     .filter-accordion-mobile {
       display: block;
       width: 100%;
       flex-basis: 100%;
-      border-top: 1px solid #E8E8E4;
+      border-top: 1px solid var(--color-border);
       background: white;
     }
 
@@ -1301,7 +1303,7 @@
 
     .filter-accordion-item__toggle {
       padding: 12px 0;
-      border-bottom: 1px solid #E8E8E4;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .filter-accordion-item__content {
@@ -1332,7 +1334,7 @@
       bottom: 0;
       max-width: none;
       min-width: auto;
-      border: 1px solid #E8E8E4;
+      border: 1px solid var(--color-border);
       border-radius: 12px 12px 0 0;
       z-index: var(--z-modal);
       max-height: 60vh;
@@ -1361,7 +1363,7 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      border-bottom: 1px solid #E8E8E4;
+      border-bottom: 1px solid var(--color-border);
       padding: 12px 0;
       background: white;
       flex-basis: 100%;
@@ -1371,7 +1373,7 @@
       display: block;
       width: 100%;
       flex-basis: 100%;
-      border-top: 1px solid #E8E8E4;
+      border-top: 1px solid var(--color-border);
       background: white;
     }
 
@@ -1423,7 +1425,7 @@
     .filter-accordion-item__toggle {
       font-size: 10px;
       padding: 8px 0;
-      border-bottom: 1px solid #E8E8E4;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .filter-accordion-item__content {
