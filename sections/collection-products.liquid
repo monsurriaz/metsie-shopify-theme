@@ -52,6 +52,100 @@
       </div>
     </div>
 
+    {%- comment -%} Top-bar filters (only for top-bar style) {%- endcomment -%}
+    {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
+      <div class="filter-bar">
+        <form class="filter-form filter-form--top-bar" method="GET" action="{{ collection.url }}">
+          <div class="filter-bar__inner">
+            {% for filter in collection.filters %}
+              <div class="filter-dropdown">
+                <button
+                  type="button"
+                  class="filter-dropdown__trigger"
+                  @click="openFilterKey = openFilterKey === '{{ filter.label }}' ? null : '{{ filter.label }}'"
+                  :class="{ 'filter-dropdown__trigger--active': openFilterKey === '{{ filter.label }}' }"
+                  aria-expanded="false"
+                  :aria-expanded="openFilterKey === '{{ filter.label }}'"
+                >
+                  <span class="filter-dropdown__label">{{ filter.label | upcase }}</span>
+                  <svg class="filter-dropdown__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+
+                <div
+                  class="filter-dropdown__panel"
+                  x-show="openFilterKey === '{{ filter.label }}'"
+                  @click.outside="openFilterKey = null"
+                  x-transition:enter="dropdown-enter"
+                  x-transition:enter-start="dropdown-enter-start"
+                  x-transition:enter-end="dropdown-enter-end"
+                  x-transition:leave="dropdown-leave"
+                  x-transition:leave-start="dropdown-leave-start"
+                  x-transition:leave-end="dropdown-leave-end"
+                >
+                  {% if filter.type == 'price_range' %}
+                    <div class="filter-panel__content">
+                      <div class="price-range-filter">
+                        <div class="price-range-inputs">
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.min_value.param_name }}"
+                              value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                              min="0"
+                              placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-min-top-{{ forloop.index }}"
+                            >
+                          </div>
+                          <span class="price-range-separator">—</span>
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.max_value.param_name }}"
+                              value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                              max="{{ filter.range_max | divided_by: 100 | round }}"
+                              placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-max-top-{{ forloop.index }}"
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="filter-panel__content">
+                      <ul class="filter-options filter-options--dropdown">
+                        {% for filter_value in filter.values %}
+                          <li class="filter-option">
+                            <label class="filter-option__label">
+                              <input
+                                type="checkbox"
+                                name="{{ filter_value.param_name }}"
+                                value="{{ filter_value.value }}"
+                                {% if filter_value.active %}checked{% endif %}
+                                class="filter-option__checkbox"
+                                onchange="this.form.submit()"
+                              >
+                              <span class="filter-option__text">{{ filter_value.label }}</span>
+                              <span class="filter-option__count">({{ filter_value.count }})</span>
+                            </label>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </form>
+      </div>
+    {% endif %}
+
     {%- comment -%} Main layout: sidebar + grid or top-bar {%- endcomment -%}
     <div class="collection-layout" :class="{ 'has-sidebar': isSidebar && filtersOpen, 'filter-style--sidebar': isSidebar, 'filter-style--top-bar': isTopBar }">
 
@@ -668,6 +762,99 @@
     align-items: center;
   }
 
+  /* Top-bar filters */
+  .filter-bar {
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .filter-form--top-bar {
+    display: contents;
+  }
+
+  .filter-bar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .filter-dropdown {
+    position: relative;
+  }
+
+  .filter-dropdown__trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #E8E8E4;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .filter-dropdown__trigger:hover {
+    border-color: #2D4A6A;
+    color: #2D4A6A;
+  }
+
+  .filter-dropdown__trigger--active {
+    background-color: #2D4A6A;
+    border-color: #2D4A6A;
+    color: #F5F0E8;
+  }
+
+  .filter-dropdown__icon {
+    transition: transform var(--transition-fast);
+    color: currentColor;
+  }
+
+  .filter-dropdown__trigger--active .filter-dropdown__icon {
+    transform: rotate(180deg);
+  }
+
+  .filter-dropdown__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #E8E8E4;
+    border-top: none;
+    min-width: 200px;
+    max-width: 300px;
+    z-index: var(--z-dropdown);
+  }
+
+  .filter-panel__content {
+    padding: 12px 0;
+  }
+
+  .filter-options--dropdown {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .filter-options--dropdown .filter-option {
+    padding: 0 12px;
+    margin: 0;
+  }
+
+  /* Dropdown transitions */
+  .dropdown-enter { transition: opacity 0.15s ease, transform 0.15s ease; }
+  .dropdown-enter-start { opacity: 0; transform: translateY(-4px); }
+  .dropdown-enter-end { opacity: 1; transform: translateY(0); }
+  .dropdown-leave { transition: opacity 0.15s ease; }
+  .dropdown-leave-start { opacity: 1; }
+  .dropdown-leave-end { opacity: 0; }
+
   /* Responsive */
   @media (max-width: 1200px) {
     .collection-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -701,11 +888,13 @@
 
 <script>
   function collectionFilters() {
+    const filterStyle = {{ section.settings.filter_style | json }};
+
     return {
-      filterStyle: {{ section.settings.filter_style | json }},
-      isSidebar: {{ section.settings.filter_style | json }} === 'sidebar',
-      isTopBar: {{ section.settings.filter_style | json }} === 'top-bar',
-      filtersOpen: (window.innerWidth >= 1024 || {{ section.settings.filter_style | json }} === 'top-bar') && {{ section.settings.show_filters | json }},
+      filterStyle: filterStyle,
+      isSidebar: filterStyle === 'sidebar',
+      isTopBar: filterStyle === 'top-bar',
+      filtersOpen: (window.innerWidth >= 1024) && {{ section.settings.show_filters | json }},
       openFilterKey: null
     }
   }
