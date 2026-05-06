@@ -1123,9 +1123,9 @@ details > summary::-webkit-details-marker {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: var(--color-cream);
-  border-bottom-color: var(--color-border);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  background-color: var(--color-white);
+  /* border-bottom-color: var(--color-border); */
+  /* box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06); */
 }
 
 .site-header.is-sticky .header__logo-text,

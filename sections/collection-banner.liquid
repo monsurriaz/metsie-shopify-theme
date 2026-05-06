@@ -12,12 +12,15 @@
   "
 >
   {% if collection.image and section.settings.show_collection_image %}
-    <div class="collection-banner__overlay"></div>
+    <div class="collection-banner__overlay page-banner__overlay"></div>
   {% endif %}
 
-  <div class="collection-banner__content">
-    <p class="section-label collection-banner__label">{{ section.settings.label | default: 'THE COLLECTION' | upcase }}</p>
-    <h1 class="collection-banner__title">
+  <div class="collection-banner__content page-banner__content">
+    <p class="banner-label collection-banner__label page-banner__label text-body-primary">
+      {{ section.settings.label | default: 'THE COLLECTION' | upcase }}
+    </p>
+
+    <h1 class="collection-banner__title page-banner__title">
       {% if section.settings.heading != blank %}
         {{ section.settings.heading }}
       {% elsif collection.title != blank %}
@@ -28,13 +31,13 @@
     </h1>
 
     {% if section.settings.show_description and collection.description != blank %}
-      <div class="collection-banner__description">
+      <div class="collection-banner__description page-banner__description">
         {{ collection.description | strip_html | truncate: 200 }}
       </div>
     {% endif %}
 
     {% if section.settings.show_product_count %}
-      <p class="collection-banner__count">
+      <p class="collection-banner__count page-banner__count">
         {{ collection.products_count }}
         {% if collection.products_count == 1 %}
           PRODUCT
@@ -49,14 +52,18 @@
 <style>
   .collection-banner {
     position: relative;
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: {{ section.settings.text_color }};
     {% if section.settings.banner_height == 'small' %}
       padding: 64px 40px;
-    {% elsif section.settings.banner_height == 'large' %}
-      padding: 160px 40px;
-    {% else %}
+    {% elsif section.settings.banner_height == 'medium' %}
       padding: 100px 40px;
+    {% else %}
+      min-height: calc(100vh - var(--header-height));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
     {% endif %}
     text-align: center;
     overflow: hidden;
@@ -70,39 +77,40 @@
   }
 
   .collection-banner__content {
-    position: relative;
     z-index: 2;
     max-width: 720px;
-    margin: 0 auto;
-    color: #F5F0E8;
+    color: {{ section.settings.text_color }};
+    {% if section.settings.banner_height != 'large' %}
+      margin: 0 auto;
+    {% endif %}
   }
 
-  /* When image is shown, always white text */
-  .collection-banner:has(.collection-banner__overlay) .collection-banner__content {
-    color: #F5F0E8;
-  }
-
+  /* Label: absolutely positioned to top ONLY when banner_height is large */
   .collection-banner__label {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    opacity: 0.6;
+    margin: 0 0 20px;
+    {% if section.settings.banner_height == 'large' %}
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    {% else %}
+      margin-bottom: 20px;
+    {% endif %}
   }
 
   .collection-banner__title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-heading);
     font-size: clamp(36px, 5vw, 72px);
     font-weight: 300;
     margin: 0 0 20px;
     line-height: 1.05;
     letter-spacing: -0.01em;
+    color: inherit;
   }
 
   .collection-banner__description {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 14px;
     line-height: 1.7;
     opacity: 0.75;
@@ -113,7 +121,7 @@
   }
 
   .collection-banner__count {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.2em;
@@ -123,13 +131,28 @@
 
   @media (max-width: 768px) {
     .collection-banner {
-      padding: 72px 24px;
+      {% if section.settings.banner_height != 'large' %}
+        padding: 72px 24px;
+      {% else %}
+        padding: 0 24px;
+      {% endif %}
+    }
+    .collection-banner__label {
+      {% if section.settings.banner_height == 'large' %}
+        top: 100px;
+      {% else %}
+        margin-bottom: 20px;
+      {% endif %}
     }
   }
 
   @media (max-width: 480px) {
     .collection-banner {
-      padding: 56px 16px;
+      {% if section.settings.banner_height != 'large' %}
+        padding: 56px 16px;
+      {% else %}
+        padding: 0 16px;
+      {% endif %}
     }
   }
 </style>
@@ -197,6 +220,12 @@
       "id": "bg_color",
       "label": "Background color (no image)",
       "default": "#2D4A6A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
     }
   ],
   "presets": [

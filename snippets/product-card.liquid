@@ -6,7 +6,7 @@
 
   USAGE:
     {% render 'product-card', product: product %}
-    {% render 'product-card', product: product, lazy_index: forloop.index %}
+    {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: false, aspect_ratio: 'portrait', lazy_index: forloop.index %}
 
   PARAMETERS:
     product        (object, required) — Shopify product object
@@ -29,13 +29,6 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign product         = product
-  assign lazy_index      = lazy_index      | default: 0
-  assign show_vendor     = show_vendor     | default: false
-  assign show_swatches   = show_swatches   | default: true
-  assign show_quick_add  = show_quick_add  | default: true
-  assign aspect_ratio    = aspect_ratio    | default: 'square'
-
   # Determine loading strategy
   if lazy_index > 4
     assign loading_attr = 'lazy'
@@ -183,7 +176,7 @@
     {%- endif -%}
 
     {%- comment -%} ── Wishlist button ── {%- endcomment -%}
-    <button
+    {% comment %} <button
       type="button"
       class="product-card__wishlist"
       aria-label="[ADD TO WISHLIST]: {{ product.title | escape }}"
@@ -191,7 +184,7 @@
       data-product-id="{{ product.id }}"
     >
       {%- render 'svg-icons', icon: 'heart', size: 18 -%}
-    </button>
+    </button> {% endcomment %}
 
   </div>{%- comment -%} /.product-card__media-wrapper {%- endcomment -%}
 
