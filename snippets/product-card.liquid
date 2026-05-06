@@ -644,6 +644,10 @@
           });
         }
 
+        // Expose observeCards globally for AJAX filter updates
+        window.Metsie = window.Metsie || {};
+        window.Metsie.observeCards = observeCards;
+
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', observeCards);
         } else {
@@ -691,10 +695,6 @@
           btn.disabled    = false;
         });
       });
-
-      // Expose observeCards globally for AJAX filter updates
-      window.Metsie = window.Metsie || {};
-      window.Metsie.observeCards = observeCards;
     })();
   </script>
 {%- endunless -%}
