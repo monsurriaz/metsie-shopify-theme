@@ -692,6 +692,9 @@
         });
       });
 
+      // Expose observeCards globally for AJAX filter updates
+      window.Metsie = window.Metsie || {};
+      window.Metsie.observeCards = observeCards;
     })();
   </script>
 {%- endunless -%}

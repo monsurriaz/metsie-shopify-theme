@@ -598,6 +598,13 @@ details > summary::-webkit-details-marker {
 .badge--new  { background-color: var(--color-espresso); }
 .badge--out  { background-color: var(--color-light-gray); color: var(--color-near-black); }
 
+/* Loading state for AJAX operations */
+.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
 
 /* ============================================================
    6. COMPONENT: BUTTONS

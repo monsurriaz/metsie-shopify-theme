@@ -1,4 +1,4 @@
-<section class="collection-products" data-section-id="{{ section.id }}" x-data="collectionFilters()">
+<section class="collection-products" data-section-id="{{ section.id }}" data-ajax-filters x-data="collectionFilters()">
   <div class="collection-products__inner">
 
     {%- comment -%} Toolbar: filters + sort {%- endcomment -%}
@@ -403,7 +403,7 @@
             <ul class="collection-grid" role="list">
               {% for product in collection.products %}
                 <li class="product-card-wrapper">
-                  {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: false, aspect_ratio: 'portrait', lazy_index: forloop.index %}
+                  {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: true, aspect_ratio: 'portrait', lazy_index: forloop.index %}
                   {% comment %} <article class="product-card">
                     <a href="{{ product.url }}" class="product-card__image-link">
                       <div class="product-card__image-container">
