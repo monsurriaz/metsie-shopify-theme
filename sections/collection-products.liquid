@@ -52,15 +52,15 @@
       </div>
     </div>
 
-    {%- comment -%} Main layout: sidebar + grid {%- endcomment -%}
-    <div class="collection-layout" :class="{ 'has-sidebar': filtersOpen }">
+    {%- comment -%} Main layout: sidebar + grid or top-bar {%- endcomment -%}
+    <div class="collection-layout" :class="{ 'has-sidebar': isSidebar && filtersOpen, 'filter-style--sidebar': isSidebar, 'filter-style--top-bar': isTopBar }">
 
-      {%- comment -%} Filter sidebar {%- endcomment -%}
-      {% if section.settings.show_filters %}
+      {%- comment -%} Filter sidebar (only for sidebar style) {%- endcomment -%}
+      {% if section.settings.show_filters and section.settings.filter_style == 'sidebar' %}
         <aside
           class="filter-sidebar"
           id="filter-sidebar"
-          x-show="filtersOpen"
+          x-show="isSidebar && filtersOpen"
           x-transition:enter="sidebar-enter"
           x-transition:enter-start="sidebar-enter-start"
           x-transition:enter-end="sidebar-enter-end"
@@ -89,121 +89,71 @@
             {% endif %}
 
             {%- comment -%} Filter groups {%- endcomment -%}
-            {% for filter in collection.filters %}
-              <details class="filter-group" open>
-                <summary class="filter-group__summary">
-                  {{ filter.label | upcase }}
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
+            <form class="filter-form" method="GET" action="{{ collection.url }}">
+              {% for filter in collection.filters %}
+                <details class="filter-group" open>
+                  <summary class="filter-group__summary">
+                    {{ filter.label | upcase }}
+                    <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </summary>
 
-                <div class="filter-group__body">
-                  {% if filter.type == 'price_range' %}
-                    <div class="price-range-filter">
-                      <div class="price-range-inputs">
-                        <div class="price-input-group">
-                          <span class="price-input-symbol">€</span>
-                          <input
-                            type="number"
-                            name="{{ filter.min_value.param_name }}"
-                            value="{{ filter.min_value.value | divided_by: 100 | round }}"
-                            min="0"
-                            placeholder="{{ filter.range_min | divided_by: 100 | round }}"
-                            class="price-input"
-                            id="filter-min-{{ forloop.index }}"
-                          >
-                        </div>
-                        <span class="price-range-separator">—</span>
-                        <div class="price-input-group">
-                          <span class="price-input-symbol">€</span>
-                          <input
-                            type="number"
-                            name="{{ filter.max_value.param_name }}"
-                            value="{{ filter.max_value.value | divided_by: 100 | round }}"
-                            max="{{ filter.range_max | divided_by: 100 | round }}"
-                            placeholder="{{ filter.range_max | divided_by: 100 | round }}"
-                            class="price-input"
-                            id="filter-max-{{ forloop.index }}"
-                          >
+                  <div class="filter-group__body">
+                    {% if filter.type == 'price_range' %}
+                      <div class="price-range-filter">
+                        <div class="price-range-inputs">
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.min_value.param_name }}"
+                              value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                              min="0"
+                              placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-min-{{ forloop.index }}"
+                            >
+                          </div>
+                          <span class="price-range-separator">—</span>
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.max_value.param_name }}"
+                              value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                              max="{{ filter.range_max | divided_by: 100 | round }}"
+                              placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-max-{{ forloop.index }}"
+                            >
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  {% else %}
-                    <ul class="filter-options">
-                      {% for filter_value in filter.values %}
-                        <li class="filter-option">
-                          <label class="filter-option__label">
-                            <input
-                              type="checkbox"
-                              name="{{ filter_value.param_name }}"
-                              value="{{ filter_value.value }}"
-                              {% if filter_value.active %}checked{% endif %}
-                              class="filter-option__checkbox"
-                              onchange="this.form.submit()"
-                            >
-                            <span class="filter-option__text">{{ filter_value.label }}</span>
-                            <span class="filter-option__count">({{ filter_value.count }})</span>
-                          </label>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  {% endif %}
-                </div>
-              </details>
-            {% else %}
-              {%- comment -%} Default filters when no native filters configured {%- endcomment -%}
-              <details class="filter-group" open>
-                <summary class="filter-group__summary">SHAPE
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <ul class="filter-options">
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Geometric</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Organic</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Wavy</span></label></li>
-                  </ul>
-                </div>
-              </details>
-
-              <details class="filter-group">
-                <summary class="filter-group__summary">COLOR
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <ul class="filter-options">
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Cream</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Espresso</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Navy</span></label></li>
-                  </ul>
-                </div>
-              </details>
-
-              <details class="filter-group">
-                <summary class="filter-group__summary">PRICE
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <div class="price-range-inputs">
-                    <div class="price-input-group">
-                      <span class="price-input-symbol">€</span>
-                      <input type="number" placeholder="0" class="price-input" min="0">
-                    </div>
-                    <span class="price-range-separator">—</span>
-                    <div class="price-input-group">
-                      <span class="price-input-symbol">€</span>
-                      <input type="number" placeholder="500" class="price-input" max="500">
-                    </div>
+                    {% else %}
+                      <ul class="filter-options">
+                        {% for filter_value in filter.values %}
+                          <li class="filter-option">
+                            <label class="filter-option__label">
+                              <input
+                                type="checkbox"
+                                name="{{ filter_value.param_name }}"
+                                value="{{ filter_value.value }}"
+                                {% if filter_value.active %}checked{% endif %}
+                                class="filter-option__checkbox"
+                                onchange="this.form.submit()"
+                              >
+                              <span class="filter-option__text">{{ filter_value.label }}</span>
+                              <span class="filter-option__count">({{ filter_value.count }})</span>
+                            </label>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
                   </div>
-                </div>
-              </details>
-            {% endfor %}
+                </details>
+              {% endfor %}
+            </form>
           </div>
         </aside>
       {% endif %}
@@ -216,7 +166,8 @@
             <ul class="collection-grid" role="list">
               {% for product in collection.products %}
                 <li class="product-card-wrapper">
-                  <article class="product-card">
+                  {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: false, aspect_ratio: 'portrait', lazy_index: forloop.index %}
+                  {% comment %} <article class="product-card">
                     <a href="{{ product.url }}" class="product-card__image-link">
                       <div class="product-card__image-container">
                         {% if product.featured_image %}
@@ -268,7 +219,7 @@
                         {% endif %}
                       </p>
                     </div>
-                  </article>
+                  </article> {% endcomment %}
                 </li>
               {% endfor %}
             </ul>
@@ -608,7 +559,7 @@
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    gap: 60px 20px;
   }
 
   .collection-layout.has-sidebar .collection-grid {
@@ -751,7 +702,11 @@
 <script>
   function collectionFilters() {
     return {
-      filtersOpen: window.innerWidth >= 1024 && {{ section.settings.show_filters | json }}
+      filterStyle: {{ section.settings.filter_style | json }},
+      isSidebar: {{ section.settings.filter_style | json }} === 'sidebar',
+      isTopBar: {{ section.settings.filter_style | json }} === 'top-bar',
+      filtersOpen: (window.innerWidth >= 1024 || {{ section.settings.filter_style | json }} === 'top-bar') && {{ section.settings.show_filters | json }},
+      openFilterKey: null
     }
   }
 </script>
@@ -762,6 +717,16 @@
   "tag": "section",
   "class": "collection-products-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "filter_style",
+      "label": "Filter layout style",
+      "options": [
+        { "value": "top-bar", "label": "Top bar (floating above grid)" },
+        { "value": "sidebar", "label": "Sidebar (left column)" }
+      ],
+      "default": "top-bar"
+    },
     {
       "type": "range",
       "id": "products_per_page",
@@ -832,6 +797,7 @@
     {
       "name": "Collection Products",
       "settings": {
+        "filter_style": "top-bar",
         "products_per_page": 12,
         "show_filters": true,
         "show_sort": true,
