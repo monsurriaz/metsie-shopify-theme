@@ -1021,24 +1021,38 @@ function initAjaxFilters() {
   }
 
   function updateDOM(sectionHtml) {
+    console.log('[AJAX] Updating DOM...');
     const doc = new DOMParser().parseFromString(sectionHtml, 'text/html');
     ['.collection-grid-wrap', '.collection-count', '.active-filters'].forEach(sel => {
       const fresh = doc.querySelector(sel);
       const live = section.querySelector(sel);
-      if (fresh && live) live.replaceWith(fresh);
+      if (fresh && live) {
+        live.replaceWith(fresh);
+        console.log(`[AJAX] Replaced ${sel}`);
+      }
     });
-    window.Metsie?.observeCards?.();
+    console.log('[AJAX] Cards found after update:', document.querySelectorAll('[data-product-card]').length);
+    console.log('[AJAX] Checking window.Metsie:', window.Metsie);
+    console.log('[AJAX] observeCards exists?', typeof window.Metsie?.observeCards);
+    console.log('[AJAX] Calling observeCards...');
+    if (window.Metsie?.observeCards) {
+      window.Metsie.observeCards();
+    } else {
+      console.warn('[AJAX] observeCards NOT FOUND!');
+    }
     section.querySelector('.collection-grid-wrap')
       ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function fetchFiltered(url, { pushHistory = true } = {}) {
+    console.log('[AJAX] Fetching filtered:', url);
     if (controller) controller.abort();
     controller = new AbortController();
     setLoading(true);
 
     const fetchUrl = new URL(url, window.location.origin);
     fetchUrl.searchParams.set('sections', 'collection-products');
+    console.log('[AJAX] Request URL:', fetchUrl.toString());
 
     fetch(fetchUrl.toString(), { signal: controller.signal })
       .then(r => r.json())
@@ -1062,14 +1076,17 @@ function initAjaxFilters() {
   }
 
   section.addEventListener('change', e => {
+    console.log('[AJAX] Change event:', e.target);
     const select = e.target.closest('.sort-select');
     if (select) {
+      console.log('[AJAX] Sort changed');
       e.stopPropagation();
       fetchFiltered(mergeSortParam(window.location.href, select.value));
       return;
     }
     const form = e.target.closest('.filter-form');
     if (form && e.target.type === 'checkbox') {
+      console.log('[AJAX] Checkbox filter changed');
       e.stopPropagation();
       const params = new URLSearchParams(new FormData(form));
       fetchFiltered(`${form.action}?${params.toString()}`);
@@ -1100,8 +1117,67 @@ function initAjaxFilters() {
 
 
 /* ============================================================
-   18. MAIN INITIALIZATION
+   18. PRODUCT CARD FADE-IN (IntersectionObserver)
    ============================================================ */
+
+function initProductCardObserver() {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback for older browsers: show all cards immediately
+    document.querySelectorAll('[data-product-card]').forEach(c => {
+      c.classList.add('is-visible');
+    });
+    return;
+  }
+
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -5% 0px',
+    threshold: 0.08
+  });
+
+  function observeCards() {
+    const cards = document.querySelectorAll('[data-product-card]');
+    cards.forEach((card, idx) => {
+      const delay = Math.min((idx % 4) * 80, 240);
+      card.style.transitionDelay = delay + 'ms';
+      cardObserver.observe(card);
+    });
+  }
+
+  // Expose globally for AJAX filter updates
+  window.Metsie.observeCards = observeCards;
+
+  // Observe cards on initial page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeCards);
+  } else {
+    observeCards();
+  }
+}
+
+
+/* ============================================================
+   19. MAIN INITIALIZATION
+   ============================================================ */
+
+// Initialize Metsie API object early so it's available to all init functions
+window.Metsie = {
+  CartDrawer,
+  CurrencyUtil,
+  LanguageUtil,
+  Cookie,
+  detectGeo,
+  emit,
+  debounce,
+  throttle,
+  trapFocus
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('is-loaded');
@@ -1118,6 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAddToCartForms();
   initVariantSelectors();
   initStickyAtc();
+  initProductCardObserver();
   initAjaxFilters();
 
   // Navigation & Modals
@@ -1150,16 +1227,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   emit('theme:ready');
 });
-
-// Expose public API for use in sections and snippets
-window.Metsie = {
-  CartDrawer,
-  CurrencyUtil,
-  LanguageUtil,
-  Cookie,
-  detectGeo,
-  emit,
-  debounce,
-  throttle,
-  trapFocus
-};
