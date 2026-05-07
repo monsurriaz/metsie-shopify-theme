@@ -607,52 +607,9 @@
 {%- endunless -%}
 
 
-{%- comment -%} ── JavaScript (Quick Add only; fade-in now handled in theme.js) ── {%- endcomment -%}
-{%- unless product_card_js_rendered -%}
-  {%- assign product_card_js_rendered = true -%}
-  <script>
-    /**
-     * product-card.js — Metsie Theme
-     * Quick Add: AJAX add to cart for single-variant products
-     * (IntersectionObserver fade-in is now handled globally in theme.js)
-     */
-    (function () {
-      'use strict';
-
-      document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-quick-add]');
-        if (!btn) return;
-        e.preventDefault();
-
-        var variantId = btn.dataset.variantId;
-        if (!variantId) return;
-
-        btn.textContent = '[ADDING...]';
-        btn.disabled    = true;
-
-        fetch('/cart/add.js', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body:    JSON.stringify({ id: variantId, quantity: 1 })
-        })
-        .then(function (res) {
-          if (!res.ok) throw new Error('add to cart failed');
-          return res.json();
-        })
-        .then(function () {
-          btn.textContent = '[ADDED!]';
-          setTimeout(function () {
-            btn.textContent = '[QUICK ADD]';
-            btn.disabled    = false;
-          }, 2000);
-          // Dispatch event for cart drawer / header count update
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-        })
-        .catch(function () {
-          btn.textContent = '[ERROR — TRY AGAIN]';
-          btn.disabled    = false;
-        });
-      });
-    })();
-  </script>
-{%- endunless -%}
+{%- comment -%}
+  CSS and fade-in animation are handled globally:
+  - CSS: embedded in this snippet (lines 273-606)
+  - Fade-in: IntersectionObserver in theme.js (initProductCardObserver)
+  - Quick Add: delegated listener in theme.js (initQuickAdd)
+{%- endcomment -%}

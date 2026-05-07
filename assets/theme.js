@@ -1007,7 +1007,7 @@ function initStickyAtc() {
 
 
 /* ============================================================
-   17. AJAX FILTERING FOR COLLECTIONS
+   20. AJAX FILTERING FOR COLLECTIONS
    ============================================================ */
 
 function initAjaxFilters() {
@@ -1117,7 +1117,39 @@ function initAjaxFilters() {
 
 
 /* ============================================================
-   18. PRODUCT CARD FADE-IN (IntersectionObserver)
+   18. QUICK ADD TO CART (Product Cards)
+   ============================================================ */
+
+function initQuickAdd() {
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-quick-add]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const variantId = btn.dataset.variantId;
+    if (!variantId) return;
+
+    btn.textContent = '[ADDING...]';
+    btn.disabled = true;
+
+    CartDrawer.addItem({ id: variantId, quantity: 1 })
+      .then(() => {
+        btn.textContent = '[ADDED!]';
+        setTimeout(() => {
+          btn.textContent = '[QUICK ADD]';
+          btn.disabled = false;
+        }, 2000);
+      })
+      .catch(() => {
+        btn.textContent = '[ERROR — TRY AGAIN]';
+        btn.disabled = false;
+      });
+  });
+}
+
+
+/* ============================================================
+   19. PRODUCT CARD FADE-IN (IntersectionObserver)
    ============================================================ */
 
 function initProductCardObserver() {
@@ -1163,7 +1195,7 @@ function initProductCardObserver() {
 
 
 /* ============================================================
-   19. MAIN INITIALIZATION
+   21. MAIN INITIALIZATION
    ============================================================ */
 
 // Initialize Metsie API object early so it's available to all init functions
@@ -1194,6 +1226,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAddToCartForms();
   initVariantSelectors();
   initStickyAtc();
+  initQuickAdd();
   initProductCardObserver();
   initAjaxFilters();
 
