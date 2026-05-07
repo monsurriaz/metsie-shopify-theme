@@ -3,7 +3,7 @@
  * Handles media gallery, variant selection, quantity, and add-to-cart
  */
 
-function productMain() {
+window.productMain = function productMain() {
   return {
     /* ===== STATE ===== */
     activeIndex: 0,
@@ -179,6 +179,10 @@ function productMain() {
 }
 
 /* Register with Alpine.js */
-document.addEventListener('alpine:init', () => {
+if (window.Alpine) {
   Alpine.data('productMain', productMain);
-});
+} else {
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('productMain', productMain);
+  });
+}
