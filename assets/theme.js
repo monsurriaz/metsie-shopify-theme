@@ -1144,8 +1144,18 @@ function initProductCardObserver() {
 
   function observeCards() {
     const cards = document.querySelectorAll('[data-product-card]');
+    if (cards.length === 0) return;
+
+    // Calculate grid columns dynamically from the grid element
+    const grid = cards[0].closest('.collection-grid');
+    let columns = 3; // Default fallback
+    if (grid) {
+      const gridCols = window.getComputedStyle(grid).gridTemplateColumns;
+      columns = gridCols.split(' ').length;
+    }
+
     cards.forEach((card, idx) => {
-      const delay = Math.min((idx % 4) * 80, 240);
+      const delay = Math.min((idx % columns) * 80, 240);
       card.style.transitionDelay = delay + 'ms';
       cardObserver.observe(card);
     });
