@@ -10,11 +10,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   {%- comment -%} ============================================================
-    PRODUCT MAIN COMPONENT — must load before Alpine.js
-  ============================================================ {%- endcomment -%}
-  <script defer src="{{ 'product-main.js' | asset_url }}"></script>
-
-  {%- comment -%} ============================================================
     ALPINE.JS — must be in <head> with defer so it initialises before theme.js
   ============================================================ {%- endcomment -%}
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
