@@ -235,7 +235,7 @@
               class="sort-select"
               onchange="window.location.href = this.value"
             >
-              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+              {% assign sort_by = collection.sort_by | default: 'manual' %}
               <option value="{{ collection.url }}?sort_by=manual"          {% if sort_by == 'manual' %}selected{% endif %}>Featured</option>
               <option value="{{ collection.url }}?sort_by=best-selling"    {% if sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
               <option value="{{ collection.url }}?sort_by=title-ascending" {% if sort_by == 'title-ascending' %}selected{% endif %}>A → Z</option>
@@ -261,7 +261,7 @@
 
           <div class="sort-accordion-mobile" x-show="sortOpenMobile" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
             <div class="sort-accordion__content">
-              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+              {% assign sort_by = collection.sort_by | default: 'manual' %}
               <div class="sort-accordion-item">
                 <a href="{{ collection.url }}?sort_by=manual" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'manual' }">Featured</a>
               </div>
