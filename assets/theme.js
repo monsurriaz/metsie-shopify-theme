@@ -207,54 +207,24 @@ const CartDrawer = (() => {
   let drawer, overlay, closeBtn, removeFocusTrap = null;
 
   function init() {
-    drawer = document.getElementById('cart-drawer');
-    if (!drawer) return;
-
-    overlay = drawer.querySelector('.cart-drawer__overlay');
-    closeBtn = drawer.querySelector('[data-cart-drawer-close]');
-
-    document.querySelectorAll('[data-cart-open]').forEach(btn => {
-      btn.addEventListener('click', open);
-    });
-
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    if (overlay) overlay.addEventListener('click', close);
-
-    // Listen for Shopify cart events
+    // Cart drawer is Alpine.js based, just listen for cart updates
     document.addEventListener('metsie:cart:updated', refreshDrawer);
   }
 
   function open() {
-    if (!drawer) return;
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    removeFocusTrap = trapFocus(drawer, close);
-    emit('cart-drawer:opened');
+    // Dispatch Alpine.js event to open the drawer (cart-drawer section uses @open-cart-drawer)
+    window.dispatchEvent(new CustomEvent('open-cart-drawer'));
   }
 
   function close() {
-    if (!drawer) return;
-    drawer.classList.remove('is-open');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (removeFocusTrap) { removeFocusTrap(); removeFocusTrap = null; }
-    emit('cart-drawer:closed');
+    // Alpine.js handles close via @keydown.escape or button click
+    window.dispatchEvent(new CustomEvent('close-cart-drawer'));
   }
 
   async function refreshDrawer() {
+    // Cart drawer content is managed by Alpine.js; just update the cart count
     try {
-      const response = await fetch('/?section_id=cart-drawer');
-      if (!response.ok) return;
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const newContent = doc.querySelector('.cart-drawer__body');
-      const currentContent = drawer.querySelector('.cart-drawer__body');
-      if (newContent && currentContent) {
-        currentContent.innerHTML = newContent.innerHTML;
-      }
-      updateCartCount();
+      await updateCartCount();
     } catch (err) {
       console.warn('[Metsie] Cart drawer refresh failed:', err);
     }
@@ -263,11 +233,10 @@ const CartDrawer = (() => {
   async function updateCartCount() {
     try {
       const data = await fetch('/cart.js').then(r => r.json());
-      const countEls = document.querySelectorAll('[data-cart-count]');
-      countEls.forEach(el => {
-        el.textContent = data.item_count;
-        el.style.display = data.item_count > 0 ? '' : 'none';
-      });
+      const countEl = document.getElementById('cart-count');
+      if (countEl) {
+        countEl.textContent = data.item_count;
+      }
       window.__METSIE = window.__METSIE || {};
       window.__METSIE.cartItemCount = data.item_count;
     } catch (err) {
