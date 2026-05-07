@@ -10,6 +10,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   {%- comment -%} ============================================================
+    PRODUCT MAIN COMPONENT — must load before Alpine.js
+  ============================================================ {%- endcomment -%}
+  <script defer src="{{ 'product-main.js' | asset_url }}"></script>
+
+  {%- comment -%} ============================================================
     ALPINE.JS — must be in <head> with defer so it initialises before theme.js
   ============================================================ {%- endcomment -%}
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
@@ -219,7 +224,6 @@
     THEME JS
   ============================================================ {%- endcomment -%}
   <script src="{{ 'theme.js' | asset_url }}" defer></script>
-  <script src="{{ 'product-main.js' | asset_url }}" defer></script>
 
   {%- comment -%} Remove no-js class once JS is active {%- endcomment -%}
   <script>document.documentElement.classList.remove('no-js');</script>
