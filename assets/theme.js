@@ -297,13 +297,11 @@ const CartDrawer = (() => {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.description || 'Add to cart failed');
+      throw new Error('Add to cart failed');
     }
 
-    const data = await response.json();
     console.log('[CartDrawer.addItem] Item added successfully');
-    emit('cart:updated', { item: data });
+    emit('cart:updated', { item: params });
 
     console.log('[CartDrawer.addItem] Updating cart count...');
     await updateCartCount();
@@ -316,7 +314,7 @@ const CartDrawer = (() => {
       open();
     }
     console.log('[CartDrawer.addItem] Done');
-    return data;
+    return params;
   }
 
   /**
