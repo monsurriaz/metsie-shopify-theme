@@ -824,8 +824,13 @@ function initLocalizationForm() {
 
 /* ============================================================
    16. PRODUCT PAGE: ADD TO CART FORM
+   ============================================================
+   DISABLED: product-main.liquid is now static design only.
+   This function was handling form submission for add-to-cart.
+   Re-enable if other product sections need this functionality.
    ============================================================ */
 
+/*
 function initAddToCartForms() {
   document.querySelectorAll('[data-product-form]').forEach(form => {
     form.addEventListener('submit', async (e) => {
@@ -868,12 +873,18 @@ function initAddToCartForms() {
     });
   });
 }
+*/
 
 
 /* ============================================================
    16b. PRODUCT VARIANT SELECTOR
+   ============================================================
+   DISABLED: product-main.liquid is now static design only.
+   This function was handling variant selection and price updates.
+   Re-enable if other product sections need this functionality.
    ============================================================ */
 
+/*
 function initVariantSelectors() {
   document.querySelectorAll('[data-variant-selector]').forEach(container => {
     const form = container.closest('[data-product-form]') || container.closest('form');
@@ -952,6 +963,7 @@ function initVariantSelectors() {
     return mf.replace('{{amount}}', amount).replace('{{amount_no_decimals}}', Math.floor(cents / 100));
   }
 }
+*/
 
 
 /* ============================================================
@@ -1202,8 +1214,8 @@ document.addEventListener('DOMContentLoaded', () => {
   CartDrawer.init();
   initAccordions();
   initQuantitySelectors();
-  initAddToCartForms();
-  initVariantSelectors();
+  // initAddToCartForms(); // DISABLED: product-main.liquid is now static design only
+  // initVariantSelectors(); // DISABLED: product-main.liquid is now static design only
   initStickyAtc();
   initQuickAdd();
   initProductCardObserver();
