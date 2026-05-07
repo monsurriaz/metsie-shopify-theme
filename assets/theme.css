@@ -567,6 +567,13 @@ details > summary::-webkit-details-marker {
   white-space: nowrap;
 }
 
+/* Loading State */
+.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
 /* Position */
 .relative { position: relative; }
 .absolute { position: absolute; }
