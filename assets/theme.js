@@ -208,7 +208,11 @@ const CartDrawer = (() => {
 
   function init() {
     drawer = document.getElementById('cart-drawer');
-    if (!drawer) return;
+    console.log('[CartDrawer] Drawer element found?', !!drawer);
+    if (!drawer) {
+      console.warn('[CartDrawer] No cart-drawer element found on page');
+      return;
+    }
 
     overlay = drawer.querySelector('.cart-drawer__overlay');
     closeBtn = drawer.querySelector('[data-cart-drawer-close]');
@@ -222,6 +226,7 @@ const CartDrawer = (() => {
 
     // Listen for Shopify cart events
     document.addEventListener('metsie:cart:updated', refreshDrawer);
+    console.log('[CartDrawer] Initialized');
   }
 
   function open() {
@@ -283,6 +288,7 @@ const CartDrawer = (() => {
   async function addItem(params) {
     const routes = window.__METSIE?.routes || {};
     const url = routes.cartAdd || '/cart/add.js';
+    console.log('[CartDrawer.addItem] Adding item:', params);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -296,12 +302,20 @@ const CartDrawer = (() => {
     }
 
     const data = await response.json();
+    console.log('[CartDrawer.addItem] Item added successfully');
     emit('cart:updated', { item: data });
+
+    console.log('[CartDrawer.addItem] Updating cart count...');
     await updateCartCount();
+
+    console.log('[CartDrawer.addItem] Cart type:', window.__METSIE?.settings?.cartType);
     if (window.__METSIE?.settings?.cartType === 'drawer') {
+      console.log('[CartDrawer.addItem] Refreshing drawer...');
       await refreshDrawer();
+      console.log('[CartDrawer.addItem] Opening drawer...');
       open();
     }
+    console.log('[CartDrawer.addItem] Done');
     return data;
   }
 
@@ -1140,7 +1154,8 @@ function initQuickAdd() {
           btn.disabled = false;
         }, 2000);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('[QuickAdd] Error:', err);
         btn.textContent = '[ERROR — TRY AGAIN]';
         btn.disabled = false;
       });
