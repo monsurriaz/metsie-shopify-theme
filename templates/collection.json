@@ -16,20 +16,24 @@
         "show_description": true,
         "show_product_count": false,
         "banner_height": "large",
-        "bg_color": "#2E4356",
+        "bg_position": "center center",
+        "label": "THE COLLECTION",
+        "heading": "Mats designed to belong",
+        "bg_color": "#2e4356",
         "text_color": "#ffffff"
       }
     },
     "collection-products": {
       "type": "collection-products",
       "settings": {
+        "filter_style": "top-bar",
         "products_per_page": 12,
         "show_filters": true,
         "show_sort": true,
         "show_product_count": true,
-        "columns_desktop": "3",
+        "columns_desktop": "4",
         "columns_mobile": "2",
-        "image_ratio": "square",
+        "image_ratio": "portrait",
         "show_secondary_image": true
       }
     }
