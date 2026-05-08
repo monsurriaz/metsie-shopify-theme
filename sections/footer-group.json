@@ -1,13 +1,61 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer group",
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "menu_link_qBnEfq": {
+          "type": "menu_link",
+          "settings": {
+            "heading": "Customer Care",
+            "menu": "footer"
+          }
+        },
+        "menu_link_7HAkCr": {
+          "type": "menu_link",
+          "settings": {
+            "heading": "Cart & Checkout",
+            "menu": "cart-checkout"
+          }
+        },
+        "menu_link_wJrYEV": {
+          "type": "menu_link",
+          "settings": {
+            "heading": "Legal",
+            "menu": "legal"
+          }
+        },
+        "newsletter_AYXrep": {
+          "type": "newsletter",
+          "settings": {
+            "newsletter_heading": "SIGN UP TO OUR NEWSLETTER",
+            "newsletter_subtitle": "Subscribe to get a 10% discount on your first order!",
+            "newsletter_placeholder": "Enter your email",
+            "newsletter_button": "SUBMIT"
+          }
+        }
+      },
+      "block_order": [
+        "menu_link_qBnEfq",
+        "menu_link_7HAkCr",
+        "menu_link_wJrYEV",
+        "newsletter_AYXrep"
+      ],
       "settings": {
-        "newsletter_subtitle": "Subscribe to get a 10% discount on your first order!",
-        "newsletter_placeholder": "Your email address",
-        "newsletter_button": "SUBMIT"
+        "footer_style": "standard",
+        "footer_logo_width": 120,
+        "instagram_url": "",
+        "pinterest_url": ""
       }
     }
   },
