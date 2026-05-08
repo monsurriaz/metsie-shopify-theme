@@ -9,8 +9,8 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Logo-Black.svg",
-    "logo_dark": "shopify://shop_images/Logo-white.svg",
+    "logo": "shopify://shop_images/Logo-white.svg",
+    "logo_dark": "shopify://shop_images/Logo-Black.svg",
     "colors": {
       "color_deep_navy": "#2D4A6A",
       "color_navy_mid": "#1E3A5F",

@@ -5,7 +5,7 @@
   x-data="siteHeader()"
   :class="{ 'is-transparent': isTransparent, 'is-sticky': isSticky, 'is-scrolled': isScrolled, 'is-hidden': isHidden }"
 >
-  <div class="site-header__inner">
+  <div class="site-header__inner container">
 
     {%- comment -%} HAMBURGER — hidden desktop, left column on mobile {%- endcomment -%}
     <button
@@ -131,9 +131,6 @@
     grid-template-columns: 0.5fr 1fr 0.5fr;
     grid-template-areas: "logo nav actions";
     align-items: center;
-    max-width: var(--page-width, 1440px);
-    margin: 0 auto;
-    padding: 0 var(--container-px);
     height: 65px;
   }
 
@@ -299,14 +296,17 @@
     .site-header__inner {
       grid-template-columns: auto 1fr auto;
       grid-template-areas: "hamburger logo actions";
-      padding: 0 24px;
-      height: 56px;
+      height: 45px;
     }
 
     .site-header__logo { justify-self: center; }
     .site-header__nav { display: none; }
     .site-header__hamburger { display: flex; }
     .site-header__currency { display: none; }
+
+    .site-header__logo-img {
+      width: 65px;
+    }
   }
 
   @media (max-width: 640px) {

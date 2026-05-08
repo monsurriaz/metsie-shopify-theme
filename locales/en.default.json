@@ -102,6 +102,8 @@
   "products": {
     "product": {
       "add_to_cart": "[ADD TO CART]",
+      "adding": "[ADDING…]",
+      "added": "[ADDED]",
       "sold_out": "[SOLD OUT]",
       "out_of_stock": "[OUT OF STOCK]",
       "unavailable": "[UNAVAILABLE]",
