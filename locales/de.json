@@ -79,6 +79,8 @@
   "products": {
     "product": {
       "add_to_cart": "[IN DEN WARENKORB]",
+      "adding": "[WIRD HINZUGEFÜGT…]",
+      "added": "[HINZUGEFÜGT]",
       "sold_out": "[AUSVERKAUFT]",
       "out_of_stock": "[NICHT VORRÄTIG]",
       "unavailable": "[NICHT VERFÜGBAR]",

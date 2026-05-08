@@ -79,6 +79,8 @@
   "products": {
     "product": {
       "add_to_cart": "[AJOUTER AU PANIER]",
+      "adding": "[AJOUT EN COURS…]",
+      "added": "[AJOUTÉ]",
       "sold_out": "[ÉPUISÉ]",
       "out_of_stock": "[EN RUPTURE DE STOCK]",
       "unavailable": "[INDISPONIBLE]",

@@ -38,19 +38,23 @@
         </svg>
       </button>
       <a href="{{ routes.root_url }}" class="mobile-menu__logo" @click="close()" aria-label="{{ shop.name }} — Home">
-        {%- if settings.logo_dark != blank -%}
-          <img
-            src="{{ settings.logo_dark | image_url: width: 200 }}"
-            alt="{{ shop.name }}"
-            class="mobile-menu__logo-img"
-            loading="eager"
-          >
-        {%- elsif settings.logo != blank -%}
+        {%- if settings.logo != blank -%}
           <img
             src="{{ settings.logo | image_url: width: 200 }}"
             alt="{{ shop.name }}"
             class="mobile-menu__logo-img"
             loading="eager"
+            width="auto"
+            height="auto"
+          >
+        {%- elsif settings.logo_dark != blank -%}
+          <img
+            src="{{ settings.logo_dark | image_url: width: 200 }}"
+            alt="{{ shop.name }}"
+            class="mobile-menu__logo-img"
+            loading="eager"
+            width="auto"
+            height="auto"
           >
         {%- else -%}
           <span class="mobile-menu__logo-text">{{ section.settings.logo_text | default: shop.name | upcase }}</span>
@@ -112,7 +116,7 @@
     <div class="mobile-menu__divider"></div>
 
     {%- comment -%} Secondary links {%- endcomment -%}
-    <nav class="mobile-menu__secondary" aria-label="Secondary navigation">
+    {% comment %} <nav class="mobile-menu__secondary" aria-label="Secondary navigation">
       {% if section.settings.secondary_menu != blank %}
         {% for link in linklists[section.settings.secondary_menu].links %}
           <a href="{{ link.url }}" class="mobile-menu__secondary-link" @click="close()">
@@ -124,10 +128,10 @@
         <a href="/pages/shipping" class="mobile-menu__secondary-link" @click="close()">SHIPPING & RETURNS</a>
         <a href="/pages/contact" class="mobile-menu__secondary-link" @click="close()">CONTACT</a>
       {% endif %}
-    </nav>
+    </nav> {% endcomment %}
 
     {%- comment -%} Footer: social + currency {%- endcomment -%}
-    <div class="mobile-menu__footer">
+    {% comment %} <div class="mobile-menu__footer">
       {% if settings.social_instagram != blank or settings.social_pinterest != blank or settings.social_facebook != blank %}
         <div class="mobile-menu__social">
           {% if settings.social_instagram != blank %}
@@ -173,7 +177,7 @@
       <p class="mobile-menu__copyright">
         &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
       </p>
-    </div>
+    </div> {% endcomment %}
 
   </div>
 </div>
@@ -271,6 +275,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 25px;
   }
 

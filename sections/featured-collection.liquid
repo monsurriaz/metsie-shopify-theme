@@ -28,7 +28,7 @@
         {% assign products_to_show = section.settings.products_to_show | default: 3 %}
         {% for product in featured_collection.products limit: products_to_show %}
           <li class="product-card-wrapper">
-            {% render 'product-card', product: product, aspect_ratio: 'portrait', lazy_index: forloop.index %}
+            {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: false, aspect_ratio: 'portrait', lazy_index: forloop.index %}
           </li>
         {% endfor %}
       </ul>

@@ -4,11 +4,11 @@
       "type": "collection-banner",
       "settings": {
         "show_collection_image": true,
-        "banner_height": "medium",
+        "banner_height": "large",
         "show_description": true,
-        "show_product_count": true,
-        "bg_color": "#F5F0E8",
-        "text_color": "#2B1F18"
+        "show_product_count": false,
+        "bg_color": "#2E4356",
+        "text_color": "#ffffff"
       }
     },
     "collection-products": {

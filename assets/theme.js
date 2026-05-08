@@ -207,54 +207,24 @@ const CartDrawer = (() => {
   let drawer, overlay, closeBtn, removeFocusTrap = null;
 
   function init() {
-    drawer = document.getElementById('cart-drawer');
-    if (!drawer) return;
-
-    overlay = drawer.querySelector('.cart-drawer__overlay');
-    closeBtn = drawer.querySelector('[data-cart-drawer-close]');
-
-    document.querySelectorAll('[data-cart-open]').forEach(btn => {
-      btn.addEventListener('click', open);
-    });
-
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    if (overlay) overlay.addEventListener('click', close);
-
-    // Listen for Shopify cart events
+    // Cart drawer is Alpine.js based, just listen for cart updates
     document.addEventListener('metsie:cart:updated', refreshDrawer);
   }
 
   function open() {
-    if (!drawer) return;
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    removeFocusTrap = trapFocus(drawer, close);
-    emit('cart-drawer:opened');
+    // Dispatch Alpine.js event to open the drawer (cart-drawer section uses @open-cart-drawer)
+    window.dispatchEvent(new CustomEvent('open-cart-drawer'));
   }
 
   function close() {
-    if (!drawer) return;
-    drawer.classList.remove('is-open');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (removeFocusTrap) { removeFocusTrap(); removeFocusTrap = null; }
-    emit('cart-drawer:closed');
+    // Alpine.js handles close via @keydown.escape or button click
+    window.dispatchEvent(new CustomEvent('close-cart-drawer'));
   }
 
   async function refreshDrawer() {
+    // Cart drawer content is managed by Alpine.js; just update the cart count
     try {
-      const response = await fetch('/?section_id=cart-drawer');
-      if (!response.ok) return;
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const newContent = doc.querySelector('.cart-drawer__body');
-      const currentContent = drawer.querySelector('.cart-drawer__body');
-      if (newContent && currentContent) {
-        currentContent.innerHTML = newContent.innerHTML;
-      }
-      updateCartCount();
+      await updateCartCount();
     } catch (err) {
       console.warn('[Metsie] Cart drawer refresh failed:', err);
     }
@@ -263,11 +233,10 @@ const CartDrawer = (() => {
   async function updateCartCount() {
     try {
       const data = await fetch('/cart.js').then(r => r.json());
-      const countEls = document.querySelectorAll('[data-cart-count]');
-      countEls.forEach(el => {
-        el.textContent = data.item_count;
-        el.style.display = data.item_count > 0 ? '' : 'none';
-      });
+      const countEl = document.getElementById('cart-count');
+      if (countEl) {
+        countEl.textContent = data.item_count;
+      }
       window.__METSIE = window.__METSIE || {};
       window.__METSIE.cartItemCount = data.item_count;
     } catch (err) {
@@ -291,18 +260,18 @@ const CartDrawer = (() => {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.description || 'Add to cart failed');
+      throw new Error('Add to cart failed');
     }
 
-    const data = await response.json();
-    emit('cart:updated', { item: data });
+    emit('cart:updated', { item: params });
     await updateCartCount();
+
     if (window.__METSIE?.settings?.cartType === 'drawer') {
       await refreshDrawer();
       open();
     }
-    return data;
+
+    return params;
   }
 
   /**
@@ -855,8 +824,13 @@ function initLocalizationForm() {
 
 /* ============================================================
    16. PRODUCT PAGE: ADD TO CART FORM
+   ============================================================
+   DISABLED: product-main.liquid is now static design only.
+   This function was handling form submission for add-to-cart.
+   Re-enable if other product sections need this functionality.
    ============================================================ */
 
+/*
 function initAddToCartForms() {
   document.querySelectorAll('[data-product-form]').forEach(form => {
     form.addEventListener('submit', async (e) => {
@@ -899,12 +873,18 @@ function initAddToCartForms() {
     });
   });
 }
+*/
 
 
 /* ============================================================
    16b. PRODUCT VARIANT SELECTOR
+   ============================================================
+   DISABLED: product-main.liquid is now static design only.
+   This function was handling variant selection and price updates.
+   Re-enable if other product sections need this functionality.
    ============================================================ */
 
+/*
 function initVariantSelectors() {
   document.querySelectorAll('[data-variant-selector]').forEach(container => {
     const form = container.closest('[data-product-form]') || container.closest('form');
@@ -983,6 +963,7 @@ function initVariantSelectors() {
     return mf.replace('{{amount}}', amount).replace('{{amount_no_decimals}}', Math.floor(cents / 100));
   }
 }
+*/
 
 
 /* ============================================================
@@ -1007,8 +988,219 @@ function initStickyAtc() {
 
 
 /* ============================================================
-   18. MAIN INITIALIZATION
+   20. AJAX FILTERING FOR COLLECTIONS
    ============================================================ */
+
+function initAjaxFilters() {
+  const section = document.querySelector('[data-ajax-filters]');
+  if (!section) return;
+
+  let controller = null;
+
+  function setLoading(on) {
+    section.querySelector('.collection-grid-wrap')?.classList.toggle('is-loading', on);
+  }
+
+  function updateDOM(sectionHtml) {
+    console.log('[AJAX] Updating DOM...');
+    const doc = new DOMParser().parseFromString(sectionHtml, 'text/html');
+    ['.collection-grid-wrap', '.collection-count', '.active-filters'].forEach(sel => {
+      const fresh = doc.querySelector(sel);
+      const live = section.querySelector(sel);
+      if (fresh && live) {
+        live.replaceWith(fresh);
+        console.log(`[AJAX] Replaced ${sel}`);
+      }
+    });
+    console.log('[AJAX] Cards found after update:', document.querySelectorAll('[data-product-card]').length);
+    console.log('[AJAX] Checking window.Metsie:', window.Metsie);
+    console.log('[AJAX] observeCards exists?', typeof window.Metsie?.observeCards);
+    console.log('[AJAX] Calling observeCards...');
+    if (window.Metsie?.observeCards) {
+      window.Metsie.observeCards();
+    } else {
+      console.warn('[AJAX] observeCards NOT FOUND!');
+    }
+    section.querySelector('.collection-grid-wrap')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function fetchFiltered(url, { pushHistory = true } = {}) {
+    console.log('[AJAX] Fetching filtered:', url);
+    if (controller) controller.abort();
+    controller = new AbortController();
+    setLoading(true);
+
+    const fetchUrl = new URL(url, window.location.origin);
+    fetchUrl.searchParams.set('sections', 'collection-products');
+    console.log('[AJAX] Request URL:', fetchUrl.toString());
+
+    fetch(fetchUrl.toString(), { signal: controller.signal })
+      .then(r => r.json())
+      .then(data => {
+        updateDOM(data['collection-products']);
+        if (pushHistory) history.pushState({}, '', url);
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') window.location.href = url;
+      })
+      .finally(() => setLoading(false));
+  }
+
+  function mergeSortParam(baseUrl, sortValue) {
+    const sortUrl = new URL(sortValue, window.location.origin);
+    const current = new URL(baseUrl);
+    const params = new URLSearchParams(current.search);
+    const sortBy = sortUrl.searchParams.get('sort_by');
+    sortBy ? params.set('sort_by', sortBy) : params.delete('sort_by');
+    return `${current.pathname}?${params.toString()}`;
+  }
+
+  section.addEventListener('change', e => {
+    console.log('[AJAX] Change event:', e.target);
+    const select = e.target.closest('.sort-select');
+    if (select) {
+      console.log('[AJAX] Sort changed');
+      e.stopPropagation();
+      fetchFiltered(mergeSortParam(window.location.href, select.value));
+      return;
+    }
+    const form = e.target.closest('.filter-form');
+    if (form && e.target.type === 'checkbox') {
+      console.log('[AJAX] Checkbox filter changed');
+      e.stopPropagation();
+      const params = new URLSearchParams(new FormData(form));
+      fetchFiltered(`${form.action}?${params.toString()}`);
+    }
+  }, true);
+
+  section.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    if (
+      a.closest('.pagination') ||
+      a.closest('.active-filters') ||
+      a.closest('.collection-empty') ||
+      a.classList.contains('clear-filters')
+    ) {
+      e.preventDefault();
+      fetchFiltered(a.href);
+    } else if (a.closest('.sort-accordion')) {
+      e.preventDefault();
+      fetchFiltered(mergeSortParam(window.location.href, a.href));
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    fetchFiltered(window.location.href, { pushHistory: false });
+  });
+}
+
+
+/* ============================================================
+   18. QUICK ADD TO CART (Product Cards)
+   ============================================================ */
+
+function initQuickAdd() {
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-quick-add]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const variantId = btn.dataset.variantId;
+    if (!variantId) return;
+
+    btn.textContent = '[ADDING...]';
+    btn.disabled = true;
+
+    CartDrawer.addItem({ id: variantId, quantity: 1 })
+      .then(() => {
+        btn.textContent = '[ADDED!]';
+        setTimeout(() => {
+          btn.textContent = '[QUICK ADD]';
+          btn.disabled = false;
+        }, 2000);
+      })
+      .catch(() => {
+        btn.textContent = '[ERROR — TRY AGAIN]';
+        btn.disabled = false;
+      });
+  });
+}
+
+
+/* ============================================================
+   19. PRODUCT CARD FADE-IN (IntersectionObserver)
+   ============================================================ */
+
+function initProductCardObserver() {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback for older browsers: show all cards immediately
+    document.querySelectorAll('[data-product-card]').forEach(c => {
+      c.classList.add('is-visible');
+    });
+    return;
+  }
+
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -5% 0px',
+    threshold: 0.08
+  });
+
+  function observeCards() {
+    const cards = document.querySelectorAll('[data-product-card]');
+    if (cards.length === 0) return;
+
+    // Calculate grid columns dynamically from the grid element
+    const grid = cards[0].closest('.collection-grid');
+    let columns = 3; // Default fallback
+    if (grid) {
+      const gridCols = window.getComputedStyle(grid).gridTemplateColumns;
+      columns = gridCols.split(' ').length;
+    }
+
+    cards.forEach((card, idx) => {
+      const delay = Math.min((idx % columns) * 80, 240);
+      card.style.transitionDelay = delay + 'ms';
+      cardObserver.observe(card);
+    });
+  }
+
+  // Expose globally for AJAX filter updates
+  window.Metsie.observeCards = observeCards;
+
+  // Observe cards on initial page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeCards);
+  } else {
+    observeCards();
+  }
+}
+
+
+/* ============================================================
+   21. MAIN INITIALIZATION
+   ============================================================ */
+
+// Initialize Metsie API object early so it's available to all init functions
+window.Metsie = {
+  CartDrawer,
+  CurrencyUtil,
+  LanguageUtil,
+  Cookie,
+  detectGeo,
+  emit,
+  debounce,
+  throttle,
+  trapFocus
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('is-loaded');
@@ -1022,9 +1214,12 @@ document.addEventListener('DOMContentLoaded', () => {
   CartDrawer.init();
   initAccordions();
   initQuantitySelectors();
-  initAddToCartForms();
-  initVariantSelectors();
+  // initAddToCartForms(); // DISABLED: product-main.liquid is now static design only
+  // initVariantSelectors(); // DISABLED: product-main.liquid is now static design only
   initStickyAtc();
+  initQuickAdd();
+  initProductCardObserver();
+  initAjaxFilters();
 
   // Navigation & Modals
   initHeaderScroll();
@@ -1037,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Privacy / Legal
   initCookieConsent();
+
 
   // GEO (async — does not block UI)
   if (window.__METSIE?.settings?.enableGeoRedirect) {
@@ -1055,16 +1251,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   emit('theme:ready');
 });
-
-// Expose public API for use in sections and snippets
-window.Metsie = {
-  CartDrawer,
-  CurrencyUtil,
-  LanguageUtil,
-  Cookie,
-  detectGeo,
-  emit,
-  debounce,
-  throttle,
-  trapFocus
-};

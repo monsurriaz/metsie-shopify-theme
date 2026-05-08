@@ -1,10 +1,207 @@
-<section class="collection-products" data-section-id="{{ section.id }}" x-data="collectionFilters()">
-  <div class="collection-products__inner">
+<section class="collection-products" data-section-id="{{ section.id }}" data-ajax-filters x-data="collectionFilters()">
+  <div class="collection-products__inner container">
 
-    {%- comment -%} Toolbar: count + sort {%- endcomment -%}
+    {%- comment -%} Toolbar: filters + sort {%- endcomment -%}
     <div class="collection-toolbar">
       <div class="collection-toolbar__left">
-        {% if section.settings.show_filters %}
+        {%- comment -%} Top-bar filters (inline in toolbar) {%- endcomment -%}
+        {% if section.settings.show_filters and section.settings.filter_style == 'top-bar' %}
+          <span class="toolbar-label toolbar-label--desktop text-body-primary">FILTER FOR</span>
+          <button
+            type="button"
+            class="filter-toggle-mobile text-body-primary"
+            @click="filtersOpenMobile = !filtersOpenMobile"
+            :aria-expanded="filtersOpenMobile"
+          >
+            <span class="text-body-primary">FILTER FOR</span>
+            <svg class="filter-toggle-mobile__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          {%- comment -%} Mobile accordion filter (inline below FILTER FOR button) {%- endcomment -%}
+          <div class="filter-accordion-mobile" x-show="filtersOpenMobile" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
+            <form class="filter-form filter-form--mobile-accordion" method="GET" action="{{ collection.url }}">
+              <div class="filter-accordion__content">
+                {% for filter in collection.filters %}
+                  <div class="filter-accordion-item">
+                    <button
+                      type="button"
+                      class="filter-accordion-item__toggle"
+                      @click="toggleExpandedFilter('{{ filter.label }}')"
+                      :class="{ 'filter-accordion-item__toggle--open': expandedFilters['{{ filter.label }}'] }"
+                      aria-expanded="false"
+                      :aria-expanded="expandedFilters['{{ filter.label }}']"
+                    >
+                      <span class="text-body-light">{{ filter.label }}</span>
+                      <svg class="filter-accordion-item__icon" width="12" height="6" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                        <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+
+                    <div
+                      class="filter-accordion-item__content"
+                      x-show="expandedFilters['{{ filter.label }}']"
+                      x-transition:enter="dropdown-enter"
+                      x-transition:enter-start="dropdown-enter-start"
+                      x-transition:enter-end="dropdown-enter-end"
+                      x-transition:leave="dropdown-leave"
+                      x-transition:leave-start="dropdown-leave-start"
+                      x-transition:leave-end="dropdown-leave-end"
+                    >
+                      {% if filter.type == 'price_range' %}
+                        <div class="filter-panel__content">
+                          <div class="price-range-filter">
+                            <div class="price-range-inputs">
+                              <div class="price-input-group">
+                                <span class="price-input-symbol">{{ shop.currency }}</span>
+                                <input
+                                  type="number"
+                                  name="{{ filter.min_value.param_name }}"
+                                  value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                                  min="0"
+                                  placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                                  class="price-input"
+                                  id="filter-min-mobile-{{ forloop.index }}"
+                                >
+                              </div>
+                              <span class="price-range-separator">—</span>
+                              <div class="price-input-group">
+                                <span class="price-input-symbol">{{ shop.currency }}</span>
+                                <input
+                                  type="number"
+                                  name="{{ filter.max_value.param_name }}"
+                                  value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                                  max="{{ filter.range_max | divided_by: 100 | round }}"
+                                  placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                                  class="price-input"
+                                  id="filter-max-mobile-{{ forloop.index }}"
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% else %}
+                        <div class="filter-panel__content">
+                          <ul class="filter-options filter-options--mobile-accordion">
+                            {% for filter_value in filter.values %}
+                              <li class="filter-option">
+                                <label class="filter-option__label">
+                                  <input
+                                    type="checkbox"
+                                    name="{{ filter_value.param_name }}"
+                                    value="{{ filter_value.value }}"
+                                    {% if filter_value.active %}checked{% endif %}
+                                    class="filter-option__checkbox"
+                                    onchange="this.form.submit()"
+                                  >
+                                  <span class="filter-option__text text-body-light">{{ filter_value.label }}</span>
+                                  <span class="filter-option__count text-body-light">({{ filter_value.count }})</span>
+                                </label>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </form>
+          </div>
+
+          <form class="filter-form filter-form--top-bar" method="GET" action="{{ collection.url }}">
+            <div class="filter-bar__inner">
+              {% for filter in collection.filters %}
+                <div class="filter-dropdown">
+                  <button
+                    type="button"
+                    class="filter-dropdown__trigger text-body-light"
+                    @click="openFilterKey = openFilterKey === '{{ filter.label }}' ? null : '{{ filter.label }}'"
+                    :class="{ 'filter-dropdown__trigger--active': openFilterKey === '{{ filter.label }}' }"
+                    aria-expanded="false"
+                    :aria-expanded="openFilterKey === '{{ filter.label }}'"
+                  >
+                    <span class="filter-dropdown__label text-body-light">{{ filter.label }}</span>
+                    <svg class="filter-dropdown__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+
+                  <div
+                    class="filter-dropdown__panel"
+                    x-show="openFilterKey === '{{ filter.label }}'"
+                    @click.outside="openFilterKey = null"
+                    x-transition:enter="dropdown-enter"
+                    x-transition:enter-start="dropdown-enter-start"
+                    x-transition:enter-end="dropdown-enter-end"
+                    x-transition:leave="dropdown-leave"
+                    x-transition:leave-start="dropdown-leave-start"
+                    x-transition:leave-end="dropdown-leave-end"
+                  >
+                    {% if filter.type == 'price_range' %}
+                      <div class="filter-panel__content">
+                        <div class="price-range-filter">
+                          <div class="price-range-inputs">
+                            <div class="price-input-group">
+                              <span class="price-input-symbol">{{ shop.currency }}</span>
+                              <input
+                                type="number"
+                                name="{{ filter.min_value.param_name }}"
+                                value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                                min="0"
+                                placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                                class="price-input"
+                                id="filter-min-top-{{ forloop.index }}"
+                              >
+                            </div>
+                            <span class="price-range-separator">—</span>
+                            <div class="price-input-group">
+                              <span class="price-input-symbol">{{ shop.currency }}</span>
+                              <input
+                                type="number"
+                                name="{{ filter.max_value.param_name }}"
+                                value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                                max="{{ filter.range_max | divided_by: 100 | round }}"
+                                placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                                class="price-input"
+                                id="filter-max-top-{{ forloop.index }}"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="filter-panel__content">
+                        <ul class="filter-options filter-options--dropdown">
+                          {% for filter_value in filter.values %}
+                            <li class="filter-option">
+                              <label class="filter-option__label">
+                                <input
+                                  type="checkbox"
+                                  name="{{ filter_value.param_name }}"
+                                  value="{{ filter_value.value }}"
+                                  {% if filter_value.active %}checked{% endif %}
+                                  class="filter-option__checkbox"
+                                  onchange="this.form.submit()"
+                                >
+                                <span class="filter-option__text">{{ filter_value.label }}</span>
+                                <span class="filter-option__count">({{ filter_value.count }})</span>
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </form>
+        {% endif %}
+
+        {%- comment -%} Sidebar toggle + product count (non top-bar styles) {%- endcomment -%}
+        {% if section.settings.show_filters and section.settings.filter_style == 'sidebar' %}
           <button
             class="filter-toggle"
             @click="filtersOpen = !filtersOpen"
@@ -22,7 +219,7 @@
         {% endif %}
 
         {% if section.settings.show_product_count %}
-          <p class="collection-count">
+          <p class="collection-count text-body-primary">
             {{ collection.products_count }}
             {% if collection.products_count == 1 %}PRODUCT{% else %}PRODUCTS{% endif %}
           </p>
@@ -31,14 +228,14 @@
 
       <div class="collection-toolbar__right">
         {% if section.settings.show_sort %}
-          <div class="sort-wrapper">
-            <label for="sort-{{ section.id }}" class="sort-label">SORT</label>
+          <div class="sort-wrapper sort-wrapper--desktop">
+            <label for="sort-{{ section.id }}" class="sort-label sort-label--desktop text-body-primary">Sort</label>
             <select
               id="sort-{{ section.id }}"
-              class="sort-select"
+              class="sort-select text-body-light"
               onchange="window.location.href = this.value"
             >
-              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+              {% assign sort_by = collection.sort_by | default: 'manual' %}
               <option value="{{ collection.url }}?sort_by=manual"          {% if sort_by == 'manual' %}selected{% endif %}>Featured</option>
               <option value="{{ collection.url }}?sort_by=best-selling"    {% if sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
               <option value="{{ collection.url }}?sort_by=title-ascending" {% if sort_by == 'title-ascending' %}selected{% endif %}>A → Z</option>
@@ -48,19 +245,59 @@
               <option value="{{ collection.url }}?sort_by=created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>Newest</option>
             </select>
           </div>
+
+          {%- comment -%} Mobile sort accordion {%- endcomment -%}
+          <button
+            type="button"
+            class="sort-toggle-mobile text-body-primary"
+            @click="sortOpenMobile = !sortOpenMobile"
+            :aria-expanded="sortOpenMobile"
+          >
+            <span class="text-body-primary">SORT BY</span>
+            <svg class="sort-toggle-mobile__icon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="sort-accordion-mobile" x-show="sortOpenMobile" x-transition:enter="dropdown-enter" x-transition:enter-start="dropdown-enter-start" x-transition:enter-end="dropdown-enter-end" x-transition:leave="dropdown-leave" x-transition:leave-start="dropdown-leave-start" x-transition:leave-end="dropdown-leave-end">
+            <div class="sort-accordion__content">
+              {% assign sort_by = collection.sort_by | default: 'manual' %}
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=manual" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'manual' }">Featured</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=best-selling" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'best-selling' }">Best Selling</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=title-ascending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-ascending' }">A → Z</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=title-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'title-descending' }">Z → A</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=price-ascending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-ascending' }">Price: Low → High</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=price-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'price-descending' }">Price: High → Low</a>
+              </div>
+              <div class="sort-accordion-item">
+                <a href="{{ collection.url }}?sort_by=created-descending" class="sort-accordion-item__link text-body-light" :class="{ 'sort-accordion-item__link--active': '{{ sort_by }}' === 'created-descending' }">Newest</a>
+              </div>
+            </div>
+          </div>
         {% endif %}
       </div>
     </div>
 
     {%- comment -%} Main layout: sidebar + grid {%- endcomment -%}
-    <div class="collection-layout" :class="{ 'has-sidebar': filtersOpen }">
+    <div class="collection-layout" :class="{ 'has-sidebar': isSidebar && filtersOpen, 'filter-style--sidebar': isSidebar, 'filter-style--top-bar': isTopBar }">
 
-      {%- comment -%} Filter sidebar {%- endcomment -%}
-      {% if section.settings.show_filters %}
+      {%- comment -%} Filter sidebar (only for sidebar style) {%- endcomment -%}
+      {% if section.settings.show_filters and section.settings.filter_style == 'sidebar' %}
         <aside
           class="filter-sidebar"
           id="filter-sidebar"
-          x-show="filtersOpen"
+          x-show="isSidebar && filtersOpen"
           x-transition:enter="sidebar-enter"
           x-transition:enter-start="sidebar-enter-start"
           x-transition:enter-end="sidebar-enter-end"
@@ -69,7 +306,7 @@
           x-transition:leave-end="sidebar-leave-end"
         >
           <div class="filter-sidebar__inner">
-            <h2 class="filter-sidebar__heading">FILTER</h2>
+            <h2 class="filter-sidebar__heading text-body-primary">FILTER</h2>
 
             {%- comment -%} Active filters {%- endcomment -%}
             {% if current_filters.size > 0 %}
@@ -84,126 +321,76 @@
                     </a>
                   {% endfor %}
                 {% endfor %}
-                <a href="{{ collection.url }}" class="clear-filters">CLEAR ALL</a>
+                <a href="{{ collection.url }}" class="clear-filters text-body-primary">CLEAR ALL</a>
               </div>
             {% endif %}
 
             {%- comment -%} Filter groups {%- endcomment -%}
-            {% for filter in collection.filters %}
-              <details class="filter-group" open>
-                <summary class="filter-group__summary">
-                  {{ filter.label | upcase }}
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
+            <form class="filter-form" method="GET" action="{{ collection.url }}">
+              {% for filter in collection.filters %}
+                <details class="filter-group" open>
+                  <summary class="filter-group__summary text-body-primary">
+                    {{ filter.label | upcase }}
+                    <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </summary>
 
-                <div class="filter-group__body">
-                  {% if filter.type == 'price_range' %}
-                    <div class="price-range-filter">
-                      <div class="price-range-inputs">
-                        <div class="price-input-group">
-                          <span class="price-input-symbol">€</span>
-                          <input
-                            type="number"
-                            name="{{ filter.min_value.param_name }}"
-                            value="{{ filter.min_value.value | divided_by: 100 | round }}"
-                            min="0"
-                            placeholder="{{ filter.range_min | divided_by: 100 | round }}"
-                            class="price-input"
-                            id="filter-min-{{ forloop.index }}"
-                          >
-                        </div>
-                        <span class="price-range-separator">—</span>
-                        <div class="price-input-group">
-                          <span class="price-input-symbol">€</span>
-                          <input
-                            type="number"
-                            name="{{ filter.max_value.param_name }}"
-                            value="{{ filter.max_value.value | divided_by: 100 | round }}"
-                            max="{{ filter.range_max | divided_by: 100 | round }}"
-                            placeholder="{{ filter.range_max | divided_by: 100 | round }}"
-                            class="price-input"
-                            id="filter-max-{{ forloop.index }}"
-                          >
+                  <div class="filter-group__body">
+                    {% if filter.type == 'price_range' %}
+                      <div class="price-range-filter">
+                        <div class="price-range-inputs">
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.min_value.param_name }}"
+                              value="{{ filter.min_value.value | divided_by: 100 | round }}"
+                              min="0"
+                              placeholder="{{ filter.range_min | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-min-{{ forloop.index }}"
+                            >
+                          </div>
+                          <span class="price-range-separator">—</span>
+                          <div class="price-input-group">
+                            <span class="price-input-symbol">{{ shop.currency }}</span>
+                            <input
+                              type="number"
+                              name="{{ filter.max_value.param_name }}"
+                              value="{{ filter.max_value.value | divided_by: 100 | round }}"
+                              max="{{ filter.range_max | divided_by: 100 | round }}"
+                              placeholder="{{ filter.range_max | divided_by: 100 | round }}"
+                              class="price-input"
+                              id="filter-max-{{ forloop.index }}"
+                            >
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  {% else %}
-                    <ul class="filter-options">
-                      {% for filter_value in filter.values %}
-                        <li class="filter-option">
-                          <label class="filter-option__label">
-                            <input
-                              type="checkbox"
-                              name="{{ filter_value.param_name }}"
-                              value="{{ filter_value.value }}"
-                              {% if filter_value.active %}checked{% endif %}
-                              class="filter-option__checkbox"
-                              onchange="this.form.submit()"
-                            >
-                            <span class="filter-option__text">{{ filter_value.label }}</span>
-                            <span class="filter-option__count">({{ filter_value.count }})</span>
-                          </label>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  {% endif %}
-                </div>
-              </details>
-            {% else %}
-              {%- comment -%} Default filters when no native filters configured {%- endcomment -%}
-              <details class="filter-group" open>
-                <summary class="filter-group__summary">SHAPE
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <ul class="filter-options">
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Geometric</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Organic</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Wavy</span></label></li>
-                  </ul>
-                </div>
-              </details>
-
-              <details class="filter-group">
-                <summary class="filter-group__summary">COLOR
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <ul class="filter-options">
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Cream</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Espresso</span></label></li>
-                    <li class="filter-option"><label class="filter-option__label"><input type="checkbox" class="filter-option__checkbox"><span class="filter-option__text">Navy</span></label></li>
-                  </ul>
-                </div>
-              </details>
-
-              <details class="filter-group">
-                <summary class="filter-group__summary">PRICE
-                  <svg class="filter-group__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </summary>
-                <div class="filter-group__body">
-                  <div class="price-range-inputs">
-                    <div class="price-input-group">
-                      <span class="price-input-symbol">€</span>
-                      <input type="number" placeholder="0" class="price-input" min="0">
-                    </div>
-                    <span class="price-range-separator">—</span>
-                    <div class="price-input-group">
-                      <span class="price-input-symbol">€</span>
-                      <input type="number" placeholder="500" class="price-input" max="500">
-                    </div>
+                    {% else %}
+                      <ul class="filter-options">
+                        {% for filter_value in filter.values %}
+                          <li class="filter-option">
+                            <label class="filter-option__label">
+                              <input
+                                type="checkbox"
+                                name="{{ filter_value.param_name }}"
+                                value="{{ filter_value.value }}"
+                                {% if filter_value.active %}checked{% endif %}
+                                class="filter-option__checkbox"
+                                onchange="this.form.submit()"
+                              >
+                              <span class="filter-option__text text-body-light">{{ filter_value.label }}</span>
+                              <span class="filter-option__count text-body-light">({{ filter_value.count }})</span>
+                            </label>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
                   </div>
-                </div>
-              </details>
-            {% endfor %}
+                </details>
+              {% endfor %}
+            </form>
           </div>
         </aside>
       {% endif %}
@@ -216,7 +403,8 @@
             <ul class="collection-grid" role="list">
               {% for product in collection.products %}
                 <li class="product-card-wrapper">
-                  <article class="product-card">
+                  {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: true, aspect_ratio: 'portrait', lazy_index: forloop.index %}
+                  {% comment %} <article class="product-card">
                     <a href="{{ product.url }}" class="product-card__image-link">
                       <div class="product-card__image-container">
                         {% if product.featured_image %}
@@ -268,7 +456,7 @@
                         {% endif %}
                       </p>
                     </div>
-                  </article>
+                  </article> {% endcomment %}
                 </li>
               {% endfor %}
             </ul>
@@ -308,8 +496,8 @@
 
           {% else %}
             <div class="collection-empty">
-              <p class="collection-empty__heading">[NO PRODUCTS FOUND]</p>
-              <p class="collection-empty__text">[TRY ADJUSTING YOUR FILTERS OR BROWSE ALL PRODUCTS]</p>
+              <p class="collection-empty__heading text-body-primary">[NO PRODUCTS FOUND]</p>
+              <p class="collection-empty__text text-body-light">[TRY ADJUSTING YOUR FILTERS OR BROWSE ALL PRODUCTS]</p>
               <a href="{{ collection.url }}" class="btn btn--outline">CLEAR FILTERS</a>
             </div>
           {% endif %}
@@ -323,13 +511,7 @@
 
 <style>
   .collection-products {
-    padding: 40px 0 96px;
-  }
-
-  .collection-products__inner {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 0 var(--container-px);
+    padding: var(--gap-lg) 0 var(--section-py);
   }
 
   /* Toolbar */
@@ -337,17 +519,36 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #E8E8E4;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
     gap: 16px;
   }
 
-  .collection-toolbar__left,
+  .collection-toolbar__left {
+    display: flex;
+    align-items: center;
+    gap: 20px 60px;
+    flex-wrap: wrap;
+  }
+
   .collection-toolbar__right {
     display: flex;
     align-items: center;
     gap: 20px;
+  }
+
+  /* Top-bar filters in toolbar */
+  .toolbar-label {
+  }
+
+  .filter-form--top-bar {
+    display: contents;
+  }
+
+  .filter-bar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 35px;
+    align-items: center;
   }
 
   .filter-toggle {
@@ -362,56 +563,220 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     padding: 0;
   }
 
-  .filter-toggle:hover { color: #2D4A6A; }
+  .filter-toggle:hover { color: var(--color-deep-navy); }
+
+  .filter-toggle:focus {
+    outline: 2px solid var(--color-deep-navy);
+    outline-offset: 2px;
+  }
+
+  /* Mobile accordion toggle button */
+  .filter-toggle-mobile {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-near-black);
+    padding: 15px 16px;
+  }
+
+  .filter-toggle-mobile:hover { color: var(--color-deep-navy); }
+
+  .filter-toggle-mobile:focus {
+    outline: none;
+  }
+
+  .filter-toggle-mobile__icon {
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .filter-toggle-mobile[aria-expanded="true"] .filter-toggle-mobile__icon {
+    transform: rotate(180deg);
+  }
+
+  /* Mobile accordion container */
+  .filter-accordion-mobile {
+    display: none;
+  }
+
+  .filter-accordion__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Accordion item (each filter group) */
+  .filter-accordion-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .filter-accordion-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .filter-accordion-item__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-near-black);
+    text-align: left;
+  }
+
+  .filter-accordion-item__toggle:hover {
+    color: var(--color-deep-navy);
+  }
+
+  .filter-accordion-item__toggle:focus {
+    outline: none;
+  }
+
+  .filter-accordion-item__toggle--open {
+    color: var(--color-deep-navy);
+  }
+
+  .filter-accordion-item__icon {
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .filter-accordion-item__toggle--open .filter-accordion-item__icon {
+    transform: rotate(180deg);
+  }
+
+  .filter-accordion-item__content {
+    padding: 0 16px 12px;
+  }
+
+  .filter-options--mobile-accordion {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Mobile sort accordion */
+  .sort-toggle-mobile {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-near-black);
+  }
+
+  .sort-toggle-mobile:hover {
+    color: var(--color-deep-navy);
+  }
+
+  .sort-toggle-mobile:focus {
+    outline: none;
+  }
+
+  .sort-toggle-mobile__icon {
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  [aria-expanded="true"] .sort-toggle-mobile__icon {
+    transform: rotate(180deg);
+  }
+
+  .sort-accordion-mobile {
+    display: none;
+  }
+
+  .sort-accordion__content {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sort-accordion-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sort-accordion-item:last-child {
+    border-bottom: none;
+  }
+
+  .sort-accordion-item__link {
+    display: block;
+    padding: 12px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--color-near-black);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .sort-accordion-item__link:hover {
+    color: var(--color-deep-navy);
+  }
+
+  .sort-accordion-item__link:focus {
+    outline: 2px solid var(--color-deep-navy);
+    outline-offset: 2px;
+  }
+
+  .sort-accordion-item__link--active {
+    color: var(--color-deep-navy);
+    font-weight: 500;
+  }
 
   .filter-active-count {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
   }
 
   .collection-count {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
     letter-spacing: 0.1em;
-    color: #888;
+    color: var(--color-light-gray);
     margin: 0;
     text-transform: uppercase;
+    display: none;
   }
 
   .sort-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px 48px;
   }
 
   .sort-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: #888;
-    white-space: nowrap;
   }
 
   .sort-select {
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    border: 1px solid #E8E8E4;
-    background: white;
-    padding: 8px 32px 8px 12px;
-    color: #1A1A1A;
+    padding: 0px 24px 0px 12px;
+    color: var(--color-near-black);
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
     outline: none;
+    border: 0;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
-    min-width: 160px;
+    min-width: 100px;
   }
 
   /* Layout */
@@ -437,7 +802,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.25em;
-    color: #888;
+    color: var(--color-light-gray);
     margin: 0 0 20px;
   }
 
@@ -448,7 +813,7 @@
     gap: 8px;
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .active-filter-tag {
@@ -459,27 +824,33 @@
     font-size: 10px;
     letter-spacing: 0.08em;
     padding: 4px 10px;
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    border-radius: 2px;
+    transition: background-color var(--transition-fast);
   }
 
-  .active-filter-tag:hover { background-color: #1E3A5F; }
+  .active-filter-tag:hover { background-color: var(--color-navy-mid); }
+
+  .active-filter-tag:focus {
+    outline: 2px solid var(--color-deep-navy);
+    outline-offset: 2px;
+  }
 
   .clear-filters {
     font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.12em;
-    color: #888;
+    color: var(--color-light-gray);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   /* Filter groups */
   .filter-group {
-    border-bottom: 1px solid #E8E8E4;
+    border-bottom: 1px solid var(--color-border);
     padding: 0;
   }
 
@@ -493,11 +864,15 @@
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.15em;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     list-style: none;
   }
 
   .filter-group__summary::-webkit-details-marker { display: none; }
+
+  .filter-group__summary:hover {
+    color: var(--color-deep-navy);
+  }
 
   details[open] .filter-group__icon {
     transform: rotate(180deg);
@@ -506,7 +881,7 @@
   .filter-group__icon {
     transition: transform 0.2s ease;
     flex-shrink: 0;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   .filter-group__body {
@@ -527,27 +902,31 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .filter-option__label:hover {
+    color: var(--color-deep-navy);
   }
 
   .filter-option__checkbox {
-    width: 14px;
-    height: 14px;
-    accent-color: #2D4A6A;
+    width: 12px;
+    height: 12px;
+    accent-color: var(--color-deep-navy);
     flex-shrink: 0;
     cursor: pointer;
+    margin: 0;
   }
 
   .filter-option__text {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     flex: 1;
   }
 
   .filter-option__count {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
-    color: #aaa;
+    color: var(--color-near-black);
   }
 
   /* Price range */
@@ -560,7 +939,7 @@
   .price-input-group {
     display: flex;
     align-items: center;
-    border: 1px solid #E8E8E4;
+    border: 1px solid var(--color-border);
     flex: 1;
   }
 
@@ -568,7 +947,7 @@
     padding: 0 8px;
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #888;
+    color: var(--color-light-gray);
   }
 
   .price-input {
@@ -577,7 +956,7 @@
     padding: 8px 8px 8px 0;
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     outline: none;
     width: 60px;
     -moz-appearance: textfield;
@@ -589,7 +968,7 @@
   .price-range-separator {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
-    color: #aaa;
+    color: var(--color-light-gray);
     flex-shrink: 0;
   }
 
@@ -608,7 +987,7 @@
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    gap: 60px 20px;
   }
 
   .collection-layout.has-sidebar .collection-grid {
@@ -628,13 +1007,13 @@
   }
 
   .product-card__badge--sold-out {
-    background-color: #E8E8E4;
-    color: #888;
+    background-color: var(--color-border);
+    color: var(--color-light-gray);
   }
 
   .product-card__badge--sale {
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
   }
 
   /* Empty state */
@@ -647,14 +1026,14 @@
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 32px;
     font-weight: 300;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     margin-bottom: 12px;
   }
 
   .collection-empty__text {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    color: #888;
+    color: var(--color-light-gray);
     margin-bottom: 32px;
   }
 
@@ -673,16 +1052,21 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 1px solid #E8E8E4;
-    color: #1A1A1A;
+    border: 1px solid var(--color-border);
+    color: var(--color-near-black);
     text-decoration: none;
     transition: all 0.2s ease;
   }
 
   .pagination__btn:hover {
-    border-color: #2D4A6A;
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    border-color: var(--color-deep-navy);
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
+  }
+
+  .pagination__btn:focus {
+    outline: 2px solid var(--color-deep-navy);
+    outline-offset: 2px;
   }
 
   .pagination__page {
@@ -694,28 +1078,110 @@
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     text-decoration: none;
-    color: #1A1A1A;
+    color: var(--color-near-black);
     transition: all 0.2s ease;
   }
 
   .pagination__page:hover:not(.pagination__page--current) {
-    color: #2D4A6A;
+    color: var(--color-deep-navy);
+  }
+
+  .pagination__page:focus {
+    outline: 2px solid var(--color-deep-navy);
+    outline-offset: 2px;
   }
 
   .pagination__page--current {
-    background-color: #2D4A6A;
-    color: #F5F0E8;
+    background-color: var(--color-deep-navy);
+    color: var(--color-cream);
     pointer-events: none;
   }
 
   .pagination__ellipsis {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
-    color: #888;
+    color: var(--color-light-gray);
     padding: 0 4px;
     display: flex;
     align-items: center;
   }
+
+  /* Filter dropdown styling */
+  .filter-dropdown {
+    position: relative;
+  }
+
+  .filter-dropdown__trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--color-near-black);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .filter-dropdown__trigger:hover {
+    color: var(--color-deep-navy);
+  }
+
+  .filter-dropdown__trigger:focus {
+  }
+
+  .filter-dropdown__trigger--active {
+    color: var(--color-cream);
+  }
+
+  .filter-dropdown__trigger--active:hover {
+  }
+
+  .filter-dropdown__trigger--active:focus {
+  }
+
+  .filter-dropdown__icon {
+    width: 8px;
+    transition: transform var(--transition-fast);
+    color: currentColor;
+  }
+
+  .filter-dropdown__trigger--active .filter-dropdown__icon {
+    transform: rotate(180deg);
+  }
+
+  .filter-dropdown__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid var(--color-border);
+    border-top: none;
+    min-width: 200px;
+    max-width: 300px;
+    z-index: var(--z-dropdown);
+  }
+
+  .filter-panel__content {
+    padding: 16px 0;
+  }
+
+  .filter-options--dropdown {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .filter-options--dropdown .filter-option {
+    padding: 0 12px;
+    margin: 0;
+  }
+
+  /* Dropdown transitions */
+  .dropdown-enter { transition: opacity 0.15s ease, transform 0.15s ease; }
+  .dropdown-enter-start { opacity: 0; transform: translateY(-4px); }
+  .dropdown-enter-end { opacity: 1; transform: translateY(0); }
+  .dropdown-leave { transition: opacity 0.15s ease; }
+  .dropdown-leave-start { opacity: 1; }
+  .dropdown-leave-end { opacity: 0; }
 
   /* Responsive */
   @media (max-width: 1200px) {
@@ -723,7 +1189,45 @@
   }
 
   @media (max-width: 1024px) {
-    .collection-products__inner { padding: 0 24px; }
+
+    /* Mobile pill filters */
+    .collection-toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0px;
+    }
+
+    .collection-toolbar__left {
+      width: 100%;
+      gap: 12px;
+    }
+
+    .toolbar-label {
+      flex-shrink: 0;
+    }
+
+    .filter-bar__inner {
+      gap: 8px;
+    }
+
+    .filter-dropdown__trigger {
+      padding: 6px 10px;
+      font-size: 10px;
+      gap: 4px;
+    }
+
+    .filter-dropdown__icon {
+      width: 10px;
+      height: 6px;
+    }
+
+    .filter-dropdown__panel {
+      min-width: 160px;
+      max-width: 250px;
+      top: calc(100% + 4px);
+      border: 1px solid var(--color-border);
+    }
+
     .collection-layout.has-sidebar {
       grid-template-columns: 200px 1fr;
     }
@@ -732,6 +1236,163 @@
   }
 
   @media (max-width: 768px) {
+    .collection-toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .collection-toolbar__left {
+      width: 100%;
+      gap: 0px;
+      flex-wrap: wrap;
+    }
+
+    .collection-toolbar__right {
+      width: 100%;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toolbar-label--desktop {
+      display: none;
+    }
+
+    .filter-form--top-bar {
+      display: none;
+    }
+
+    .filter-toggle-mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 15px 0;
+      flex-basis: 100%;
+    }
+
+    .filter-toggle-mobile:hover {
+      color: var(--color-deep-navy);
+    }
+
+    .filter-accordion-mobile {
+      display: block;
+      width: 100%;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--color-border);
+      flex-basis: 100%;
+    }
+
+    .filter-accordion-item {
+      border: none;
+      padding: 0;
+    }
+
+    .filter-accordion-item:first-child {
+      border: none;
+    }
+
+    .filter-accordion-item__toggle {
+      padding: 0;
+    }
+
+    .filter-accordion-item__toggle .text-body-light {
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .filter-accordion-item__content {
+      padding: 0 0;
+    }
+
+    .filter-option__text {
+      font-size: 11px;
+    }
+
+    .filter-bar__inner {
+      gap: 6px;
+      width: 100%;
+    }
+
+    .filter-dropdown__trigger {
+      padding: 5px 8px;
+      font-size: 9px;
+      gap: 3px;
+    }
+
+    .filter-dropdown__icon {
+      width: 10px;
+      height: 6px;
+    }
+
+    .filter-dropdown__panel {
+      position: fixed;
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-width: none;
+      min-width: auto;
+      border: 1px solid var(--color-border);
+      border-radius: 12px 12px 0 0;
+      z-index: var(--z-modal);
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .filter-panel__content {
+      padding: 10px 0 10px 5px;
+    }
+
+    .sort-wrapper--desktop {
+      display: none;
+    }
+
+    .sort-select {
+      width: 100%;
+      display: none;
+    }
+
+    .sort-label--desktop {
+      display: none;
+    }
+
+    .sort-toggle-mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid var(--color-border);
+      padding: 15px 0;
+      flex-basis: 100%;
+    }
+
+    .sort-accordion-mobile {
+      display: block;
+      width: 100%;
+      flex-basis: 100%;
+    }
+
+    .sort-accordion__content {
+      gap: 16px;
+    }
+
+    .sort-accordion-item {
+      border: none;
+    }
+
+    .sort-accordion-item:last-child {
+      border-bottom: none;
+    }
+
+    .sort-accordion-item__link {
+      padding: 0px;
+      line-height: 1.7;
+    }
+
     .collection-layout.has-sidebar {
       grid-template-columns: 1fr;
     }
@@ -742,16 +1403,37 @@
   }
 
   @media (max-width: 480px) {
-    .collection-products { padding-bottom: 64px; }
-    .collection-products__inner { padding: 0 16px; }
-    .collection-toolbar { flex-direction: column; align-items: flex-start; }
+    .filter-dropdown__icon {
+      width: 8px;
+      height: 5px;
+    }
+
+    .collection-grid { grid-template-columns: repeat(1, 1fr); gap: 12px; }
   }
 </style>
 
 <script>
   function collectionFilters() {
+    const filterStyle = {{ section.settings.filter_style | json }};
+
     return {
-      filtersOpen: window.innerWidth >= 1024 && {{ section.settings.show_filters | json }}
+      filterStyle: filterStyle,
+      isSidebar: filterStyle === 'sidebar',
+      isTopBar: filterStyle === 'top-bar',
+      filtersOpen: (window.innerWidth >= 1024) && {{ section.settings.show_filters | json }},
+      openFilterKey: null,
+      filtersOpenMobile: false,
+      expandedFilters: {},
+      sortOpenMobile: false,
+      toggleExpandedFilter(filterLabel) {
+        if (!this.expandedFilters[filterLabel]) {
+          this.$nextTick(() => {
+            this.expandedFilters[filterLabel] = true;
+          });
+        } else {
+          this.expandedFilters[filterLabel] = false;
+        }
+      }
     }
   }
 </script>
@@ -762,6 +1444,16 @@
   "tag": "section",
   "class": "collection-products-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "filter_style",
+      "label": "Filter layout style",
+      "options": [
+        { "value": "top-bar", "label": "Top bar (floating above grid)" },
+        { "value": "sidebar", "label": "Sidebar (left column)" }
+      ],
+      "default": "top-bar"
+    },
     {
       "type": "range",
       "id": "products_per_page",
@@ -832,6 +1524,7 @@
     {
       "name": "Collection Products",
       "settings": {
+        "filter_style": "top-bar",
         "products_per_page": 12,
         "show_filters": true,
         "show_sort": true,

@@ -5,7 +5,7 @@
   x-data="siteHeader()"
   :class="{ 'is-transparent': isTransparent, 'is-sticky': isSticky, 'is-scrolled': isScrolled, 'is-hidden': isHidden }"
 >
-  <div class="site-header__inner">
+  <div class="site-header__inner container">
 
     {%- comment -%} HAMBURGER — hidden desktop, left column on mobile {%- endcomment -%}
     <button
@@ -26,7 +26,7 @@
           width="{{ settings.logo_width }}"
           height="auto"
           loading="eager"
-          class="site-header__logo-img site-header__logo-img--dark"
+          class="site-header__logo-img site-header__logo-img--light"
         >
         {%- if settings.logo_dark != blank -%}
           <img
@@ -35,7 +35,7 @@
             width="{{ settings.logo_width }}"
             height="auto"
             loading="eager"
-            class="site-header__logo-img site-header__logo-img--light"
+            class="site-header__logo-img site-header__logo-img--dark"
           >
         {%- endif -%}
       {%- else -%}
@@ -115,7 +115,7 @@
   }
 
   .site-header.is-scrolled {
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     color: #1A1A1A;
     box-shadow: 0 1px 0 rgba(0,0,0,0.06);
   }
@@ -128,11 +128,9 @@
   .site-header__inner {
     display: grid;
     grid-template-columns: var(--logo-width, 120px) 1fr auto;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
     grid-template-areas: "logo nav actions";
     align-items: center;
-    max-width: var(--page-width, 1440px);
-    margin: 0 auto;
-    padding: 0 var(--container-px);
     height: 65px;
   }
 
@@ -176,12 +174,12 @@
   }
 
   .site-header__nav-link {
-    font-family: var(--font-nav, 'Inter', sans-serif);
-    font-size: 11px;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
+    line-height: var(--lh-relaxed);
     color: inherit;
     opacity: 0.85;
     transition: opacity 0.2s ease;
@@ -201,6 +199,7 @@
 
   .site-header__nav-link:hover,
   .site-header__nav-link.is-active {
+    color: inherit;
     opacity: 1;
   }
 
@@ -214,6 +213,7 @@
     grid-area: actions;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 20px;
   }
 
@@ -227,10 +227,9 @@
     background: transparent;
     border: none;
     color: inherit;
-    font-family: var(--font-nav, 'Inter', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.1em;
     cursor: pointer;
     outline: none;
     appearance: none;
@@ -250,12 +249,17 @@
     text-decoration: none;
   }
 
+  .site-header__cart:hover {
+    color: inherit;
+    opacity: 1;
+  }
+
   .site-header__cart-text {
-    font-family: var(--font-nav, 'Inter', sans-serif);
-    font-size: 11px;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.1em;
     text-transform: uppercase;
+    line-height: var(--lh-relaxed);
     color: inherit;
     opacity: 0.85;
     transition: opacity 0.2s ease;
@@ -292,14 +296,17 @@
     .site-header__inner {
       grid-template-columns: auto 1fr auto;
       grid-template-areas: "hamburger logo actions";
-      padding: 0 24px;
-      height: 56px;
+      height: 45px;
     }
 
     .site-header__logo { justify-self: center; }
     .site-header__nav { display: none; }
     .site-header__hamburger { display: flex; }
     .site-header__currency { display: none; }
+
+    .site-header__logo-img {
+      width: 65px;
+    }
   }
 
   @media (max-width: 640px) {
