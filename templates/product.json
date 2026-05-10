@@ -94,8 +94,8 @@
       "type": "product-recommendations",
       "settings": {
         "section_label": "Metsie — Collection",
-        "heading": "YOU MAY ALSO LIKE",
-        "products_to_show": 4,
+        "heading": "Discover more pieces from the collection",
+        "products_to_show": 3,
         "intent": "related"
       }
     }

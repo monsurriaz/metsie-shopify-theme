@@ -28,7 +28,7 @@
         {% assign products_to_show = section.settings.products_to_show | default: 3 %}
         {% for product in featured_collection.products limit: products_to_show %}
           <li class="product-card-wrapper">
-            {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: false, aspect_ratio: 'portrait', lazy_index: forloop.index %}
+            {% render 'product-card', product: product, show_vendor: false, show_swatches: false, show_quick_add: section.settings.show_quick_add, aspect_ratio: 'portrait', lazy_index: forloop.index %}
           </li>
         {% endfor %}
       </ul>
@@ -114,7 +114,7 @@
   }
 
   /* ── Mobile — horizontal scroll, peek at next card ── */
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .featured-collection { padding: var(--section-padding-sm) 0; }
     .featured-collection__inner {
       padding-left: var(--space-4);
@@ -196,6 +196,12 @@
       "id": "view_all_text",
       "label": "View all link text",
       "default": "VIEW ALL"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button on product card",
+      "default": true
     }
   ],
   "presets": [
@@ -206,7 +212,8 @@
         "heading": "A curated selection of essential designs in timeless tones",
         "products_to_show": 3,
         "show_view_all": true,
-        "view_all_text": "VIEW ALL"
+        "view_all_text": "VIEW ALL",
+        "show_quick_add": true
       }
     }
   ]
