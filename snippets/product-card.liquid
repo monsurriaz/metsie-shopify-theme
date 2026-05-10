@@ -259,7 +259,7 @@
       {%- endif -%}
 
       {%- comment -%} Tax display {%- endcomment -%}
-      {%- render 'geo-tax-display', inline: true -%}
+      {% comment %} {%- render 'geo-tax-display', inline: true -%} {% endcomment %}
     </div>
 
   </div>{%- comment -%} /.product-card__info {%- endcomment -%}
@@ -278,7 +278,7 @@
       display: flex;
       flex-direction: column;
       gap: 0;
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: var(--font-body);
       /* Fade-in: starts invisible, IntersectionObserver adds .is-visible */
       opacity: 0;
       transform: translateY(12px);
@@ -303,8 +303,8 @@
     .product-card__media-wrapper {
       position: relative;
       overflow: hidden;
-      border-radius: 2px;
-      background: #F5F0E8;
+      border-radius: var(--radius-sm);
+      background: var(--color-cream);
     }
 
     .product-card__media-link {
@@ -356,7 +356,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #F5F0E8;
+      background: var(--color-cream);
     }
 
     .product-card__placeholder-svg {
@@ -369,18 +369,18 @@
     /* ── Badges ── */
     .product-card__badges {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 10;
+      top: var(--space-2-5);
+      left: var(--space-2-5);
+      z-index: var(--z-raised);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: var(--space-1);
     }
 
     .product-card__badge {
       display: inline-block;
       padding: 3px 7px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 9px;
       font-weight: 600;
       letter-spacing: 0.1em;
@@ -389,27 +389,27 @@
     }
 
     .product-card__badge--sale {
-      background: #2D4A6A;
-      color: #FFFFFF;
+      background: var(--color-near-black);
+      color: var(--color-white);
     }
 
     .product-card__badge--sold-out {
       background: rgba(26, 26, 26, 0.7);
-      color: #FFFFFF;
+      color: var(--color-white);
     }
 
     .product-card__badge--new {
-      background: #F5F0E8;
-      color: #2D4A6A;
+      background: var(--color-cream);
+      color: var(--color-navy-mid);
       border: 1px solid rgba(45, 74, 106, 0.3);
     }
 
     /* ── Wishlist button ── */
     .product-card__wishlist {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
+      top: var(--space-2-5);
+      right: var(--space-2-5);
+      z-index: var(--z-raised);
       width: 34px;
       height: 34px;
       display: flex;
@@ -420,7 +420,7 @@
       border: none;
       border-radius: 50%;
       cursor: pointer;
-      color: #2D4A6A;
+      color: var(--color-navy-mid);
       opacity: 0;
       transform: scale(0.8);
       transition: opacity 200ms ease, transform 200ms ease, background 200ms ease;
@@ -442,19 +442,19 @@
     }
 
     .product-card__wishlist:hover {
-      background: #FFFFFF;
+      background: var(--color-white);
     }
 
     .product-card__wishlist:focus-visible {
-      outline: 2px solid #2D4A6A;
+      outline: 2px solid var(--color-navy-mid);
       outline-offset: 2px;
       opacity: 1;
       transform: scale(1);
     }
 
     .product-card__wishlist.is-active svg {
-      fill: #2D4A6A;
-      stroke: #2D4A6A;
+      fill: var(--color-navy-mid);
+      stroke: var(--color-navy-mid);
     }
 
     /* ── Quick Add ── */
@@ -477,10 +477,10 @@
     .product-card__quick-add-btn {
       display: block;
       width: 100%;
-      padding: 12px 16px;
-      background: #2D4A6A;
-      color: #FFFFFF;
-      font-family: 'Inter', sans-serif;
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-navy-mid);
+      color: var(--color-white);
+      font-family: var(--font-body);
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.12em;
@@ -505,34 +505,24 @@
     }
 
     .product-card__vendor {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 9px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #1A1A1A;
+      color: var(--color-near-black);
       opacity: 0.4;
       margin: 0;
     }
 
     .product-card__type {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 9px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #2D4A6A;
+      color: var(--color-navy-mid);
       opacity: 0.7;
       margin: 0;
     }
-
-    /* .product-card__title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(15px, 1.5vw, 18px);
-      font-weight: 400;
-      line-height: 1.3;
-      margin: 0;
-      color: #1A1A1A;
-      letter-spacing: 0.01em;
-    } */
 
     .product-card__title-link {
       text-decoration: none;
@@ -541,11 +531,11 @@
     }
 
     .product-card__title-link:hover {
-      color: #2D4A6A;
+      color: var(--color-navy-mid);
     }
 
     .product-card__title-link:focus-visible {
-      outline: 2px solid #2D4A6A;
+      outline: 2px solid var(--color-navy-mid);
       outline-offset: 2px;
       border-radius: 1px;
     }
@@ -571,7 +561,7 @@
 
     .product-card__swatch:hover {
       transform: scale(1.2);
-      box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(45, 74, 106, 0.4);
+      box-shadow: 0 0 0 2px var(--color-white), 0 0 0 3px rgba(45, 74, 106, 0.4);
     }
 
     /* ── Price ── */
@@ -584,14 +574,14 @@
     }
 
     .product-card__price {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 13px;
       letter-spacing: 0.03em;
-      color: #1A1A1A;
+      color: var(--color-near-black);
     }
 
     .product-card__price--sale {
-      color: #2D4A6A;
+      color: var(--color-navy-mid);
     }
 
     .product-card__price--compare {

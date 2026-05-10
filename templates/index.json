@@ -18,7 +18,7 @@
         "monogram_size": 80,
         "monogram_top": 20,
         "full_viewport": true,
-        "show_scroll_indicator": true
+        "show_scroll_indicator": false
       }
     },
     "featured-collection": {
@@ -30,7 +30,8 @@
         "collection": "featured",
         "products_to_show": 3,
         "show_view_all": false,
-        "view_all_text": "VIEW ALL"
+        "view_all_text": "VIEW ALL",
+        "show_quick_add": true
       }
     },
     "brand-story": {

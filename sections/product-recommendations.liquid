@@ -80,7 +80,7 @@
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--gap-sm);
   }
 
@@ -93,8 +93,19 @@
     .recommendations-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  @media (max-width: 768px) {
-    .recommendations-grid { grid-template-columns: repeat(2, 1fr); gap: 16px 8px; }
+  @media (max-width: 640px) {
+    .recommendations-grid {
+      grid-template-columns: unset;
+      grid-auto-flow: column;
+      grid-auto-columns: 70vw;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-right: var(--space-4);
+    }
+    .recommendations-grid::-webkit-scrollbar { display: none; }
+    .product-card-wrapper { scroll-snap-align: start; }
   }
 </style>
 
@@ -253,8 +264,8 @@
     {
       "name": "Product Recommendations",
       "settings": {
-        "heading": "YOU MAY ALSO LIKE",
-        "products_to_show": 4,
+        "heading": "Discover more pieces from the collection",
+        "products_to_show": 3,
         "intent": "related"
       }
     }
