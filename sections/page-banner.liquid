@@ -1,0 +1,354 @@
+<section
+  class="page-banner"
+  data-section-id="{{ section.id }}"
+  data-transparent-header-anchor
+  style="background-color: {{ section.settings.bg_color }};"
+>
+
+  {%- comment -%} BACKGROUND — video → image → bg_color fallback {%- endcomment -%}
+  {%- if section.settings.video != blank -%}
+    <div class="page-banner__bg">
+      {{- section.settings.video | video_tag:
+        autoplay: true,
+        loop: true,
+        muted: true,
+        controls: false,
+        class: 'page-banner__video',
+        preload: 'auto'
+      -}}
+    </div>
+  {%- elsif section.settings.image != blank -%}
+    <div class="page-banner__bg">
+      {{- section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'page-banner__bg-image',
+          widths: '750, 1100, 1500, 1780, 2000, 3840',
+          sizes: '100vw'
+      -}}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Overlay — darkens image/video for text legibility {%- endcomment -%}
+  {%- if section.settings.overlay_opacity > 0 -%}
+    <div class="page-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+  {%- endif -%}
+
+  {%- comment -%} Content: Blocks rendered here {%- endcomment -%}
+  <div class="page-banner__content">
+    {% for block in section.blocks %}
+      {% case block.type %}
+
+        {% when 'label' %}
+          <p class="page-banner__label text-body-primary" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </p>
+
+        {% when 'title' %}
+          <h1 class="page-banner__title" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </h1>
+
+        {% when 'description' %}
+          <div class="page-banner__description" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </div>
+
+      {% endcase %}
+    {% endfor %}
+  </div>
+
+</section>
+
+<style>
+  .page-banner {
+    position: relative;
+    width: 100%;
+    background-color: var(--color-deep-navy);
+    color: {{ section.settings.text_color }};
+    text-align: center;
+    overflow: hidden;
+
+    /* Height variants */
+    {% if section.settings.banner_height == 'small' %}
+      padding: 64px 40px;
+    {% elsif section.settings.banner_height == 'medium' %}
+      padding: 100px 40px;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    {% elsif section.settings.banner_height == 'large' %}
+      min-height: calc(100vh - var(--header-height));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
+    {% else %} /* fullscreen */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
+    {% endif %}
+  }
+
+  /* Background media */
+  .page-banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .page-banner__bg-image,
+  .page-banner__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Overlay */
+  .page-banner__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: #000;
+  }
+
+  /* Content container */
+  .page-banner__content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-sm);
+  }
+
+  /* Label block */
+  .page-banner__label {
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Title block */
+  .page-banner__title {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: inherit;
+  }
+
+  /* Description block */
+  .page-banner__description {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: var(--lh-relaxed);
+    opacity: 0.85;
+    max-width: 540px;
+    margin: 0;
+  }
+
+  .page-banner__description p {
+    margin: 0;
+  }
+
+  .page-banner__description a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .page-banner {
+      {% if section.settings.banner_height == 'small' %}
+        padding: 56px 24px;
+      {% elsif section.settings.banner_height == 'medium' %}
+        padding: 72px 24px;
+      {% else %}
+        padding: 0 24px;
+      {% endif %}
+    }
+    .page-banner__title {
+      font-size: clamp(28px, 4vw, 48px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-banner {
+      {% if section.settings.banner_height == 'small' %}
+        padding: 48px 16px;
+      {% elsif section.settings.banner_height == 'medium' %}
+        padding: 56px 16px;
+      {% else %}
+        padding: 0 16px;
+      {% endif %}
+    }
+    .page-banner__title {
+      font-size: clamp(24px, 3vw, 36px);
+    }
+    .page-banner__label {
+      font-size: var(--text-xs);
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function shouldShowTransparent() {
+      const mode = {{ settings.header_transparent_on | json }};
+      if (mode === 'disabled') return false;
+
+      const pageTemplate = document.body.dataset.pageTemplate;
+
+      if (mode === 'all') return true;
+      if (mode === pageTemplate) return true;
+
+      return false;
+    }
+
+    function init() {
+      if (shouldShowTransparent()) {
+        document.body.classList.add('hero-page');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Page Banner",
+  "tag": "section",
+  "class": "page-banner-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Background video (takes priority over image)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fallback background color",
+      "default": "#2D4A6A"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity (darkens image/video for text legibility)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "options": [
+        { "value": "small", "label": "Small (compact)" },
+        { "value": "medium", "label": "Medium (standard)" },
+        { "value": "large", "label": "Large (fullscreen - header height)" },
+        { "value": "fullscreen", "label": "Fullscreen (100vh)" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "label",
+      "name": "Label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Label text",
+          "default": "LABEL"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Title text",
+          "default": "Page Title"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description text",
+          "default": "<p>Add your description here</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page Banner",
+      "blocks": [
+        {
+          "type": "label",
+          "settings": { "text": "ABOUT US" }
+        },
+        {
+          "type": "title",
+          "settings": { "text": "Our Story" }
+        },
+        {
+          "type": "description",
+          "settings": { "text": "<p>Discover who we are and what drives us</p>" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

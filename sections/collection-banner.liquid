@@ -1,6 +1,7 @@
 <div
   class="collection-banner"
   data-section-id="{{ section.id }}"
+  data-transparent-header-anchor
   style="
     {% if collection.image and section.settings.show_collection_image %}
       background-image: url('{{ collection.image | img_url: '2000x' }}');
@@ -156,6 +157,34 @@
     }
   }
 </style>
+
+<script>
+  (function () {
+    function shouldShowTransparent() {
+      const mode = {{ settings.header_transparent_on | json }};
+      if (mode === 'disabled') return false;
+
+      const pageTemplate = document.body.dataset.pageTemplate;
+
+      if (mode === 'all') return true;
+      if (mode === pageTemplate) return true;
+
+      return false;
+    }
+
+    function init() {
+      if (shouldShowTransparent()) {
+        document.body.classList.add('hero-page');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
 
 {% schema %}
 {
