@@ -1,4 +1,4 @@
-<div class="editorial-statement" data-section-id="{{ section.id }}" data-reveal="slide-up">
+<div class="editorial-statement editorial-statement--{{ section.settings.content_bg_style }}" data-section-id="{{ section.id }}" data-reveal="slide-up" style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}">
   {% unless section.settings.full_width %}
     <div class="container">
       <div class="editorial-statement__inner">
@@ -27,11 +27,11 @@
     {% endif %}
 
     {%- comment -%} Centered overlaid content (block-based) {%- endcomment -%}
-    <div class="editorial-statement__content">
+    <div class="editorial-statement__content" data-reveal-group>
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'label' %}
-            <p class="editorial-statement__label text-body-primary">{{ block.settings.text | upcase }}</p>
+            <p class="editorial-statement__label text-body-primary">{{ block.settings.text }}</p>
 
           {% when 'heading' %}
             <h2 class="editorial-statement__heading text-heading-primary">
@@ -41,7 +41,7 @@
           {% when 'button' %}
             <a
               href="{{ block.settings.link }}"
-              class="editorial-statement__cta btn btn--white btn--lg"
+              class="editorial-statement__cta btn {% if section.settings.content_bg_style == "navy" %}btn--white-outline{% else %}btn--white{% endif %} btn--lg"
             >
               {{ block.settings.text }}
             </a>
@@ -106,7 +106,11 @@
   .editorial-statement__overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(29, 40, 54, 0.05);
+    background-color: rgba(29, 40, 54, var(--overlay-opacity));
+  }
+
+  .editorial-statement--transparent .editorial-statement__overlay {
+    background-color: rgba(0, 0, 0, var(--overlay-opacity));
   }
 
   .editorial-statement__content {
@@ -125,12 +129,6 @@
   }
 
   .editorial-statement__heading {
-    /* font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(28px, 4vw, 56px);
-    font-weight: 300;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    margin: 0; */
     color: inherit;
   }
 
@@ -154,11 +152,29 @@
     border-color: #F5F0E8;
   }
 
+  /* Transparent background style */
+  .editorial-statement--transparent .editorial-statement__content {
+    background-color: transparent;
+    /* color: var(--color-near-black); */
+  }
+
+  /* .editorial-statement--transparent .editorial-statement__heading {
+    color: var(--color-black);
+  }
+
+  .editorial-statement--transparent .editorial-statement__label {
+    color: var(--color-near-black);
+  } */
+
   @media (max-width: 768px) {
     .editorial-statement {
       min-height: 60vh;
     }
+    .editorial-statement .container {
+      padding-inline: 0px;
+    }
     .editorial-statement__content {
+      max-width: 85%;
       padding: 60px 24px;
       gap: 32px;
     }
@@ -196,6 +212,40 @@
       "type": "text",
       "id": "image_alt",
       "label": "Image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Content Box"
+    },
+    {
+      "type": "select",
+      "id": "content_bg_style",
+      "label": "Background style",
+      "options": [
+        {
+          "value": "navy",
+          "label": "Navy background"
+        },
+        {
+          "value": "transparent",
+          "label": "Transparent background"
+        }
+      ],
+      "default": "navy"
+    },
+    {
+      "type": "header",
+      "content": "Image Overlay"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 0
     }
   ],
   "blocks": [

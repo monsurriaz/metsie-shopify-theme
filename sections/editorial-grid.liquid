@@ -3,13 +3,13 @@
 
     <div class="editorial-grid__header">
       <p class="editorial-grid__label text-body-primary">{{ section.settings.label | default: 'EDITORIAL' | upcase }}</p>
-      <h2 class="editorial-grid__heading text-heading-primary">
+      <h2 class="editorial-grid__heading text-heading-primary{% if section.settings.heading_width == 'fixed' %} section-heading__fixed--width{% endif %}">
         {{ section.settings.heading | default: 'Moments where mats become part of the interior' }}
       </h2>
     </div>
 
     {%- comment -%} 4-column equal width editorial image grid (block-based) {%- endcomment -%}
-    <div class="editorial-grid__layout" data-reveal-group>
+    <div class="editorial-grid__layout" {% unless request.design_mode %}data-reveal-group{% endunless %}>
       {% for block in section.blocks %}
         <div class="editorial-grid__cell">
           {% if block.settings.image != blank %}
@@ -39,10 +39,6 @@
     background-color: var(--color-white);
   }
 
-  .editorial-grid__inner {
-    
-  }
-
   /* Header */
   .editorial-grid__header {
     margin-bottom: var(--gap-lg);
@@ -54,7 +50,10 @@
 
   .editorial-grid__heading {
     color: var(--color-black);
-    max-width: 560px;
+  }
+
+  .editorial-grid__heading--fixed {
+    max-width: 1056px;
   }
 
   /* Grid layout */
@@ -128,6 +127,22 @@
       "id": "heading",
       "label": "Heading",
       "default": "Moments where mats become part of the interior"
+    },
+    {
+      "type": "select",
+      "id": "heading_width",
+      "label": "Heading width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed width (560px)"
+        }
+      ],
+      "default": "fixed"
     }
   ],
   "blocks": [

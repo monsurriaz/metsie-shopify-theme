@@ -1,10 +1,6 @@
-<div class="service-features" data-section-id="{{ section.id }}">
-  <div class="{% if section.settings.section_width == 'natural' %}container--lg {% elsif section.settings.section_width == 'compact' %}container {% else %}service-features__inner{% endif %}">
+<div class="service-features service-features--{{ section.settings.style }}" data-section-id="{{ section.id }}">
+  <div class="{% if section.settings.section_width == 'compact' %}container {% else %}service-features__inner{% endif %}">
     <div class="{% unless section.settings.section_width == 'full_width' %}service-features__inner{% else %}container{% endunless %}">
-
-      {% if section.settings.section_width == "natural" %}
-        <div class="container">
-      {% endif %}
 
       <div class="service-features__header">
         <p class="service-features__label text-body-primary">{{ section.settings.label | default: 'MAKING EXPERIENCE' | upcase }}</p>
@@ -12,37 +8,17 @@
   
       <div class="service-features__grid" data-reveal-group>
         {% for block in section.blocks %}
-          {% if block.type == 'feature' %}
-            <div class="service-features__item" {{ block.shopify_attributes }}>
-              <h3 class="service-features__item-heading text-heading-primary">{{ block.settings.heading | default: '[Feature]' }}</h3>
-              {% if block.settings.description != blank %}
-                <p class="service-features__item-description text-body-light">{{ block.settings.description }}</p>
-                {% if block.settings.url != blank or block.settings.label != blank %}
-                  <a href="{{ block.settings.url }}" class="service-features__item-btn text-body-light">{{ block.settings.label }}</a>
-                {% endif %}
+          <div class="service-features__item" {{ block.shopify_attributes }}>
+            <h3 class="service-features__item-heading text-heading-primary">{{ block.settings.heading | default: '[Feature]' }}</h3>
+            {% if block.settings.description != blank %}
+              <p class="service-features__item-description text-body-light">{{ block.settings.description }}</p>
+              {% if block.settings.url != blank or block.settings.label != blank %}
+                <a href="{{ block.settings.url }}" class="service-features__item-btn text-body-light">{{ block.settings.label }}</a>
               {% endif %}
-            </div>
-          {% endif %}
-        {% else %}
-          {%- comment -%} Default placeholder features when no blocks {%- endcomment -%}
-          <div class="service-features__item">
-            <h3 class="service-features__item-heading text-heading-primary">Free delivery</h3>
-            <p class="service-features__item-description text-body-light">Complimentary shipping on all orders across Europe</p>
-          </div>
-          <div class="service-features__item">
-            <h3 class="service-features__item-heading text-heading-primary">Trade & studio orders</h3>
-            <p class="service-features__item-description text-body-light">Dedicated support and pricing for interior professionals</p>
-          </div>
-          <div class="service-features__item">
-            <h3 class="service-features__item-heading text-heading-primary">Custom colors</h3>
-            <p class="service-features__item-description text-body-light">Bespoke colorway service for made-to-order pieces</p>
+            {% endif %}
           </div>
         {% endfor %}
       </div>
-
-      {% if section.settings.section_width == "natural" %}
-        </div>
-      {% endif %}
 
     </div>
   </div>
@@ -103,6 +79,32 @@
     opacity: 0.8;
   }
 
+  /* Light style variant */
+  .service-features--light .service-features__inner {
+    background-color: var(--color-white);
+    color: var(--color-near-black);
+  }
+
+  .service-features--light .service-features__label {
+    color: var(--color-near-black);
+  }
+
+  .service-features--light .service-features__item-heading {
+    color: var(--color-black);
+  }
+
+  .service-features--light .service-features__item-description {
+    color: var(--color-near-black);
+  }
+
+  .service-features--light .service-features__item-btn {
+    color: var(--color-near-black);
+  }
+
+  .service-features--light .service-features__item-btn:hover {
+    color: var(--color-near-black);
+  }
+
   @media (max-width: 1024px) {
     .service-features__grid {
       gap: 32px;
@@ -139,15 +141,27 @@
           "label": "Full Width"
         },
         {
-          "value": "natural",
-          "label": "Natural"
-        },
-        {
           "value": "compact",
           "label": "Compact"
         }
       ],
-      "default": "natural"
+      "default": "compact"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Content box style",
+      "options": [
+        {
+          "value": "light",
+          "label": "White background"
+        },
+        {
+          "value": "navy",
+          "label": "Navy background"
+        }
+      ],
+      "default": "navy"
     }
   ],
   "blocks": [

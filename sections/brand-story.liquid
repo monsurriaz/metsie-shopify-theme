@@ -1,50 +1,53 @@
 
-<div class="brand-story{% if section.settings.section_style == 'equal_width' %} equal-width mobile-fluid{% endif %}" data-section-id="{{ section.id }}" data-reveal="slide-up">
-  <div class="brand-story__inner">
+<div class="brand-story{% if section.settings.section_style == 'equal_width' %} equal-width mobile-fluid{% endif %}" data-section-id="{{ section.id }}">
+  <div class="container">
 
-    {%- comment -%} Image column — LEFT {%- endcomment -%}
-    <div class="brand-story__image-col">
-      {% if section.settings.image != blank %}
-        <div class="brand-story__image-container">
-          <img
-            src="{{ section.settings.image | image_url: width: 800 }}"
-            srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1200 }} 1200w"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            alt="{{ section.settings.image_alt | default: 'Metsie design studio' }}"
-            width="800"
-            height="960"
-            loading="lazy"
-            class="brand-story__image"
-          >
-        </div>
-      {% else %}
-        <div class="brand-story__image-placeholder">
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'brand-story__placeholder-svg' }}
-        </div>
-      {% endif %}
-    </div>
-
-    {%- comment -%} Text column — RIGHT (block-based) {%- endcomment -%}
-    <div class="brand-story__text-col">
-      {% for block in section.blocks %}
-        {% case block.type %}
-          {% when 'label' %}
-            <p class="brand-story__label text-body-primary">{{ block.settings.text }}</p>
-
-          {% when 'text' %}
-            <h2 class="brand-story__body text-heading-primary">{{ block.settings.body_text }}</h2>
-
-          {% when 'button' %}
-            <a
-              href="{{ block.settings.link }}"
-              class="brand-story__cta{% if section.settings.section_style == 'equal_width' %} btn btn--white-outline btn--lg{% endif %}"
+    <div class="brand-story__inner">
+      {%- comment -%} Image column — LEFT {%- endcomment -%}
+      <div class="brand-story__image-col">
+        {% if section.settings.image != blank %}
+          <div class="brand-story__image-container aspect-portrait">
+            <img
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt="{{ section.settings.image_alt | default: 'Metsie design studio' }}"
+              width="800"
+              height="960"
+              loading="lazy"
+              class="brand-story__image media-fit"
             >
-              {{ block.settings.text }}
-            </a>
-        {% endcase %}
-      {% endfor %}
-    </div>
+          </div>
+        {% else %}
+          <div class="brand-story__image-placeholder aspect-portrait">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'brand-story__placeholder-svg' }}
+          </div>
+        {% endif %}
+      </div>
 
+      {%- comment -%} Text column — RIGHT (block-based) {%- endcomment -%}
+      <div class="brand-story__text-col">
+        <div class="brand-story__text-wrapper" data-reveal-group>
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'label' %}
+                <p class="brand-story__label text-body-primary">{{ block.settings.text }}</p>
+  
+              {% when 'text' %}
+                <h2 class="brand-story__body text-heading-primary">{{ block.settings.body_text }}</h2>
+  
+              {% when 'button' %}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="brand-story__cta{% if section.settings.section_style == 'equal_width' %} btn btn--white-outline btn--lg{% endif %}"
+                >
+                  {{ block.settings.text }}
+                </a>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -53,9 +56,6 @@
     overflow: hidden;
   }
   .brand-story__inner {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 0 var(--container-px);
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
@@ -70,14 +70,10 @@
   .brand-story__image-container,
   .brand-story__image-placeholder {
     position: relative;
-    aspect-ratio: 5 / 6;
     overflow: hidden;
     background-color: var(--color-light-gray);
   }
   .brand-story__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     transition: transform 0.6s ease;
   }
   .brand-story__image-container:hover .brand-story__image {
@@ -102,6 +98,12 @@
       color: var(--color-white);
       background-color: var(--color-deep-navy);
       padding: 80px var(--container-px);
+    }
+    .brand-story.equal-width .brand-story__text-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
     }
     .brand-story.equal-width .brand-story__label {
       color: #ffffff;
@@ -162,7 +164,6 @@
       padding: 72px 0;
     }
     .brand-story__inner {
-      padding: 0 24px;
       gap: 48px;
     }
     .brand-story__label {
@@ -179,8 +180,11 @@
       grid-template-columns: 1fr;
       gap: 40px;
     }
+    
+    .brand-story.equal-width .container {
+      padding-inline: 0;
+    }
     .brand-story.equal-width .brand-story__inner {
-      padding-inline: 0px;
       gap: 0px;
     }
 
