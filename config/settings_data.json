@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "page_width": 1520,
     "logo": "shopify://shop_images/Logo-white.svg",
     "logo_dark": "shopify://shop_images/Logo-Black.svg",
     "colors": {

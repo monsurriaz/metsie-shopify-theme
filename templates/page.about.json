@@ -9,6 +9,36 @@
  */
 {
   "sections": {
+    "about-page": {
+      "type": "about-page",
+      "blocks": {
+        "story_block_dyMFmw": {
+          "type": "story_block",
+          "settings": {
+            "label": "",
+            "heading": "[SECTION HEADING]",
+            "text": "<p>[PLACEHOLDER STORY TEXT]</p>",
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "story_block_dyMFmw"
+      ],
+      "disabled": true,
+      "settings": {
+        "hero_heading": "[OUR STORY]",
+        "hero_subheading": "[CRAFTED WITH INTENTION. DESIGNED FOR LIVING.]",
+        "hero_bg_color": "#2d4a6a",
+        "mission_text": "[DESCRIBE YOUR BRAND MISSION — COMMITMENT TO QUALITY, SUSTAINABILITY, AND THOUGHTFUL DESIGN]",
+        "values_heading": "[WHAT WE BELIEVE]",
+        "show_team": true,
+        "team_heading": "[THE PEOPLE BEHIND METSIE]",
+        "cta_heading": "[READY TO FIND YOUR PERFECT MAT?]",
+        "cta_button_text": "SHOP NOW",
+        "cta_button_link": "/collections/all"
+      }
+    },
     "page_banner_bVRAAW": {
       "type": "page-banner",
       "blocks": {
@@ -23,46 +53,202 @@
           "settings": {
             "text": "Our Story"
           }
-        },
-        "description_YG7JUV": {
-          "type": "description",
-          "disabled": true,
-          "settings": {
-            "text": "<p>Discover who we are and what drives us</p>"
-          }
         }
       },
       "block_order": [
         "label_dxRxHL",
-        "title_4dB96V",
-        "description_YG7JUV"
+        "title_4dB96V"
       ],
       "name": "Page Banner",
       "settings": {
         "bg_color": "#2e4356",
-        "overlay_opacity": 20,
+        "overlay_opacity": 0,
         "banner_height": "large",
         "text_color": "#ffffff"
       }
     },
-    "about-page": {
-      "type": "about-page",
+    "multi_column_PnXatY": {
+      "type": "multi-column",
+      "blocks": {
+        "column_ecwUyY": {
+          "type": "column",
+          "settings": {
+            "enable_image": true,
+            "image_alt": "",
+            "label": "",
+            "title": "",
+            "description": "",
+            "text_alignment": "left",
+            "content_position": "outside"
+          }
+        },
+        "column_yTVnWh": {
+          "type": "column",
+          "settings": {
+            "enable_image": true,
+            "image_alt": "",
+            "label": "",
+            "title": "",
+            "description": "",
+            "text_alignment": "left",
+            "content_position": "outside"
+          }
+        }
+      },
+      "block_order": [
+        "column_ecwUyY",
+        "column_yTVnWh"
+      ],
+      "name": "Multi Column",
       "settings": {
-        "hero_heading": "[OUR STORY]",
-        "hero_subheading": "[CRAFTED WITH INTENTION. DESIGNED FOR LIVING.]",
-        "hero_bg_color": "#2d4a6a",
-        "mission_text": "[DESCRIBE YOUR BRAND MISSION — COMMITMENT TO QUALITY, SUSTAINABILITY, AND THOUGHTFUL DESIGN]",
-        "values_heading": "[WHAT WE BELIEVE]",
-        "show_team": true,
-        "team_heading": "[THE PEOPLE BEHIND METSIE]",
-        "cta_heading": "[READY TO FIND YOUR PERFECT MAT?]",
-        "cta_button_text": "SHOP NOW",
-        "cta_button_link": "/collections/all"
+        "label": "Design Philosophy",
+        "heading": "Our philosophy redefines the mat as part of the interior, where movement, material, and proportion coexist in quiet balance to create objects that feel essential — never excessive",
+        "heading_width": "fixed",
+        "media_ratio": "aspect-slightly-tall",
+        "remove_padding_bottom": true,
+        "columns": 2,
+        "enable_mobile_slider": false
+      }
+    },
+    "design_approach_9eAMt6": {
+      "type": "design-approach",
+      "name": "Design Approach",
+      "settings": {
+        "label": "Design approach",
+        "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions",
+        "image_alt": "",
+        "media_ratio": "aspect-ultrawide",
+        "remove_bottom_padding": true
+      }
+    },
+    "service_features_WEj73N": {
+      "type": "service-features",
+      "blocks": {
+        "feature_kk839i": {
+          "type": "feature",
+          "settings": {
+            "heading": "Considered construction",
+            "description": "Layered composition, precise edge finishing, and controlled thickness ensure balance between comfort and support. Every proportion is intentional.",
+            "label": "",
+            "url": ""
+          }
+        },
+        "feature_E9BQcg": {
+          "type": "feature",
+          "settings": {
+            "heading": "Material integrity",
+            "description": "We select durable, high-density materials that provide stability, grip, and longevity — designed to perform daily while maintaining their structure over time.",
+            "label": "",
+            "url": ""
+          }
+        },
+        "feature_YpV3yk": {
+          "type": "feature",
+          "settings": {
+            "heading": "Responsible production",
+            "description": "Manufactured in small batches with attention to waste reduction and material efficiency. Built to last — not to be replaced seasonally.",
+            "label": "",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_kk839i",
+        "feature_E9BQcg",
+        "feature_YpV3yk"
+      ],
+      "name": "Service Features",
+      "settings": {
+        "label": "Materials & production",
+        "section_width": "compact",
+        "style": "light"
+      }
+    },
+    "editorial_statement_G7894W": {
+      "type": "editorial-statement",
+      "blocks": {
+        "label_TtRJbq": {
+          "type": "label",
+          "settings": {
+            "text": "A piece of your space"
+          }
+        },
+        "heading_Fnzrqb": {
+          "type": "heading",
+          "settings": {
+            "text": "Crafted by balance. Created for living, spaces, and permanence."
+          }
+        },
+        "button_3iJtKQ": {
+          "type": "button",
+          "settings": {
+            "text": "Explore",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "label_TtRJbq",
+        "heading_Fnzrqb",
+        "button_3iJtKQ"
+      ],
+      "name": "Editorial Statement",
+      "settings": {
+        "full_width": false,
+        "image_alt": "",
+        "content_bg_style": "transparent",
+        "overlay_opacity": 30
+      }
+    },
+    "editorial_grid_ELqccc": {
+      "type": "editorial-grid",
+      "blocks": {
+        "image_JLPdEf": {
+          "type": "image",
+          "settings": {
+            "image_alt": ""
+          }
+        },
+        "image_VHFrJn": {
+          "type": "image",
+          "settings": {
+            "image_alt": ""
+          }
+        },
+        "image_rTPfRq": {
+          "type": "image",
+          "settings": {
+            "image_alt": ""
+          }
+        },
+        "image_fhEEat": {
+          "type": "image",
+          "settings": {
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_JLPdEf",
+        "image_VHFrJn",
+        "image_rTPfRq",
+        "image_fhEEat"
+      ],
+      "name": "Editorial Grid",
+      "settings": {
+        "label": "EDITORIAL",
+        "heading": "Moments where mats become part of the interior",
+        "heading_width": "fixed"
       }
     }
   },
   "order": [
+    "about-page",
     "page_banner_bVRAAW",
-    "about-page"
+    "multi_column_PnXatY",
+    "design_approach_9eAMt6",
+    "service_features_WEj73N",
+    "editorial_statement_G7894W",
+    "editorial_grid_ELqccc"
   ]
 }
