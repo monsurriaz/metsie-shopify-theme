@@ -42,9 +42,25 @@
       {% case block.type %}
 
         {% when 'label' %}
-          <p class="page-banner__label text-body-primary" {{ block.shopify_attributes }}>
-            {{ block.settings.text }}
-          </p>
+          {% if block.settings.monogram_image != blank %}
+            {%- comment -%} Monogram icon {%- endcomment -%}
+              <div class="page-banner__monogram" aria-hidden="true">
+                {%- if block.settings.monogram_image != blank -%}
+                  <img
+                    src="{{ block.settings.monogram_image | image_url: width: 200 }}"
+                    alt=""
+                    class="page-banner__monogram-img"
+                    loading="eager"
+                    width=""
+                    height=""
+                  >
+                {%- endif -%}
+              </div>
+          {% else %}
+            <p class="page-banner__label text-body-primary" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </p>
+          {% endif %}
 
         {% when 'title' %}
           <h1 class="page-banner__title" {{ block.shopify_attributes }}>
@@ -111,7 +127,7 @@
   .page-banner__content {
     /* position: relative; */
     z-index: 2;
-    max-width: 720px;
+    max-width: 850px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -133,6 +149,21 @@
     {% else %}
       margin-bottom: 20px;
     {% endif %}
+  }
+  
+  /* Monogram styles */
+  .page-banner__monogram {
+    position: absolute;
+    top: {{ section.settings.monogram_top }}px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .page-banner__monogram-img {
+    width: {{ section.settings.monogram_size }}px;
+    height: auto;
+    display: block;
   }
 
   /* Title block */
@@ -173,6 +204,9 @@
       {% else %}
         padding: 0 24px;
       {% endif %}
+    }
+    .page-banner__monogram-img {
+      width: {{ section.settings.monogram_size | times: 0.5 | round }}px;
     }
     .page-banner__label {
       {% if section.settings.banner_height == 'large' %}
@@ -280,6 +314,30 @@
       "default": "large"
     },
     {
+      "type": "header",
+      "content": "Monogram"
+    },
+    {
+      "type": "range",
+      "id": "monogram_size",
+      "min": 40,
+      "max": 160,
+      "step": 5,
+      "unit": "px",
+      "label": "Monogram size (desktop)",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "monogram_top",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Monogram vertical position",
+      "default": 100
+    },
+    {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
@@ -296,6 +354,11 @@
           "id": "text",
           "label": "Label text",
           "default": "LABEL"
+        },
+        {
+          "type": "image_picker",
+          "id": "monogram_image",
+          "label": "Monogram icon (overrides label text)"
         }
       ]
     },

@@ -9,7 +9,7 @@
           <p class="design-approach__label text-body-primary">{{ section.settings.label | upcase }}</p>
         {% endif %}
         {% if section.settings.heading != blank %}
-          <h2 class="design-approach__heading text-heading-primary">{{ section.settings.heading }}</h2>
+          <h2 class="design-approach__heading text-heading-primary{% if section.settings.heading_width == 'fixed' %} section-heading__fixed--width{% endif %}">{{ section.settings.heading }}</h2>
         {% endif %}
       </div>
     {% endif %}
@@ -18,7 +18,7 @@
     <div class="design-approach__image-wrapper {{ section.settings.media_ratio }}" {% unless request.design_mode %}data-reveal="slide-up"{% endunless %}>
       {% if section.settings.image != blank %}
         <img
-          src="{{ section.settings.image | image_url: width: 1200 }}"
+          src="{{ section.settings.image | image_url: width: 1600 }}"
           srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 1800 }} 1800w"
           sizes="(max-width: 768px) 100vw, 90vw"
           alt="{{ section.settings.image_alt | default: 'Design approach' }}"
@@ -125,6 +125,22 @@
       "label": "Heading (optional)"
     },
     {
+      "type": "select",
+      "id": "heading_width",
+      "label": "Heading width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed width (560px)"
+        }
+      ],
+      "default": "fixed"
+    },
+    {
       "type": "header",
       "content": "Image"
     },
@@ -170,7 +186,8 @@
       "name": "Design Approach",
       "settings": {
         "label": "Design approach",
-        "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions"
+        "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions",
+        "heading_width": "fixed"
       },
     }
   ]

@@ -12,9 +12,141 @@
     "main": {
       "type": "main-page",
       "settings": {}
+    },
+    "page_banner_d34Vxf": {
+      "type": "page-banner",
+      "blocks": {
+        "label_Gr3UxU": {
+          "type": "label",
+          "settings": {
+            "text": "ABOUT US",
+            "monogram_image": "shopify://shop_images/monogram-white.svg"
+          }
+        },
+        "title_eQLgDg": {
+          "type": "title",
+          "settings": {
+            "text": "Ideas, places, and rituals that inspire the Metsie world"
+          }
+        }
+      },
+      "block_order": [
+        "label_Gr3UxU",
+        "title_eQLgDg"
+      ],
+      "name": "Page Banner",
+      "settings": {
+        "bg_color": "#2e4356",
+        "overlay_opacity": 0,
+        "banner_height": "large",
+        "monogram_size": 70,
+        "monogram_top": 100,
+        "text_color": "#ffffff"
+      }
+    },
+    "inspire_grid_Ajgwqr": {
+      "type": "inspire-grid",
+      "blocks": {
+        "inspire_cell_heHK4L": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        },
+        "inspire_cell_mFgeRe": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        },
+        "inspire_cell_GyYycM": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "inspire_cell_heHK4L",
+        "inspire_cell_mFgeRe",
+        "inspire_cell_GyYycM"
+      ],
+      "name": "Inspire Grid",
+      "settings": {
+        "overlay_opacity": 20
+      }
+    },
+    "design_philosophy_NwMtUw": {
+      "type": "design-philosophy",
+      "name": "Design Philosophy",
+      "settings": {
+        "label": "",
+        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "align_center": true,
+        "content_bg_style": "navy",
+        "width_compact": true,
+        "enable_margin_top": false,
+        "enable_margin_bottom": false
+      }
+    },
+    "inspire_grid_cTMh77": {
+      "type": "inspire-grid",
+      "blocks": {
+        "inspire_cell_YNWwMD": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        },
+        "inspire_cell_H3hFhX": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        },
+        "inspire_cell_gdDpTy": {
+          "type": "inspire_cell",
+          "settings": {
+            "image_alt": "",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "inspire_cell_YNWwMD",
+        "inspire_cell_H3hFhX",
+        "inspire_cell_gdDpTy"
+      ],
+      "name": "Inspire Grid",
+      "settings": {
+        "overlay_opacity": 0
+      }
+    },
+    "design_philosophy_qAwbjd": {
+      "type": "design-philosophy",
+      "name": "Design Philosophy",
+      "settings": {
+        "label": "",
+        "text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals",
+        "align_center": true,
+        "content_bg_style": "navy",
+        "width_compact": true,
+        "enable_margin_top": false,
+        "enable_margin_bottom": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "page_banner_d34Vxf",
+    "inspire_grid_Ajgwqr",
+    "design_philosophy_NwMtUw",
+    "inspire_grid_cTMh77",
+    "design_philosophy_qAwbjd"
   ]
 }

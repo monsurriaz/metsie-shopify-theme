@@ -1,28 +1,86 @@
-<div class="design-philosophy" data-section-id="{{ section.id }}" data-reveal="slide-up">
-  <div class="design-philosophy__inner container">
+{% liquid
+  assign bg_style = section.settings.content_bg_style
+  assign align_center = section.settings.align_center
+  assign width_compact = section.settings.width_compact
+%}
 
-    <p class="design-philosophy__label text-body-primary">{{ section.settings.label | default: 'DESIGN PHILOSOPHY' | upcase }}</p>
-
-    <h2 class="design-philosophy__text text-heading-primary">
-      {{ section.settings.text | default: 'Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive' }}
-    </h2>
+<div class="design-philosophy design-philosophy--{{ bg_style }}" id="{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="design-philosophy__inner">
+      <div class="design-philosophy__grid" data-reveal-group>
+        {% if section.settings.label != blank %}
+          <p class="design-philosophy__label text-body-primary">{{ section.settings.label }}</p>
+        {% endif %}
+    
+        <h2 class="design-philosophy__text text-heading-primary">
+          {{ section.settings.text }}
+        </h2>
+      </div>
+    </div>
 
   </div>
 </div>
 
 <style>
-  .design-philosophy {
+  #shopify-section-{{ section.id }} .design-philosophy {
+    background-color: var(--color-white);
     padding: var(--section-py) 0;
-    background-color: #FFFFFF;
+    {%  if section.settings.enable_margin_top %} 
+      margin-top: var(--gap-sm);
+    {% endif %}
+    {%  if section.settings.enable_margin_bottom %} 
+      margin-bottom: var(--gap-sm);
+    {% endif %}
   }
-
-  .design-philosophy__label {
+  #shopify-section-{{ section.id }} .design-philosophy--navy {
+    padding: 0;
+  }
+  #shopify-section-{{ section.id }} .design-philosophy__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__inner {
+    background-color: var(--color-deep-navy);
+    padding: var(--section-padding-sm) var(--gap-sm);
+  }
+  #shopify-section-{{ section.id }} .design-philosophy__grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  {% if width_compact %}
+    #shopify-section-{{ section.id }} .design-philosophy__grid {
+      max-width: 900px;
+      margin-inline: auto;
+    }
+  {% endif %}
+  {% if align_center %}
+    #shopify-section-{{ section.id }} .design-philosophy__grid {
+      text-align: center;
+    }
+  {% endif %}
+  #shopify-section-{{ section.id }} .design-philosophy__label {
     color: var(--color-near-black);
   }
-
-  .design-philosophy__text {
+  #shopify-section-{{ section.id }} .design-philosophy__text {
     color: var(--color-black);
     max-width: 900px;
+  }
+  #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__label,
+  #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__text {
+    color: var(--color-white);
+  }
+
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__inner {
+      padding: var(--space-8) var(--space-5);
+    }
+    #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__text {
+      font-size: 1rem;
+      line-height: 1.2;
+    }
   }
 </style>
 
@@ -36,21 +94,68 @@
       "type": "text",
       "id": "label",
       "label": "Section label",
-      "default": "DESIGN PHILOSOPHY"
+      "default": "Design Philosophy"
     },
     {
       "type": "textarea",
       "id": "text",
       "label": "Philosophy text",
       "default": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "align_center",
+      "label": "Center align text",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "content_bg_style",
+      "label": "Content background style",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "navy",
+          "label": "Navy"
+        }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "checkbox",
+      "id": "width_compact",
+      "label": "Compact width (max 900px)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_margin_top",
+      "label": "Enable top margin",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_margin_bottom",
+      "label": "Enable bottom margin",
+      "default": false
     }
   ],
   "presets": [
     {
       "name": "Design Philosophy",
       "settings": {
-        "label": "DESIGN PHILOSOPHY",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive"
+        "label": "Design Philosophy",
+        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "content_bg_style": "white",
+        "enable_margin_top": false,
+        "enable_margin_bottom": false
       }
     }
   ]
