@@ -1,0 +1,163 @@
+
+
+<div class="inspire-grid">
+  <div class="inspire-grid__inner container">
+    <div class="inspire-grid__grid" data-reveal-group>
+      {% for block in section.blocks %}
+        <div class="inspire-grid__cell" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <div class="inspire-grid__img-wrapper" >
+              {%- liquid
+                assign image_sizes = '(max-width: 767px) 100vw, (min-width: 768px) 50vw, 100vw'
+  
+                if forloop.first
+                  assign image_sizes = '100vw'
+                endif
+              -%}
+              {{
+                block.settings.image
+                | image_url: width: 1800
+                | image_tag:
+                  class: 'inspire-grid__img media-fit',
+                  loading: 'lazy',
+                  alt: block.settings.image_alt | default: 'Inspire grid image',
+                  widths: '400, 600, 800, 1000, 1200, 1600, 2000, 2400',
+                  sizes: image_sizes
+              }}
+              <div class="inspire-grid__overlay" style="background-color: rgba(29, 40, 54, {{ block.settings.overlay_opacity | divided_by: 100.0 }});"></div>
+            </div>
+          {% else %}
+            <div class="inspire-grid__img-wrapper inspire-grid__img-placeholder">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'inspire-grid__placeholder' }}
+              <div class="inspire-grid__overlay" style="background-color: rgba(29, 40, 54, {{ block.settings.overlay_opacity | divided_by: 100.0 }});"></div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+   #shopify-section-{{ section.id }} .inspire-grid {
+    padding: var(--gap-sm) 0;
+    background-color: var(--color-white);
+  }
+
+  #shopify-section-{{ section.id }} .inspire-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gap-sm);
+  }
+  
+  #shopify-section-{{ section.id }} .inspire-grid__grid > .inspire-grid__cell:first-child {
+    grid-column: span 2;
+    grid-column: 1 / -1;
+  }
+  #shopify-section-{{ section.id }} .inspire-grid__cell {
+    position: relative;
+  }
+  
+  #shopify-section-{{ section.id }} .inspire-grid__img-wrapper {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .inspire-grid__cell:first-child .inspire-grid__img-wrapper {
+    aspect-ratio: 16 / 9;
+  }
+
+  #shopify-section-{{ section.id }} .inspire-grid__img {
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .inspire-grid__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  #shopify-section-{{ section.id }} .inspire-grid__img-placeholder {
+    background-color: #D9D9D9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  #shopify-section-{{ section.id }} .inspire-grid__placeholder {
+    width: 100%;
+    height: 100%;
+    color: #ccc;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Inspire Grid",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "inspire_cell",
+      "name": "Inspire Cell",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%",
+          "label": "Overlay opacity",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inspire Grid",
+      "category": "Image",
+      "settings": {
+        "overlay_opacity": 0
+      },
+      "blocks": [
+        {
+          "type": "inspire_cell",
+          "settings": {}
+        },
+        {
+          "type": "inspire_cell",
+          "settings": {}
+        },
+        {
+          "type": "inspire_cell",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
