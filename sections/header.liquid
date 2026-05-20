@@ -1,3 +1,17 @@
+{%- comment -%}
+  Transparent Header Logic:
+  - Works only if a section has data-transparent-header-anchor attribute
+  - Hero banner gets this attribute by default
+  - Other sections can opt-in by adding the attribute
+  - Setting header_transparent_on controls which pages show transparency:
+    • "disabled": Never transparent
+    • "all": All pages with anchor
+    • "home": Home page with anchor (index template)
+    • "collection": Collection pages with anchor
+    • "product": Product pages with anchor
+  - Page template is set via body[data-page-template]
+{%- endcomment -%}
+
 <header
   class="site-header is-initializing"
   data-section-id="{{ section.id }}"
@@ -18,30 +32,32 @@
     </button>
 
     {%- comment -%} LOGO — left on desktop, centered on mobile {%- endcomment -%}
-    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — Home">
-      {%- if settings.logo != blank -%}
-        <img
-          src="{{ settings.logo | image_url: width: settings.logo_width }}"
-          alt="{{ shop.name }}"
-          width="{{ settings.logo_width }}"
-          height="auto"
-          loading="eager"
-          class="site-header__logo-img site-header__logo-img--light"
-        >
-        {%- if settings.logo_dark != blank -%}
+    <div class="site-header__logo-wrapper">
+      <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — Home">
+        {%- if settings.logo != blank -%}
           <img
-            src="{{ settings.logo_dark | image_url: width: settings.logo_width }}"
+            src="{{ settings.logo | image_url: width: settings.logo_width }}"
             alt="{{ shop.name }}"
             width="{{ settings.logo_width }}"
             height="auto"
             loading="eager"
-            class="site-header__logo-img site-header__logo-img--dark"
+            class="site-header__logo-img site-header__logo-img--light"
           >
+          {%- if settings.logo_dark != blank -%}
+            <img
+              src="{{ settings.logo_dark | image_url: width: settings.logo_width }}"
+              alt="{{ shop.name }}"
+              width="{{ settings.logo_width }}"
+              height="auto"
+              loading="eager"
+              class="site-header__logo-img site-header__logo-img--dark"
+            >
+          {%- endif -%}
+        {%- else -%}
+          <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
         {%- endif -%}
-      {%- else -%}
-        <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
-      {%- endif -%}
-    </a>
+      </a>
+    </div>
 
     {%- comment -%} NAV — centered on desktop, hidden on mobile {%- endcomment -%}
     <nav class="site-header__nav" aria-label="Main navigation">
@@ -134,9 +150,15 @@
     height: 65px;
   }
 
-  /* Logo */
-  .site-header__logo {
+  /* Logo wrapper — grid positioning */
+  .site-header__logo-wrapper {
     grid-area: logo;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Logo link */
+  .site-header__logo {
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -299,7 +321,7 @@
       height: 45px;
     }
 
-    .site-header__logo { justify-self: center; }
+    .site-header__logo-wrapper { justify-self: center; }
     .site-header__nav { display: none; }
     .site-header__hamburger { display: flex; }
     .site-header__currency { display: none; }
@@ -318,16 +340,31 @@
   function siteHeader() {
     return {
       isSticky: {{ settings.header_sticky | json }},
-      _transparentEnabled: {% if settings.header_style == 'transparent' %}true{% else %}false{% endif %},
       hideOnScroll: {{ section.settings.hide_on_scroll | json }},
       isTransparent: false,
       isScrolled: false,
       isHidden: false,
       lastScrollY: 0,
-      _hasHero: false,
+      _hasAnchor: false,
+      _transparentEnabled: false,
+
+      _shouldEnableTransparent() {
+        const mode = {{ settings.header_transparent_on | json }};
+        if (mode === 'disabled') return false;
+
+        const anchor = document.querySelector('[data-transparent-header-anchor]');
+        if (!anchor) return false;
+
+        if (mode === 'all') return true;
+
+        const pageTemplate = document.body.dataset.pageTemplate;
+        return mode === pageTemplate;
+      },
+
       init() {
-        this._hasHero = !!document.querySelector('.hero-banner');
-        this.isTransparent = this._transparentEnabled && this._hasHero;
+        this._hasAnchor = !!document.querySelector('[data-transparent-header-anchor]');
+        this._transparentEnabled = this._shouldEnableTransparent();
+        this.isTransparent = this._transparentEnabled && this._hasAnchor;
         this.$el.classList.remove('is-initializing');
 
         const headerEl = this.$el;
@@ -342,7 +379,7 @@
             const currentY = window.scrollY;
             this.isScrolled = currentY > 20;
 
-            if (this._transparentEnabled && this._hasHero) {
+            if (this._transparentEnabled && this._hasAnchor) {
               this.isTransparent = currentY < 50;
             }
 

@@ -1,0 +1,178 @@
+
+<div class="design-approach {% if section.settings.remove_bottom_padding %}remove-padding{% endif %}" data-section-id="{{ section.id }}">
+  <div class="design-approach__inner container">
+
+    {%- comment -%} Section header (hidden if no label or heading) {%- endcomment -%}
+    {% if section.settings.label != blank or section.settings.heading != blank %}
+      <div class="design-approach__header" {% unless request.design_mode %}data-reveal-group{% endunless %}>
+        {% if section.settings.label != blank %}
+          <p class="design-approach__label text-body-primary">{{ section.settings.label | upcase }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 class="design-approach__heading text-heading-primary">{{ section.settings.heading }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {%- comment -%} Image with overlay content box {%- endcomment -%}
+    <div class="design-approach__image-wrapper {{ section.settings.media_ratio }}" {% unless request.design_mode %}data-reveal="slide-up"{% endunless %}>
+      {% if section.settings.image != blank %}
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 1800 }} 1800w"
+          sizes="(max-width: 768px) 100vw, 90vw"
+          alt="{{ section.settings.image_alt | default: 'Design approach' }}"
+          loading="lazy"
+          class="design-approach__image"
+          width="auto"
+          height="auto"
+        >
+      {% else %}
+        <div class="design-approach__image-placeholder {{ section.settings.media_ratio }}">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'design-approach__placeholder' }}
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .design-approach {
+    padding: var(--section-py) 0;
+    background-color: var(--color-white);
+  }
+
+  .design-approach.remove-padding {
+    padding-bottom: 0;
+  }
+
+  /* Header */
+  .design-approach__header {
+    margin-bottom: var(--gap-lg);
+  }
+
+  .design-approach__label {
+    color: var(--color-near-black);
+  }
+
+  .design-approach__heading {
+    color: var(--color-black);
+  }
+
+  /* Image wrapper (position relative for content-box overlay) */
+  .design-approach__image-wrapper {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .design-approach__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .design-approach__image-placeholder {
+    background-color: #D9D9D9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .design-approach__placeholder {
+    width: 80%;
+    height: 80%;
+    color: #ccc;
+    display: block;
+  }
+
+  /* ── Mobile (stack layout) ── */
+  @media (max-width: 768px) {
+    .design-approach {
+      padding: var(--section-padding-sm) 0;
+    }
+
+    .design-approach__header {
+      margin-bottom: var(--gap);
+    }
+
+    .design-approach__image-wrapper, .design-approach__image-placeholder {
+      aspect-ratio: 4 / 4.25; /* Switch to portrait ratio on mobile */
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Design Approach",
+  "tag": "section",
+  "class": "design-approach-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label (optional)",
+      "default": "Design approach"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "select",
+      "id": "media_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "aspect-slightly-tall",
+          "label": "Portrait (4:4.25)"
+        },
+        {
+          "value": "aspect-ultrawide",
+          "label": "Landscape (16:7.67)"
+        }
+      ],
+      "default": "aspect-ultrawide"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Design Approach",
+      "settings": {
+        "label": "Design approach",
+        "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions"
+      },
+    }
+  ]
+}
+{% endschema %}

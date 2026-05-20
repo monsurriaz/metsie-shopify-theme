@@ -1,18 +1,17 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-404",
-      "settings": {
-        "heading": "[PAGE NOT FOUND]",
-        "subheading": "[THE PAGE YOU'RE LOOKING FOR DOESN'T EXIST OR HAS BEEN MOVED]",
-        "button_text": "RETURN HOME",
-        "button_link": "/",
-        "secondary_button_text": "SHOP NOW",
-        "secondary_button_link": "/collections/all",
-        "bg_color": "#F5F0E8",
-        "show_search": true,
-        "search_placeholder": "SEARCH METSIE..."
-      }
+      "settings": {}
     }
   },
   "order": [

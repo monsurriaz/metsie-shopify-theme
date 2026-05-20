@@ -410,6 +410,11 @@ details > summary::-webkit-details-marker {
   padding-inline: var(--container-px);
 }
 
+/* Heading width utilities */
+.section-heading__fixed--width {
+  max-width: 1056px;
+}
+
 /* Grid system */
 .grid {
   display: grid;
@@ -453,11 +458,17 @@ details > summary::-webkit-details-marker {
   padding-block: var(--section-py);
 }
 
-/* Aspect ratio wrappers */
-.aspect-square   { aspect-ratio: 1 / 1; }
-.aspect-portrait { aspect-ratio: 3 / 4; }
+/* Aspect ratio wrappers — standard & custom */
+.aspect-square    { aspect-ratio: 1 / 1; }
+.aspect-portrait  { aspect-ratio: 3 / 4; }
 .aspect-landscape { aspect-ratio: 4 / 3; }
-.aspect-wide     { aspect-ratio: 16 / 9; }
+.aspect-wide      { aspect-ratio: 16 / 9; }
+
+/* Custom aspect ratios (from design system) */
+.aspect-tall      { aspect-ratio: 4 / 5; }           /* Editorial grid, product images */
+.aspect-taller    { aspect-ratio: 4 / 5.14; }        /* Hero sections, featured blocks */
+.aspect-ultrawide { aspect-ratio: 16 / 7.67; }       /* Banner sections, full-width content */
+.aspect-slightly-tall { aspect-ratio: 4 / 4.25; }    /* Card-like content blocks */
 
 .media-fit {
   width: 100%;

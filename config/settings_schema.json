@@ -281,14 +281,17 @@
       },
       {
         "type": "select",
-        "id": "header_style",
-        "label": "Header Style",
+        "id": "header_transparent_on",
+        "label": "Show transparent header on",
+        "info": "Transparent header works only when a section with `data-transparent-header-anchor` (hero banner by default) is present as the first section.",
         "options": [
-          { "value": "transparent", "label": "Transparent (overlays hero)" },
-          { "value": "filled", "label": "Filled / Solid" },
-          { "value": "sticky", "label": "Sticky (scroll with page)" }
+          { "value": "disabled", "label": "Never (always filled)" },
+          { "value": "index", "label": "Home page only" },
+          { "value": "collection", "label": "Collection pages only" },
+          { "value": "product", "label": "Product pages only" },
+          { "value": "all", "label": "All pages with hero banner" }
         ],
-        "default": "transparent"
+        "default": "index"
       },
       {
         "type": "checkbox",

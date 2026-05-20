@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "page_width": 1520,
     "logo": "shopify://shop_images/Logo-white.svg",
     "logo_dark": "shopify://shop_images/Logo-Black.svg",
     "colors": {
@@ -52,7 +53,7 @@
     },
     "header": {
       "logo_width": 120,
-      "header_style": "transparent",
+      "header_transparent_on": "index",
       "header_sticky": true,
       "show_cart_icon": true,
       "show_search_icon": true

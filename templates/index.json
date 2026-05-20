@@ -13,7 +13,7 @@
       "type": "hero-banner",
       "settings": {
         "heading": "Metsie creates mats designed to stay in the space",
-        "bg_color": "#2E4356",
+        "bg_color": "#2e4356",
         "overlay_opacity": 0,
         "monogram_size": 80,
         "monogram_top": 20,
@@ -145,7 +145,8 @@
       ],
       "settings": {
         "label": "MAKING EXPERIENCE",
-        "section_width": "natural"
+        "section_width": "compact",
+        "style": "navy"
       }
     },
     "editorial-grid": {
@@ -184,7 +185,8 @@
       ],
       "settings": {
         "label": "EDITORIAL",
-        "heading": "Moments where mats become part of the interior"
+        "heading": "Moments where mats become part of the interior",
+        "heading_width": "fixed"
       }
     }
   },

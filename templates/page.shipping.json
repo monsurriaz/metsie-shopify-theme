@@ -1,15 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "shipping-info": {
       "type": "shipping-info",
-      "settings": {
-        "heading": "[SHIPPING & DELIVERY]",
-        "subheading": "[EVERYTHING YOU NEED TO KNOW ABOUT RECEIVING YOUR METSIE ORDER]",
-        "show_shipping_table": true,
-        "show_returns_info": true,
-        "returns_heading": "[RETURNS & EXCHANGES]",
-        "returns_intro": "[WE WANT YOU TO LOVE YOUR METSIE MAT. IF FOR ANY REASON YOU'RE NOT SATISFIED, WE MAKE RETURNS EASY.]"
-      },
       "blocks": {
         "zone-europe": {
           "type": "shipping_zone",
@@ -55,7 +56,14 @@
           }
         }
       },
-      "blocks_order": ["zone-europe", "zone-uk", "zone-international", "return-policy"]
+      "settings": {
+        "heading": "[SHIPPING & DELIVERY]",
+        "subheading": "[EVERYTHING YOU NEED TO KNOW ABOUT RECEIVING YOUR METSIE ORDER]",
+        "show_shipping_table": true,
+        "show_returns_info": true,
+        "returns_heading": "[RETURNS & EXCHANGES]",
+        "returns_intro": "[WE WANT YOU TO LOVE YOUR METSIE MAT. IF FOR ANY REASON YOU'RE NOT SATISFIED, WE MAKE RETURNS EASY.]"
+      }
     }
   },
   "order": [
