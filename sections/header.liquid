@@ -1,3 +1,17 @@
+{%- comment -%}
+  Transparent Header Logic:
+  - Works only if a section has data-transparent-header-anchor attribute
+  - Hero banner gets this attribute by default
+  - Other sections can opt-in by adding the attribute
+  - Setting header_transparent_on controls which pages show transparency:
+    • "disabled": Never transparent
+    • "all": All pages with anchor
+    • "home": Home page with anchor (index template)
+    • "collection": Collection pages with anchor
+    • "product": Product pages with anchor
+  - Page template is set via body[data-page-template]
+{%- endcomment -%}
+
 <header
   class="site-header is-initializing"
   data-section-id="{{ section.id }}"
@@ -18,30 +32,32 @@
     </button>
 
     {%- comment -%} LOGO — left on desktop, centered on mobile {%- endcomment -%}
-    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — Home">
-      {%- if settings.logo != blank -%}
-        <img
-          src="{{ settings.logo | image_url: width: settings.logo_width }}"
-          alt="{{ shop.name }}"
-          width="{{ settings.logo_width }}"
-          height="auto"
-          loading="eager"
-          class="site-header__logo-img site-header__logo-img--light"
-        >
-        {%- if settings.logo_dark != blank -%}
+    <div class="site-header__logo-wrapper">
+      <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — Home">
+        {%- if settings.logo != blank -%}
           <img
-            src="{{ settings.logo_dark | image_url: width: settings.logo_width }}"
+            src="{{ settings.logo | image_url: width: settings.logo_width }}"
             alt="{{ shop.name }}"
             width="{{ settings.logo_width }}"
             height="auto"
             loading="eager"
-            class="site-header__logo-img site-header__logo-img--dark"
+            class="site-header__logo-img site-header__logo-img--light"
           >
+          {%- if settings.logo_dark != blank -%}
+            <img
+              src="{{ settings.logo_dark | image_url: width: settings.logo_width }}"
+              alt="{{ shop.name }}"
+              width="{{ settings.logo_width }}"
+              height="auto"
+              loading="eager"
+              class="site-header__logo-img site-header__logo-img--dark"
+            >
+          {%- endif -%}
+        {%- else -%}
+          <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
         {%- endif -%}
-      {%- else -%}
-        <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
-      {%- endif -%}
-    </a>
+      </a>
+    </div>
 
     {%- comment -%} NAV — centered on desktop, hidden on mobile {%- endcomment -%}
     <nav class="site-header__nav" aria-label="Main navigation">
@@ -134,9 +150,15 @@
     height: 65px;
   }
 
-  /* Logo */
-  .site-header__logo {
+  /* Logo wrapper — grid positioning */
+  .site-header__logo-wrapper {
     grid-area: logo;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Logo link */
+  .site-header__logo {
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -299,7 +321,7 @@
       height: 45px;
     }
 
-    .site-header__logo { justify-self: center; }
+    .site-header__logo-wrapper { justify-self: center; }
     .site-header__nav { display: none; }
     .site-header__hamburger { display: flex; }
     .site-header__currency { display: none; }
@@ -315,20 +337,6 @@
 </style>
 
 <script>
-  {%- comment -%}
-    Transparent Header Logic:
-    - Works only if a section has data-transparent-header-anchor attribute
-    - Hero banner gets this attribute by default
-    - Other sections can opt-in by adding the attribute
-    - Setting header_transparent_on controls which pages show transparency:
-      • "disabled": Never transparent
-      • "all": All pages with anchor
-      • "home": Home page with anchor (index template)
-      • "collection": Collection pages with anchor
-      • "product": Product pages with anchor
-    - Page template is set via body[data-page-template]
-  {%- endcomment -%}
-
   function siteHeader() {
     return {
       isSticky: {{ settings.header_sticky | json }},
