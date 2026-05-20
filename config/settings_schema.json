@@ -286,12 +286,12 @@
         "info": "Transparent header works only when a section with `data-transparent-header-anchor` (hero banner by default) is present as the first section.",
         "options": [
           { "value": "disabled", "label": "Never (always filled)" },
-          { "value": "home", "label": "Home page only" },
+          { "value": "index", "label": "Home page only" },
           { "value": "collection", "label": "Collection pages only" },
           { "value": "product", "label": "Product pages only" },
           { "value": "all", "label": "All pages with hero banner" }
         ],
-        "default": "home"
+        "default": "index"
       },
       {
         "type": "checkbox",

@@ -52,7 +52,7 @@
     },
     "header": {
       "logo_width": 120,
-      "header_transparent_on": "home",
+      "header_transparent_on": "index",
       "header_sticky": true,
       "show_cart_icon": true,
       "show_search_icon": true
