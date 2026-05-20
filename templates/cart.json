@@ -1,20 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "cart-main": {
       "type": "cart-main",
       "settings": {
-        "show_shipping_calc": true,
-        "shipping_country": "SI",
         "show_order_note": true,
         "show_trust_badges": true,
+        "show_shipping_calc": true,
+        "free_shipping_threshold": 150,
         "checkout_button_text": "PROCEED TO CHECKOUT",
         "continue_shopping_text": "CONTINUE SHOPPING",
         "continue_shopping_link": "/collections/all",
         "empty_heading": "YOUR CART IS EMPTY",
         "empty_button_text": "START SHOPPING",
         "empty_button_link": "/collections/all",
-        "tax_note": "[TAXES AND SHIPPING CALCULATED AT CHECKOUT]",
-        "free_shipping_threshold": 150
+        "tax_note": "[TAXES AND SHIPPING CALCULATED AT CHECKOUT]"
       }
     }
   },

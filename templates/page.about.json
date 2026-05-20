@@ -1,13 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
+    "page_banner_bVRAAW": {
+      "type": "page-banner",
+      "blocks": {
+        "label_dxRxHL": {
+          "type": "label",
+          "settings": {
+            "text": "ABOUT US"
+          }
+        },
+        "title_4dB96V": {
+          "type": "title",
+          "settings": {
+            "text": "Our Story"
+          }
+        },
+        "description_YG7JUV": {
+          "type": "description",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Discover who we are and what drives us</p>"
+          }
+        }
+      },
+      "block_order": [
+        "label_dxRxHL",
+        "title_4dB96V",
+        "description_YG7JUV"
+      ],
+      "name": "Page Banner",
+      "settings": {
+        "bg_color": "#2e4356",
+        "overlay_opacity": 20,
+        "banner_height": "large",
+        "text_color": "#ffffff"
+      }
+    },
     "about-page": {
       "type": "about-page",
       "settings": {
         "hero_heading": "[OUR STORY]",
         "hero_subheading": "[CRAFTED WITH INTENTION. DESIGNED FOR LIVING.]",
-        "hero_image": "",
-        "hero_bg_color": "#2D4A6A",
-        "mission_heading": "[OUR MISSION]",
+        "hero_bg_color": "#2d4a6a",
         "mission_text": "[DESCRIBE YOUR BRAND MISSION — COMMITMENT TO QUALITY, SUSTAINABILITY, AND THOUGHTFUL DESIGN]",
         "values_heading": "[WHAT WE BELIEVE]",
         "show_team": true,
@@ -15,34 +58,11 @@
         "cta_heading": "[READY TO FIND YOUR PERFECT MAT?]",
         "cta_button_text": "SHOP NOW",
         "cta_button_link": "/collections/all"
-      },
-      "blocks": {
-        "value-1": {
-          "type": "value",
-          "settings": {
-            "heading": "[QUALITY]",
-            "text": "[DESCRIBE YOUR COMMITMENT TO QUALITY MATERIALS AND CRAFTSMANSHIP]"
-          }
-        },
-        "value-2": {
-          "type": "value",
-          "settings": {
-            "heading": "[SUSTAINABILITY]",
-            "text": "[DESCRIBE YOUR SUSTAINABLE PRACTICES AND ECO-FRIENDLY MATERIALS]"
-          }
-        },
-        "value-3": {
-          "type": "value",
-          "settings": {
-            "heading": "[DESIGN]",
-            "text": "[DESCRIBE YOUR DESIGN PHILOSOPHY AND AESTHETIC VISION]"
-          }
-        }
-      },
-      "blocks_order": ["value-1", "value-2", "value-3"]
+      }
     }
   },
   "order": [
+    "page_banner_bVRAAW",
     "about-page"
   ]
 }

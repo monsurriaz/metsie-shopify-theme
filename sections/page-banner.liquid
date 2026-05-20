@@ -1,4 +1,4 @@
-<section
+<div
   class="page-banner"
   data-section-id="{{ section.id }}"
   data-transparent-header-anchor
@@ -60,7 +60,7 @@
     {% endfor %}
   </div>
 
-</section>
+</div>
 
 <style>
   .page-banner {
@@ -109,7 +109,7 @@
 
   /* Content container */
   .page-banner__content {
-    position: relative;
+    /* position: relative; */
     z-index: 2;
     max-width: 720px;
     display: flex;
@@ -124,10 +124,6 @@
   /* Label block */
   .page-banner__label {
     margin: 0 0 20px;
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     {% if section.settings.banner_height == 'large' %}
       position: absolute;
       top: 100px;
@@ -201,9 +197,6 @@
     .page-banner__title {
       font-size: clamp(24px, 3vw, 36px);
     }
-    .page-banner__label {
-      font-size: var(--text-xs);
-    }
   }
 </style>
 
@@ -269,7 +262,7 @@
       "step": 5,
       "unit": "%",
       "label": "Overlay opacity (darkens image/video for text legibility)",
-      "default": 20
+      "default": 0
     },
     {
       "type": "header",
@@ -284,7 +277,7 @@
         { "value": "medium", "label": "Medium" },
         { "value": "large", "label": "Large" }
       ],
-      "default": "medium"
+      "default": "large"
     },
     {
       "type": "color",
@@ -317,18 +310,6 @@
           "default": "Page Title"
         }
       ]
-    },
-    {
-      "type": "description",
-      "name": "Description",
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "text",
-          "label": "Description text",
-          "default": "<p>Add your description here</p>"
-        }
-      ]
     }
   ],
   "presets": [
@@ -342,10 +323,6 @@
         {
           "type": "title",
           "settings": { "text": "Our Story" }
-        },
-        {
-          "type": "description",
-          "settings": { "text": "<p>Discover who we are and what drives us</p>" }
         }
       ]
     }

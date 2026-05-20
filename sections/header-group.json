@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "Header group",
@@ -7,27 +16,22 @@
       "settings": {
         "show_bar": false,
         "text": "FREE SHIPPING ON ORDERS OVER €150",
+        "show_close": true,
         "bg_color": "#2D4A6A",
-        "text_color": "#F5F0E8",
-        "show_close": true
+        "text_color": "#F5F0E8"
       }
     },
     "header": {
       "type": "header",
       "settings": {
-        "menu": "main-menu",
-        "logo_text": "METSIE",
-        "sticky": true,
-        "transparent_on_hero": true,
-        "show_currency_selector": true
+        "menu": "main-menu"
       }
     },
     "mobile-menu": {
       "type": "mobile-menu",
       "settings": {
         "logo_text": "METSIE",
-        "menu": "main-menu",
-        "show_social": true
+        "menu": "main-menu"
       }
     }
   },
