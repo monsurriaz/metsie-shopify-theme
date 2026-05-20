@@ -65,34 +65,21 @@
 <style>
   .page-banner {
     position: relative;
-    width: 100%;
     background-color: var(--color-deep-navy);
     color: {{ section.settings.text_color }};
-    text-align: center;
-    overflow: hidden;
-
-    /* Height variants */
     {% if section.settings.banner_height == 'small' %}
       padding: 64px 40px;
     {% elsif section.settings.banner_height == 'medium' %}
       padding: 100px 40px;
-      min-height: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    {% elsif section.settings.banner_height == 'large' %}
+    {% else %}
       min-height: calc(100vh - var(--header-height));
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0 40px;
-    {% else %} /* fullscreen */
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 40px;
     {% endif %}
+    text-align: center;
+    overflow: hidden;
   }
 
   /* Background media */
@@ -185,9 +172,7 @@
   /* Responsive */
   @media (max-width: 768px) {
     .page-banner {
-      {% if section.settings.banner_height == 'small' %}
-        padding: 56px 24px;
-      {% elsif section.settings.banner_height == 'medium' %}
+      {% if section.settings.banner_height != 'large' %}
         padding: 72px 24px;
       {% else %}
         padding: 0 24px;
@@ -207,9 +192,7 @@
 
   @media (max-width: 480px) {
     .page-banner {
-      {% if section.settings.banner_height == 'small' %}
-        padding: 48px 16px;
-      {% elsif section.settings.banner_height == 'medium' %}
+      {% if section.settings.banner_height != 'large' %}
         padding: 56px 16px;
       {% else %}
         padding: 0 16px;
@@ -276,7 +259,7 @@
       "type": "color",
       "id": "bg_color",
       "label": "Fallback background color",
-      "default": "#2D4A6A"
+      "default": "#2E4356"
     },
     {
       "type": "range",
@@ -297,10 +280,9 @@
       "id": "banner_height",
       "label": "Banner height",
       "options": [
-        { "value": "small", "label": "Small (compact)" },
-        { "value": "medium", "label": "Medium (standard)" },
-        { "value": "large", "label": "Large (fullscreen - header height)" },
-        { "value": "fullscreen", "label": "Fullscreen (100vh)" }
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
       ],
       "default": "medium"
     },
