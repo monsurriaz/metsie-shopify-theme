@@ -315,19 +315,48 @@
 </style>
 
 <script>
+  {%- comment -%}
+    Transparent Header Logic:
+    - Works only if a section has data-transparent-header-anchor attribute
+    - Hero banner gets this attribute by default
+    - Other sections can opt-in by adding the attribute
+    - Setting header_transparent_on controls which pages show transparency:
+      • "disabled": Never transparent
+      • "all": All pages with anchor
+      • "home": Home page with anchor (index template)
+      • "collection": Collection pages with anchor
+      • "product": Product pages with anchor
+    - Page template is set via body[data-page-template]
+  {%- endcomment -%}
+
   function siteHeader() {
     return {
       isSticky: {{ settings.header_sticky | json }},
-      _transparentEnabled: {% if settings.header_style == 'transparent' %}true{% else %}false{% endif %},
       hideOnScroll: {{ section.settings.hide_on_scroll | json }},
       isTransparent: false,
       isScrolled: false,
       isHidden: false,
       lastScrollY: 0,
-      _hasHero: false,
+      _hasAnchor: false,
+      _transparentEnabled: false,
+
+      _shouldEnableTransparent() {
+        const mode = {{ settings.header_transparent_on | json }};
+        if (mode === 'disabled') return false;
+
+        const anchor = document.querySelector('[data-transparent-header-anchor]');
+        if (!anchor) return false;
+
+        if (mode === 'all') return true;
+
+        const pageTemplate = document.body.dataset.pageTemplate;
+        return mode === pageTemplate;
+      },
+
       init() {
-        this._hasHero = !!document.querySelector('.hero-banner');
-        this.isTransparent = this._transparentEnabled && this._hasHero;
+        this._hasAnchor = !!document.querySelector('[data-transparent-header-anchor]');
+        this._transparentEnabled = this._shouldEnableTransparent();
+        this.isTransparent = this._transparentEnabled && this._hasAnchor;
         this.$el.classList.remove('is-initializing');
 
         const headerEl = this.$el;
@@ -342,7 +371,7 @@
             const currentY = window.scrollY;
             this.isScrolled = currentY > 20;
 
-            if (this._transparentEnabled && this._hasHero) {
+            if (this._transparentEnabled && this._hasAnchor) {
               this.isTransparent = currentY < 50;
             }
 

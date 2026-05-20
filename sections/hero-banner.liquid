@@ -1,6 +1,7 @@
 <section
   class="hero-banner"
   data-section-id="{{ section.id }}"
+  data-transparent-header-anchor
   style="background-color: {{ section.settings.bg_color }};"
 >
 
@@ -198,16 +199,31 @@
 </style>
 
 <script>
-  {% if settings.header_style == 'transparent' %}
   (function () {
-    function init() { document.body.classList.add('hero-page'); }
+    function shouldShowTransparent() {
+      const mode = {{ settings.header_transparent_on | json }};
+      if (mode === 'disabled') return false;
+
+      const pageTemplate = document.body.dataset.pageTemplate;
+
+      if (mode === 'all') return true;
+      if (mode === pageTemplate) return true;
+
+      return false;
+    }
+
+    function init() {
+      if (shouldShowTransparent()) {
+        document.body.classList.add('hero-page');
+      }
+    }
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
       init();
     }
   })();
-  {% endif %}
 </script>
 
 {% schema %}
