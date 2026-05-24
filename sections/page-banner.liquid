@@ -155,6 +155,7 @@
   .page-banner__monogram {
     position: absolute;
     top: {{ section.settings.monogram_top }}px;
+    top: 100px; /* fallback if no setting value */
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
@@ -168,12 +169,6 @@
 
   /* Title block */
   .page-banner__title {
-    font-family: var(--font-heading);
-    font-size: clamp(36px, 5vw, 72px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin: 0;
     color: inherit;
   }
 
@@ -215,9 +210,6 @@
         margin-bottom: 20px;
       {% endif %}
     }
-    .page-banner__title {
-      font-size: clamp(28px, 4vw, 48px);
-    }
   }
 
   @media (max-width: 480px) {
@@ -227,9 +219,6 @@
       {% else %}
         padding: 0 16px;
       {% endif %}
-    }
-    .page-banner__title {
-      font-size: clamp(24px, 3vw, 36px);
     }
   }
 </style>

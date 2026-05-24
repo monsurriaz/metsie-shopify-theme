@@ -61,7 +61,7 @@
 
   {%- comment -%} Heading content {%- endcomment -%}
   <div class="hero-banner__content">
-    <h1 class="hero-banner__heading">
+    <h1 class="hero-banner__heading display-heading">
       {{ section.settings.heading | default: 'Metsie creates mats designed to stay in the space' }}
     </h1>
   </div>
@@ -125,6 +125,8 @@
     z-index: 2;
   }
 
+
+
   .hero-monogram-img {
     width: {{ section.settings.monogram_size }}px;
     height: auto;
@@ -146,11 +148,6 @@
   }
 
   .hero-banner__heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(40px, 6vw, 80px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
     margin: 0;
     color: inherit;
   }
