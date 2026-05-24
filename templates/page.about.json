@@ -45,13 +45,13 @@
         "label_dxRxHL": {
           "type": "label",
           "settings": {
-            "text": "ABOUT US"
+            "text": "About Metsie"
           }
         },
         "title_4dB96V": {
           "type": "title",
           "settings": {
-            "text": "Our Story"
+            "text": "The thinking behind Metsie"
           }
         }
       },
@@ -64,6 +64,8 @@
         "bg_color": "#2e4356",
         "overlay_opacity": 0,
         "banner_height": "large",
+        "monogram_size": 80,
+        "monogram_top": 100,
         "text_color": "#ffffff"
       }
     },
@@ -116,6 +118,7 @@
       "settings": {
         "label": "Design approach",
         "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions",
+        "heading_width": "fixed",
         "image_alt": "",
         "media_ratio": "aspect-ultrawide",
         "remove_bottom_padding": true
@@ -170,19 +173,19 @@
         "label_TtRJbq": {
           "type": "label",
           "settings": {
-            "text": "A piece of your space"
+            "text": "Sustainability"
           }
         },
         "heading_Fnzrqb": {
           "type": "heading",
           "settings": {
-            "text": "Crafted by balance. Created for living, spaces, and permanence."
+            "text": "A commitment to permanence over excess, durability over trend."
           }
         },
         "button_3iJtKQ": {
           "type": "button",
           "settings": {
-            "text": "Explore",
+            "text": "Shop Metsie",
             "link": "/collections/all"
           }
         }
@@ -236,7 +239,7 @@
       ],
       "name": "Editorial Grid",
       "settings": {
-        "label": "EDITORIAL",
+        "label": "Instagram",
         "heading": "Moments where mats become part of the interior",
         "heading_width": "fixed"
       }
