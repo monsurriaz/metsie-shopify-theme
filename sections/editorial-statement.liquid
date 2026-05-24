@@ -31,17 +31,17 @@
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'label' %}
-            <p class="editorial-statement__label text-body-primary">{{ block.settings.text }}</p>
+            <p class="editorial-statement__label text-body-primary" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
 
           {% when 'heading' %}
-            <h2 class="editorial-statement__heading text-heading-primary">
+            <h2 class="editorial-statement__heading text-heading-primary" {{ block.shopify_attributes }}>
               {{ block.settings.text }}
             </h2>
 
           {% when 'button' %}
             <a
               href="{{ block.settings.link }}"
-              class="editorial-statement__cta btn {% if section.settings.content_bg_style == "navy" %}btn--white-outline{% else %}btn--white{% endif %} btn--lg"
+              class="editorial-statement__cta btn {% if section.settings.content_bg_style == "navy" %}btn--white-outline{% else %}btn--white{% endif %} btn--lg" {{ block.shopify_attributes }}
             >
               {{ block.settings.text }}
             </a>
@@ -284,7 +284,7 @@
           "type": "text",
           "id": "text",
           "label": "Button text",
-          "default": "Explore"
+          "default": "Shop Metsie"
         },
         {
           "type": "url",

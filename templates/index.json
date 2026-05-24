@@ -71,7 +71,12 @@
       "type": "design-philosophy",
       "settings": {
         "label": "DESIGN PHILOSOPHY",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive"
+        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "align_center": false,
+        "content_bg_style": "white",
+        "width_compact": false,
+        "enable_margin_top": false,
+        "enable_margin_bottom": false
       }
     },
     "editorial-statement": {
@@ -92,7 +97,7 @@
         "button_V4RBiC": {
           "type": "button",
           "settings": {
-            "text": "Explore",
+            "text": "Shop Metsie",
             "link": ""
           }
         }
@@ -104,7 +109,9 @@
       ],
       "settings": {
         "full_width": false,
-        "image_alt": ""
+        "image_alt": "",
+        "content_bg_style": "navy",
+        "overlay_opacity": 0
       }
     },
     "service-features": {

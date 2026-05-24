@@ -31,6 +31,9 @@
     {%  if section.settings.enable_margin_bottom %} 
       margin-bottom: var(--gap-sm);
     {% endif %}
+    {%  if section.settings.enable_super_bottom %}
+      margin-bottom: var(--section-py);
+    {% endif %}
   }
   #shopify-section-{{ section.id }} .design-philosophy--navy {
     padding: 0;
@@ -67,6 +70,9 @@
   #shopify-section-{{ section.id }} .design-philosophy__text {
     color: var(--color-black);
     max-width: 900px;
+    {%  if section.settings.disable_margin_top %} 
+      margin-top: 0px;
+    {% endif %}
   }
   #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__label,
   #shopify-section-{{ section.id }} .design-philosophy--navy .design-philosophy__text {
@@ -101,6 +107,12 @@
       "id": "text",
       "label": "Philosophy text",
       "default": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_margin_top",
+      "label": "Disable top margin",
+      "default": false
     },
     {
       "type": "header",
@@ -145,6 +157,12 @@
       "id": "enable_margin_bottom",
       "label": "Enable bottom margin",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_super_bottom",
+      "label": "Enable super bottom margin",
+      "default": false
     }
   ],
   "presets": [
@@ -155,7 +173,8 @@
         "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
         "content_bg_style": "white",
         "enable_margin_top": false,
-        "enable_margin_bottom": false
+        "enable_margin_bottom": false,
+        "enable_super_bottom": false
       }
     }
   ]

@@ -85,11 +85,13 @@
       "settings": {
         "label": "",
         "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "disable_margin_top": true,
         "align_center": true,
         "content_bg_style": "navy",
         "width_compact": true,
         "enable_margin_top": false,
-        "enable_margin_bottom": false
+        "enable_margin_bottom": false,
+        "enable_super_bottom": false
       }
     },
     "inspire_grid_cTMh77": {
@@ -133,11 +135,13 @@
       "settings": {
         "label": "",
         "text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals",
+        "disable_margin_top": true,
         "align_center": true,
         "content_bg_style": "navy",
         "width_compact": true,
         "enable_margin_top": false,
-        "enable_margin_bottom": true
+        "enable_margin_bottom": true,
+        "enable_super_bottom": true
       }
     }
   },
