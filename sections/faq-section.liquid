@@ -1,8 +1,8 @@
-<section class="faq-section" data-section-id="{{ section.id }}">
+<div class="faq-section" data-section-id="{{ section.id }}">
   <div class="faq-section__inner">
 
     {%- comment -%} Page header {%- endcomment -%}
-    <header class="faq-section__header">
+    <div class="faq-section__header">
       <p class="section-label">FAQ</p>
       <h1 class="faq-section__heading">
         {{ section.settings.heading | default: '[FREQUENTLY ASKED QUESTIONS]' }}
@@ -10,7 +10,7 @@
       {% if section.settings.subheading != blank %}
         <p class="faq-section__subheading">{{ section.settings.subheading }}</p>
       {% endif %}
-    </header>
+    </div>
 
     {%- comment -%} Category filter (if blocks have categories) {%- endcomment -%}
     {% assign categories = '' %}
@@ -133,7 +133,7 @@
     {% endif %}
 
   </div>
-</section>
+</div>
 
 <style>
   .faq-section {
