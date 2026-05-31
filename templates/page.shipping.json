@@ -12,57 +12,61 @@
     "shipping-info": {
       "type": "shipping-info",
       "blocks": {
-        "zone-europe": {
-          "type": "shipping_zone",
+        "returns_accordion_ChCh4i": {
+          "type": "returns_accordion",
           "settings": {
-            "zone_name": "[EUROPE]",
-            "standard_time": "[3–5 BUSINESS DAYS]",
-            "standard_cost": "[€X.XX]",
-            "express_time": "[1–2 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €150]"
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
           }
         },
-        "zone-uk": {
-          "type": "shipping_zone",
+        "returns_accordion_etmaHe": {
+          "type": "returns_accordion",
           "settings": {
-            "zone_name": "[UNITED KINGDOM]",
-            "standard_time": "[5–7 BUSINESS DAYS]",
-            "standard_cost": "[€X.XX]",
-            "express_time": "[2–3 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €200]"
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
           }
         },
-        "zone-international": {
-          "type": "shipping_zone",
+        "returns_accordion_3U8tPw": {
+          "type": "returns_accordion",
           "settings": {
-            "zone_name": "[REST OF WORLD]",
-            "standard_time": "[7–14 BUSINESS DAYS]",
-            "standard_cost": "[€XX.XX]",
-            "express_time": "[3–5 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €250]"
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
           }
         },
-        "return-policy": {
-          "type": "returns_block",
+        "shipping_accordion_XF7jQ8": {
+          "type": "shipping_accordion",
           "settings": {
-            "return_window": "[30 DAYS]",
-            "return_condition": "[UNUSED, IN ORIGINAL PACKAGING]",
-            "return_process": "[DESCRIBE HOW TO INITIATE A RETURN — EMAIL US AT RETURNS@METSIE.COM WITH YOUR ORDER NUMBER]",
-            "refund_time": "[5–7 BUSINESS DAYS AFTER WE RECEIVE YOUR RETURN]",
-            "exchange_info": "[EXCHANGES ARE AVAILABLE FOR DIFFERENT SIZES OR COLORS, SUBJECT TO AVAILABILITY]"
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
+          }
+        },
+        "shipping_accordion_H6Mjq8": {
+          "type": "shipping_accordion",
+          "settings": {
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
+          }
+        },
+        "shipping_accordion_ncC6EL": {
+          "type": "shipping_accordion",
+          "settings": {
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
           }
         }
       },
+      "block_order": [
+        "returns_accordion_ChCh4i",
+        "returns_accordion_etmaHe",
+        "returns_accordion_3U8tPw",
+        "shipping_accordion_XF7jQ8",
+        "shipping_accordion_H6Mjq8",
+        "shipping_accordion_ncC6EL"
+      ],
       "settings": {
-        "heading": "[SHIPPING & DELIVERY]",
-        "subheading": "[EVERYTHING YOU NEED TO KNOW ABOUT RECEIVING YOUR METSIE ORDER]",
-        "show_shipping_table": true,
-        "show_returns_info": true,
-        "returns_heading": "[RETURNS & EXCHANGES]",
-        "returns_intro": "[WE WANT YOU TO LOVE YOUR METSIE MAT. IF FOR ANY REASON YOU'RE NOT SATISFIED, WE MAKE RETURNS EASY.]"
+        "heading": "Shipping and delivery",
+        "intro_text": "<p>Please use the below guidelines to get an understanding of our shipping and delivery terms.</p><p>We currently ship to the following countries:</p><ul><li>- Denmark (1-2 business days)</li><li>- EU, UK, Norway and Switzerland (2-3 business days)</li><li>- US and Canada (3-5 business days)</li><li>- Japan and South Korea (3-5 business days)</li><li>- Rest of world (4-6 business days)</li></ul><p>All shipment times are an estimate and cannot be guaranteed.</p><p>Please contact us with any enquiries at:</p>",
+        "returns_heading": "Returns and exchanges"
       }
     }
   },

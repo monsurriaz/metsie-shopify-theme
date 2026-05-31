@@ -12,59 +12,37 @@
     "faq-section": {
       "type": "faq-section",
       "blocks": {
-        "faq-1": {
+        "faq_HBEqHB": {
           "type": "faq",
           "settings": {
-            "category": "ORDERING",
-            "question": "[HOW DO I PLACE AN ORDER?]",
-            "answer": "<p>[DESCRIBE THE ORDERING PROCESS — BROWSE, SELECT SIZE AND COLOR, ADD TO CART, AND CHECKOUT.]</p>"
+            "question": "FAQ QUESTION GOES HERE?",
+            "answer": "<p>FAQ ANSWER GOES HERE</p>"
           }
         },
-        "faq-2": {
+        "faq_An8x9g": {
           "type": "faq",
           "settings": {
-            "category": "SHIPPING",
-            "question": "[HOW LONG DOES SHIPPING TAKE?]",
-            "answer": "<p>[PROVIDE SHIPPING TIMEFRAMES FOR DIFFERENT REGIONS — E.G. EUROPE 3–5 BUSINESS DAYS, INTERNATIONAL 7–14 DAYS.]</p>"
+            "question": "FAQ QUESTION GOES HERE?",
+            "answer": "<p>FAQ ANSWER GOES HERE</p>"
           }
         },
-        "faq-3": {
+        "faq_7ERQqK": {
           "type": "faq",
           "settings": {
-            "category": "SHIPPING",
-            "question": "[DO YOU OFFER FREE SHIPPING?]",
-            "answer": "<p>[DESCRIBE FREE SHIPPING THRESHOLD — E.G. FREE SHIPPING ON ALL ORDERS OVER €150 WITHIN EUROPE.]</p>"
-          }
-        },
-        "faq-4": {
-          "type": "faq",
-          "settings": {
-            "category": "RETURNS",
-            "question": "[WHAT IS YOUR RETURN POLICY?]",
-            "answer": "<p>[DESCRIBE RETURN POLICY — E.G. FREE RETURNS WITHIN 30 DAYS OF DELIVERY FOR UNUSED ITEMS IN ORIGINAL PACKAGING.]</p>"
-          }
-        },
-        "faq-5": {
-          "type": "faq",
-          "settings": {
-            "category": "PRODUCTS",
-            "question": "[HOW DO I CARE FOR MY METSIE MAT?]",
-            "answer": "<p>[PROVIDE CARE INSTRUCTIONS — E.G. SPOT CLEAN WITH A DAMP CLOTH AND MILD SOAP. AVOID HARSH CHEMICALS. PROFESSIONAL CLEANING RECOMMENDED FOR DEEP CLEANS.]</p>"
-          }
-        },
-        "faq-6": {
-          "type": "faq",
-          "settings": {
-            "category": "PRODUCTS",
-            "question": "[WHAT SIZES ARE AVAILABLE?]",
-            "answer": "<p>[LIST AVAILABLE SIZES — E.G. SMALL (60×90CM), MEDIUM (90×150CM), LARGE (120×180CM), EXTRA LARGE (160×230CM).]</p>"
+            "question": "FAQ QUESTION GOES HERE?",
+            "answer": "<p>FAQ ANSWER GOES HERE</p>"
           }
         }
       },
+      "block_order": [
+        "faq_HBEqHB",
+        "faq_An8x9g",
+        "faq_7ERQqK"
+      ],
+      "custom_css": [],
       "settings": {
-        "heading": "[FREQUENTLY ASKED QUESTIONS]",
-        "subheading": "[FIND ANSWERS TO THE MOST COMMON QUESTIONS ABOUT METSIE PRODUCTS AND ORDERS]",
-        "show_contact_cta": true,
+        "heading": "FAQ",
+        "show_contact_cta": false,
         "contact_cta_text": "[STILL HAVE QUESTIONS? GET IN TOUCH]",
         "contact_link": "/pages/contact"
       }
