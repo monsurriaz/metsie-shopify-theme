@@ -12,57 +12,53 @@
     "shipping-info": {
       "type": "shipping-info",
       "blocks": {
-        "zone-europe": {
-          "type": "shipping_zone",
+        "shipping-delivery": {
+          "type": "shipping_accordion",
           "settings": {
-            "zone_name": "[EUROPE]",
-            "standard_time": "[3–5 BUSINESS DAYS]",
-            "standard_cost": "[€X.XX]",
-            "express_time": "[1–2 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €150]"
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
           }
         },
-        "zone-uk": {
-          "type": "shipping_zone",
+        "shipping-rates": {
+          "type": "shipping_accordion",
           "settings": {
-            "zone_name": "[UNITED KINGDOM]",
-            "standard_time": "[5–7 BUSINESS DAYS]",
-            "standard_cost": "[€X.XX]",
-            "express_time": "[2–3 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €200]"
+            "question": "SHIPPING RATES AND DELIVERY ESTIMATES",
+            "answer": "<p>Add shipping rates and delivery estimates.</p>"
           }
         },
-        "zone-international": {
-          "type": "shipping_zone",
+        "pre-orders": {
+          "type": "shipping_accordion",
           "settings": {
-            "zone_name": "[REST OF WORLD]",
-            "standard_time": "[7–14 BUSINESS DAYS]",
-            "standard_cost": "[€XX.XX]",
-            "express_time": "[3–5 BUSINESS DAYS]",
-            "express_cost": "[€XX.XX]",
-            "free_threshold": "[FREE OVER €250]"
+            "question": "PRE-ORDERS",
+            "answer": "<p>Add pre-order shipping details.</p>"
           }
         },
-        "return-policy": {
-          "type": "returns_block",
+        "return-order": {
+          "type": "returns_accordion",
           "settings": {
-            "return_window": "[30 DAYS]",
-            "return_condition": "[UNUSED, IN ORIGINAL PACKAGING]",
-            "return_process": "[DESCRIBE HOW TO INITIATE A RETURN — EMAIL US AT RETURNS@METSIE.COM WITH YOUR ORDER NUMBER]",
-            "refund_time": "[5–7 BUSINESS DAYS AFTER WE RECEIVE YOUR RETURN]",
-            "exchange_info": "[EXCHANGES ARE AVAILABLE FOR DIFFERENT SIZES OR COLORS, SUBJECT TO AVAILABILITY]"
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add return instructions.</p>"
+          }
+        },
+        "partial-return": {
+          "type": "returns_accordion",
+          "settings": {
+            "question": "CAN I RETURN A PART OF THE ORDER?",
+            "answer": "<p>Add partial return details.</p>"
+          }
+        },
+        "exchange-order": {
+          "type": "returns_accordion",
+          "settings": {
+            "question": "HOW DO I EXCHANGE AN ORDER?",
+            "answer": "<p>Add exchange instructions.</p>"
           }
         }
       },
       "settings": {
-        "heading": "[SHIPPING & DELIVERY]",
-        "subheading": "[EVERYTHING YOU NEED TO KNOW ABOUT RECEIVING YOUR METSIE ORDER]",
-        "show_shipping_table": true,
-        "show_returns_info": true,
-        "returns_heading": "[RETURNS & EXCHANGES]",
-        "returns_intro": "[WE WANT YOU TO LOVE YOUR METSIE MAT. IF FOR ANY REASON YOU'RE NOT SATISFIED, WE MAKE RETURNS EASY.]"
+        "heading": "Shipping and delivery",
+        "intro_text": "<p>Please use the below guidelines to get an understanding of our shipping and delivery terms.</p><p>We currently ship to the following countries:</p><ul><li>- Denmark (1-2 business days)</li><li>- EU, UK, Norway and Switzerland (2-3 business days)</li><li>- US and Canada (3-5 business days)</li><li>- Japan and South Korea (3-5 business days)</li><li>- Rest of world (4-6 business days)</li></ul><p>All shipment times are an estimate and cannot be guaranteed.</p><p>Please contact us with any enquiries at:</p>",
+        "returns_heading": "Returns and exchanges"
       }
     }
   },
