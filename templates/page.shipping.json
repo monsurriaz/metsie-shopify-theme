@@ -12,49 +12,57 @@
     "shipping-info": {
       "type": "shipping-info",
       "blocks": {
-        "shipping-delivery": {
+        "returns_accordion_ChCh4i": {
+          "type": "returns_accordion",
+          "settings": {
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
+          }
+        },
+        "returns_accordion_etmaHe": {
+          "type": "returns_accordion",
+          "settings": {
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
+          }
+        },
+        "returns_accordion_3U8tPw": {
+          "type": "returns_accordion",
+          "settings": {
+            "question": "HOW TO RETURN MY ORDER?",
+            "answer": "<p>Add returns details.</p>"
+          }
+        },
+        "shipping_accordion_XF7jQ8": {
           "type": "shipping_accordion",
           "settings": {
             "question": "SHIPPING AND DELIVERY",
             "answer": "<p>Add shipping and delivery details.</p>"
           }
         },
-        "shipping-rates": {
+        "shipping_accordion_H6Mjq8": {
           "type": "shipping_accordion",
           "settings": {
-            "question": "SHIPPING RATES AND DELIVERY ESTIMATES",
-            "answer": "<p>Add shipping rates and delivery estimates.</p>"
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
           }
         },
-        "pre-orders": {
+        "shipping_accordion_ncC6EL": {
           "type": "shipping_accordion",
           "settings": {
-            "question": "PRE-ORDERS",
-            "answer": "<p>Add pre-order shipping details.</p>"
-          }
-        },
-        "return-order": {
-          "type": "returns_accordion",
-          "settings": {
-            "question": "HOW TO RETURN MY ORDER?",
-            "answer": "<p>Add return instructions.</p>"
-          }
-        },
-        "partial-return": {
-          "type": "returns_accordion",
-          "settings": {
-            "question": "CAN I RETURN A PART OF THE ORDER?",
-            "answer": "<p>Add partial return details.</p>"
-          }
-        },
-        "exchange-order": {
-          "type": "returns_accordion",
-          "settings": {
-            "question": "HOW DO I EXCHANGE AN ORDER?",
-            "answer": "<p>Add exchange instructions.</p>"
+            "question": "SHIPPING AND DELIVERY",
+            "answer": "<p>Add shipping and delivery details.</p>"
           }
         }
       },
+      "block_order": [
+        "returns_accordion_ChCh4i",
+        "returns_accordion_etmaHe",
+        "returns_accordion_3U8tPw",
+        "shipping_accordion_XF7jQ8",
+        "shipping_accordion_H6Mjq8",
+        "shipping_accordion_ncC6EL"
+      ],
       "settings": {
         "heading": "Shipping and delivery",
         "intro_text": "<p>Please use the below guidelines to get an understanding of our shipping and delivery terms.</p><p>We currently ship to the following countries:</p><ul><li>- Denmark (1-2 business days)</li><li>- EU, UK, Norway and Switzerland (2-3 business days)</li><li>- US and Canada (3-5 business days)</li><li>- Japan and South Korea (3-5 business days)</li><li>- Rest of world (4-6 business days)</li></ul><p>All shipment times are an estimate and cannot be guaranteed.</p><p>Please contact us with any enquiries at:</p>",
