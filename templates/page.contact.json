@@ -12,19 +12,14 @@
     "contact-form": {
       "type": "contact-form",
       "settings": {
-        "heading": "[GET IN TOUCH]",
-        "subheading": "[WE'D LOVE TO HEAR FROM YOU]",
-        "show_contact_info": true,
-        "intro_text": "[HAVE A QUESTION ABOUT YOUR ORDER OR WANT TO LEARN MORE ABOUT OUR PRODUCTS? REACH OUT AND WE'LL GET BACK TO YOU WITHIN 1–2 BUSINESS DAYS.]",
-        "contact_email": "[hello@metsie.com]",
-        "contact_phone": "[+XX XXX XXX XXXX]",
-        "contact_hours": "[MONDAY — FRIDAY, 9AM – 5PM CET]",
-        "name_label": "YOUR NAME",
-        "email_label": "YOUR EMAIL",
-        "subject_label": "SUBJECT",
-        "message_label": "MESSAGE",
-        "submit_text": "SEND MESSAGE",
-        "success_message": "[THANK YOU FOR YOUR MESSAGE. WE'LL BE IN TOUCH SOON.]"
+        "heading": "How can we help you?",
+        "intro_text": "<p>We are here for you - whether you have questions, need advice or support. You can use the contact form below, or email us directly at</p>",
+        "name_placeholder": "Name*",
+        "email_placeholder": "Email*",
+        "message_placeholder": "Message*",
+        "submit_text": "SUBMIT INQUIRY",
+        "success_message": "Thank you for your message.",
+        "error_message": "Please check the required fields and try again."
       }
     }
   },

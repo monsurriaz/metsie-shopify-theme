@@ -1,414 +1,269 @@
-<section class="contact-form-section" data-section-id="{{ section.id }}" x-data="contactForm()">
-  <div class="contact-form-section__inner">
+<div class="contact-section non-banner__hero-section" data-section-id="{{ section.id }}">
+  <div class="contact-section__inner container container--narrow">
+    <div class="contact-section__content">
+      <div class="contact-section__header" {% unless request.design_mode %}data-reveal-group{% endunless %}>
+        <h1 class="contact-section__heading text-heading-primary">
+          {{ section.settings.heading }}
+        </h1>
 
-    {%- comment -%} Page header {%- endcomment -%}
-    <header class="contact-form-section__header">
-      <p class="section-label">CONTACT</p>
-      <h1 class="contact-form-section__heading">
-        {{ section.settings.heading | default: '[GET IN TOUCH]' }}
-      </h1>
-      {% if section.settings.subheading != blank %}
-        <p class="contact-form-section__subheading">{{ section.settings.subheading }}</p>
-      {% endif %}
-    </header>
-
-    <div class="contact-form-section__layout">
-
-      {%- comment -%} Contact info sidebar {%- endcomment -%}
-      {% if section.settings.show_contact_info %}
-        <aside class="contact-info">
-          {% if section.settings.intro_text != blank %}
-            <div class="contact-info__intro">
-              <p>{{ section.settings.intro_text }}</p>
-            </div>
-          {% endif %}
-
-          <div class="contact-info__details">
-            {% if section.settings.contact_email != blank %}
-              <div class="contact-info__row">
-                <span class="contact-info__label">EMAIL</span>
-                <a href="mailto:{{ section.settings.contact_email }}" class="contact-info__value">
-                  {{ section.settings.contact_email }}
-                </a>
-              </div>
-            {% endif %}
-
-            {% if section.settings.contact_phone != blank %}
-              <div class="contact-info__row">
-                <span class="contact-info__label">PHONE</span>
-                <a href="tel:{{ section.settings.contact_phone | remove: ' ' | remove: '-' }}" class="contact-info__value">
-                  {{ section.settings.contact_phone }}
-                </a>
-              </div>
-            {% endif %}
-
-            {% if section.settings.contact_hours != blank %}
-              <div class="contact-info__row">
-                <span class="contact-info__label">HOURS</span>
-                <span class="contact-info__value">{{ section.settings.contact_hours }}</span>
-              </div>
-            {% endif %}
+        {% if section.settings.intro_text != blank %}
+          <div class="contact-section__intro text-body-light">
+            {{ section.settings.intro_text }}
           </div>
-        </aside>
-      {% endif %}
+        {% endif %}
+      </div>
 
-      {%- comment -%} Contact form {%- endcomment -%}
-      <div class="contact-form-wrap">
+      <div
+        class="contact-section__form-wrap"
+        x-data="{ isSubmitting: false }"
+        @submit="isSubmitting = true"
+        {% unless request.design_mode %}data-reveal-group{% endunless %}
+      >
+        {% form 'contact', class: 'contact-form' %}
+          {% if form.posted_successfully? %}
+            <div
+              class="contact-form__message contact-form__message--success"
+              role="status"
+              tabindex="-1"
+              x-data
+              x-init="$nextTick(() => $el.scrollIntoView({ block: 'center' }))"
+            >
+              {{ section.settings.success_message }}
+            </div>
+          {% else %}
+            {% if form.errors %}
+              <div class="contact-form__message contact-form__message--error text-body-light" role="alert" tabindex="-1">
+                {{ section.settings.error_message }}
+              </div>
+            {% endif %}
 
-        {%- comment -%} Success message {%- endcomment -%}
-        <div class="contact-success" x-show="submitted" x-transition>
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <circle cx="24" cy="24" r="23" stroke="#2D4A6A" stroke-opacity="0.3" stroke-width="1.5"/>
-            <path d="M14 24l7 7 14-14" stroke="#2D4A6A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h2 class="contact-success__heading">{{ section.settings.success_message | default: '[THANK YOU FOR YOUR MESSAGE]' }}</h2>
-          <p class="contact-success__text">[WE'LL GET BACK TO YOU WITHIN 1–2 BUSINESS DAYS]</p>
-        </div>
-
-        {%- comment -%} The form {%- endcomment -%}
-        <form
-          class="contact-form"
-          x-show="!submitted"
-          action="/contact#contact_form"
-          method="post"
-          id="contact-form-{{ section.id }}"
-          @submit.prevent="handleSubmit"
-          novalidate
-        >
-          {% form 'contact' %}
-            <input type="hidden" name="form_type" value="contact">
-            <input type="hidden" name="utf8" value="✓">
-
-            <div class="contact-form__row contact-form__row--2">
-              <div class="form-field">
-                <label for="contact-name-{{ section.id }}" class="form-label">
-                  {{ section.settings.name_label | default: 'YOUR NAME' | upcase }} <span class="form-required" aria-label="required">*</span>
+            <div class="contact-form__row contact-form__row--split">
+              <div class="contact-form__field">
+                <label class="sr-only" for="contact-name-{{ section.id }}">
+                  {{ section.settings.name_placeholder }}
                 </label>
                 <input
                   type="text"
                   id="contact-name-{{ section.id }}"
+                  class="contact-form__input text-body-light"
                   name="contact[name]"
-                  class="form-input"
-                  required
+                  value="{% if form.author %}{{ form.author }}{% elsif customer %}{{ customer.name }}{% endif %}"
                   autocomplete="name"
-                  :class="{ 'has-error': errors.name }"
-                  x-model="formData.name"
+                  required
+                  placeholder="{{ section.settings.name_placeholder }}"
                 >
-                <span class="form-error" x-show="errors.name" x-text="errors.name"></span>
               </div>
 
-              <div class="form-field">
-                <label for="contact-email-{{ section.id }}" class="form-label">
-                  {{ section.settings.email_label | default: 'YOUR EMAIL' | upcase }} <span class="form-required" aria-label="required">*</span>
+              <div class="contact-form__field">
+                <label class="sr-only" for="contact-email-{{ section.id }}">
+                  {{ section.settings.email_placeholder }}
                 </label>
                 <input
                   type="email"
                   id="contact-email-{{ section.id }}"
+                  class="contact-form__input text-body-light{% if form.errors contains 'email' %} has-error{% endif %}"
                   name="contact[email]"
-                  class="form-input"
-                  required
+                  value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
                   autocomplete="email"
-                  :class="{ 'has-error': errors.email }"
-                  x-model="formData.email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  required
+                  placeholder="{{ section.settings.email_placeholder }}"
                 >
-                <span class="form-error" x-show="errors.email" x-text="errors.email"></span>
               </div>
             </div>
 
-            <div class="form-field">
-              <label for="contact-subject-{{ section.id }}" class="form-label">
-                {{ section.settings.subject_label | default: 'SUBJECT' | upcase }}
-              </label>
-              <input
-                type="text"
-                id="contact-subject-{{ section.id }}"
-                name="contact[subject]"
-                class="form-input"
-                x-model="formData.subject"
-              >
-            </div>
-
-            <div class="form-field">
-              <label for="contact-message-{{ section.id }}" class="form-label">
-                {{ section.settings.message_label | default: 'MESSAGE' | upcase }} <span class="form-required" aria-label="required">*</span>
+            <div class="contact-form__field">
+              <label class="sr-only" for="contact-message-{{ section.id }}">
+                {{ section.settings.message_placeholder }}
               </label>
               <textarea
                 id="contact-message-{{ section.id }}"
+                class="contact-form__input contact-form__input--textarea text-body-light"
                 name="contact[body]"
-                class="form-input form-input--textarea"
-                rows="6"
                 required
-                :class="{ 'has-error': errors.message }"
-                x-model="formData.message"
-                placeholder="[HOW CAN WE HELP?]"
-              ></textarea>
-              <span class="form-error" x-show="errors.message" x-text="errors.message"></span>
+                placeholder="{{ section.settings.message_placeholder }}"
+              >{{ form.body }}</textarea>
             </div>
 
             <button
               type="submit"
-              class="btn-atc contact-form__submit"
-              :disabled="loading"
+              class="contact-form__submit text-body-primary"
+              :class="{ 'btn--loading': isSubmitting }"
+              :disabled="isSubmitting"
+              aria-live="polite"
             >
-              <span x-show="!loading">{{ section.settings.submit_text | default: 'SEND MESSAGE' | upcase }}</span>
-              <span x-show="loading">SENDING...</span>
+              <span>{{ section.settings.submit_text }}</span>
             </button>
-          {% endform %}
-        </form>
-
+          {% endif %}
+        {% endform %}
       </div>
     </div>
-
   </div>
-</section>
+</div>
 
 <style>
-  .contact-form-section {
-    padding: 80px 0 96px;
+  .non-banner__hero-section {
+    padding: var(--space-25) 0 var(--space-40);
   }
 
-  .contact-form-section__inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 var(--container-px);
+  .contact-section__header {
+    margin-bottom: var(--space-15);
   }
 
-  .contact-form-section__header {
-    text-align: center;
-    margin-bottom: 64px;
+  .contact-section__heading {
+    margin: 0 0 var(--space-10);
   }
 
-  .contact-form-section__heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(36px, 5vw, 60px);
-    font-weight: 300;
-    margin: 12px 0 0;
-    color: #1A1A1A;
-    letter-spacing: -0.01em;
+  .contact-section__intro {
+    max-width: 37.5rem;
+    color: var(--color-near-black);
+    opacity: 0.85;
   }
 
-  .contact-form-section__subheading {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #888;
-    margin: 16px 0 0;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .contact-section__intro > *:first-child { margin-top: 0; }
+  .contact-section__intro > *:last-child { margin-bottom: 0; }
+  .contact-section__intro p { margin: 0 0 var(--space-2); }
 
-  /* Layout */
-  .contact-form-section__layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  /* Contact info */
-  .contact-info__intro {
-    margin-bottom: 36px;
-    padding-bottom: 36px;
-    border-bottom: 1px solid #E8E8E4;
-  }
-
-  .contact-info__intro p {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.75;
-    color: #555;
-    margin: 0;
-  }
-
-  .contact-info__details {
+  .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--space-5);
   }
 
-  .contact-info__row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .contact-info__label {
-    font-family: 'Inter', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    color: #aaa;
-  }
-
-  .contact-info__value {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #1A1A1A;
-    text-decoration: none;
-    transition: color 0.2s ease;
-    line-height: 1.5;
-  }
-
-  .contact-info__value:hover { color: #2D4A6A; }
-
-  /* Form */
-  .contact-form__row--2 {
+  .contact-form__row--split {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 
-  .form-field {
-    margin-bottom: 24px;
-  }
-
-  .form-label {
-    display: block;
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: #888;
-    margin-bottom: 8px;
-  }
-
-  .form-required {
-    color: #2D4A6A;
-    margin-left: 2px;
-  }
-
-  .form-input {
+  .contact-form__input {
     width: 100%;
-    border: 1px solid #E8E8E4;
-    background-color: #FFFFFF;
-    color: #1A1A1A;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    padding: 14px 16px;
+    min-height: calc(var(--space-12) + var(--border-width) * 2);
+    padding: 0 calc(var(--space-4) - 2px);
+    border: var(--border-width) solid var(--color-border);
+    background-color: var(--color-white);
+    color: var(--color-near-black);
     outline: none;
-    transition: border-color 0.2s ease;
-    box-sizing: border-box;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
   }
 
-  .form-input:focus {
-    border-color: #2D4A6A;
+  .contact-form__input::placeholder {
+    color: var(--color-near-black);
+    opacity: 0.4;
   }
 
-  .form-input.has-error {
-    border-color: #c0392b;
+  .contact-form__input:focus {
+    border-color: var(--color-deep-navy);
   }
 
-  .form-input--textarea {
-    resize: vertical;
-    min-height: 140px;
-    line-height: 1.6;
+  .contact-form__input.has-error {
+    border-color: var(--color-error);
   }
 
-  .form-input::placeholder { color: #bbb; }
-
-  .form-error {
+  .contact-form__input--textarea {
     display: block;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    color: #c0392b;
-    margin-top: 6px;
-    letter-spacing: 0.04em;
+    min-height: calc(var(--space-40) + var(--space-24));
+    padding-top: calc(var(--space-4) - 2px);
+    resize: vertical;
   }
 
   .contact-form__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    max-width: 280px;
+    min-height: calc(var(--space-12) + var(--border-width) * 2);
+    padding: 0 calc(var(--space-4) - 2px);
+    border: var(--border-width) solid var(--color-deep-navy);
+    background-color: var(--color-deep-navy);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
   }
 
-  /* Success */
-  .contact-success {
+  .contact-form__submit:hover {
+    background-color: var(--color-btn-primary-hover);
+    border-color: var(--color-btn-primary-hover);
+  }
+
+  .contact-form__submit.btn--loading {
+    color: transparent;
+  }
+
+  .contact-form__submit.btn--loading span {
+    opacity: 0;
+  }
+
+  .contact-form__message {
+    color: var(--color-near-black);
+  }
+
+  .contact-form__message--success {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 48px 0;
+    align-items: center;
+    min-height: var(--space-40);
+    padding: var(--space-10) 0;
+    border-top: var(--border-width) solid var(--color-success);
+    border-bottom: var(--border-width) solid var(--color-success);
+    color: var(--color-success);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-light);
+    line-height: var(--lh-tight);
   }
 
-  .contact-success__heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: #1A1A1A;
-    margin: 0;
+  .contact-form__message--error {
+    padding: var(--space-4) 0;
+    border-top: var(--border-width) solid var(--color-error);
+    border-bottom: var(--border-width) solid var(--color-error);
+    color: var(--color-error);
   }
 
-  .contact-success__text {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: #888;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0;
-  }
-
-  /* Responsive */
-  @media (max-width: 1024px) {
-    .contact-form-section__inner { padding: 0 24px; }
-  }
-
-  @media (max-width: 768px) {
-    .contact-form-section__layout {
-      grid-template-columns: 1fr;
-      gap: 48px;
+  @media (max-width: 767px) {
+    .non-banner__hero-section {
+      padding: var(--space-25) 0 var(--space-20);
     }
-    .contact-form__row--2 {
-      grid-template-columns: 1fr;
-    }
-  }
 
-  @media (max-width: 480px) {
-    .contact-form-section { padding: 56px 0; }
-    .contact-form-section__inner { padding: 0 16px; }
-    .contact-form__submit { max-width: 100%; }
+    .contact-section__header {
+      margin-bottom: var(--space-5);
+    }
+
+    .contact-section__heading {
+      margin-bottom: var(--space-2-5);
+    }
+
+    .contact-form {
+      gap: var(--space-2-5);
+    }
+
+    .contact-form__row--split {
+      grid-template-columns: 1fr;
+      gap: var(--space-2-5);
+    }
+
+    .contact-form__input {
+      min-height: var(--space-10);
+      padding-inline: calc(var(--space-4) - 2px);
+    }
+
+    .contact-form__input--textarea {
+      min-height: calc((var(--space-40) * 2) + var(--space-10));
+      padding-top: calc(var(--space-4) - 2px);
+    }
+
+    .contact-form__submit {
+      min-height: calc(var(--space-10) + var(--space-1) + var(--border-width));
+      margin-top: var(--space-1);
+    }
+
+    .contact-form__message--success {
+      min-height: var(--space-30);
+      padding: var(--space-8) 0;
+      font-size: var(--text-xl);
+    }
   }
 </style>
-
-<script>
-  function contactForm() {
-    return {
-      submitted: false,
-      loading: false,
-      formData: { name: '', email: '', subject: '', message: '' },
-      errors: {},
-      validate() {
-        this.errors = {};
-        if (!this.formData.name.trim()) this.errors.name = 'Please enter your name';
-        if (!this.formData.email.trim()) this.errors.email = 'Please enter your email';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email)) this.errors.email = 'Please enter a valid email';
-        if (!this.formData.message.trim()) this.errors.message = 'Please enter a message';
-        return Object.keys(this.errors).length === 0;
-      },
-      async handleSubmit() {
-        if (!this.validate()) return;
-        this.loading = true;
-        try {
-          const body = new URLSearchParams({
-            'form_type': 'contact',
-            'utf8': '✓',
-            'contact[name]': this.formData.name,
-            'contact[email]': this.formData.email,
-            'contact[subject]': this.formData.subject,
-            'contact[body]': this.formData.message
-          });
-          await fetch('/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body
-          });
-          this.submitted = true;
-        } catch (e) {
-          this.submitted = true;
-        } finally {
-          this.loading = false;
-        }
-      }
-    }
-  }
-</script>
 
 {% schema %}
 {
@@ -417,102 +272,66 @@
   "class": "contact-form-outer",
   "settings": [
     {
-      "type": "header",
-      "content": "Page Header"
-    },
-    {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "GET IN TOUCH"
+      "default": "How can we help you?"
     },
     {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading",
-      "placeholder": "WE'D LOVE TO HEAR FROM YOU"
-    },
-    {
-      "type": "header",
-      "content": "Contact Info"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_contact_info",
-      "label": "Show contact info sidebar",
-      "default": true
-    },
-    {
-      "type": "textarea",
+      "type": "richtext",
       "id": "intro_text",
       "label": "Intro text",
-      "default": "[HAVE A QUESTION? REACH OUT AND WE'LL GET BACK TO YOU WITHIN 1–2 BUSINESS DAYS.]"
+      "default": "<p>We are here for you - whether you have questions, need advice or support. You can use the contact form below, or email us directly at</p>"
     },
     {
       "type": "text",
-      "id": "contact_email",
-      "label": "Email",
-      "placeholder": "hello@metsie.com"
+      "id": "name_placeholder",
+      "label": "Name placeholder",
+      "default": "Name*"
     },
     {
       "type": "text",
-      "id": "contact_phone",
-      "label": "Phone"
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Email*"
     },
     {
       "type": "text",
-      "id": "contact_hours",
-      "label": "Hours",
-      "placeholder": "Monday — Friday, 9AM – 5PM CET"
-    },
-    {
-      "type": "header",
-      "content": "Form Labels"
-    },
-    {
-      "type": "text",
-      "id": "name_label",
-      "label": "Name label",
-      "default": "YOUR NAME"
-    },
-    {
-      "type": "text",
-      "id": "email_label",
-      "label": "Email label",
-      "default": "YOUR EMAIL"
-    },
-    {
-      "type": "text",
-      "id": "subject_label",
-      "label": "Subject label",
-      "default": "SUBJECT"
-    },
-    {
-      "type": "text",
-      "id": "message_label",
-      "label": "Message label",
-      "default": "MESSAGE"
+      "id": "message_placeholder",
+      "label": "Message placeholder",
+      "default": "Message*"
     },
     {
       "type": "text",
       "id": "submit_text",
-      "label": "Submit button text",
-      "default": "SEND MESSAGE"
+      "label": "Submit text",
+      "default": "SUBMIT INQUIRY"
     },
     {
       "type": "text",
       "id": "success_message",
       "label": "Success message",
-      "default": "THANK YOU FOR YOUR MESSAGE"
+      "default": "Thank you for your message."
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error message",
+      "default": "Please check the required fields and try again."
     }
   ],
   "presets": [
     {
       "name": "Contact Form",
       "settings": {
-        "heading": "GET IN TOUCH",
-        "show_contact_info": true,
-        "submit_text": "SEND MESSAGE"
+        "heading": "How can we help you?",
+        "intro_text": "<p>We are here for you - whether you have questions, need advice or support. You can use the contact form below, or email us directly at</p>",
+        "name_placeholder": "Name*",
+        "email_placeholder": "Email*",
+        "message_placeholder": "Message*",
+        "submit_text": "SUBMIT INQUIRY",
+        "success_message": "Thank you for your message.",
+        "error_message": "Please check the required fields and try again."
       }
     }
   ]
