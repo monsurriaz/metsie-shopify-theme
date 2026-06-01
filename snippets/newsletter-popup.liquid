@@ -68,8 +68,8 @@
             required
           >
 
-          <button type="submit" class="newsletter-popup__submit">
-            {{ settings.newsletter_popup_button_text }}
+          <button type="submit" class="newsletter-popup__submit" data-newsletter-popup-submit>
+            <span>{{ settings.newsletter_popup_button_text }}</span>
           </button>
         {% endif %}
       {% endform %}
@@ -135,8 +135,8 @@
   }
 
   .newsletter-popup__close svg {
-    width: 20px;
-    height: 20px;
+    width: var(--space-5);
+    height: var(--space-5);
   }
 
   .newsletter-popup__close:hover {
@@ -219,6 +219,15 @@
     opacity: 0.86;
   }
 
+  .newsletter-popup__submit.btn--loading {
+    color: transparent;
+    opacity: 1;
+  }
+
+  .newsletter-popup__submit.btn--loading span {
+    opacity: 0;
+  }
+
   .newsletter-popup__message {
     margin: 0;
     padding: var(--space-5) 0;
@@ -229,6 +238,12 @@
     font-weight: var(--font-weight-light);
     line-height: var(--lh-relaxed);
     color: var(--color-white);
+  }
+
+  .newsletter-popup__message--success {
+    border-top-color: var(--color-success);
+    border-bottom-color: var(--color-success);
+    color: var(--color-success);
   }
 
   .newsletter-popup__message--error {
@@ -299,6 +314,8 @@
     var frequencyDays = Number(popup.dataset.frequencyDays || 0);
     var closeButtons = popup.querySelectorAll('[data-newsletter-popup-close]');
     var emailInput = popup.querySelector('#NewsletterPopupEmail');
+    var form = popup.querySelector('.newsletter-popup__form');
+    var submitButton = popup.querySelector('[data-newsletter-popup-submit]');
     var submitted = Boolean(popup.querySelector('.newsletter-popup__message--success'));
     var previousFocus = null;
 
@@ -351,6 +368,13 @@
     closeButtons.forEach(function (button) {
       button.addEventListener('click', closePopup);
     });
+
+    if (form && submitButton) {
+      form.addEventListener('submit', function () {
+        submitButton.classList.add('btn--loading');
+        submitButton.disabled = true;
+      });
+    }
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && popup.classList.contains('is-visible')) {
