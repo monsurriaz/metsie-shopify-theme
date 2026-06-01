@@ -12,6 +12,8 @@
     "page_width": 1520,
     "logo": "shopify://shop_images/Logo-white.svg",
     "logo_dark": "shopify://shop_images/Logo-Black.svg",
+    "enable_newsletter_popup": true,
+    "newsletter_popup_frequency_days": 1,
     "colors": {
       "color_deep_navy": "#2D4A6A",
       "color_navy_mid": "#1E3A5F",

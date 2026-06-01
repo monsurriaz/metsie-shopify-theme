@@ -1,0 +1,388 @@
+{%- liquid
+  assign popup_delay = settings.newsletter_popup_delay | times: 1000
+  assign popup_frequency_days = settings.newsletter_popup_frequency_days
+-%}
+
+<div
+  id="NewsletterPopup"
+  class="newsletter-popup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="NewsletterPopupTitle"
+  aria-hidden="true"
+  data-newsletter-popup
+  data-delay="{{ popup_delay }}"
+  data-frequency-days="{{ popup_frequency_days }}"
+  data-design-mode="{{ request.design_mode }}"
+  hidden
+>
+  <div class="newsletter-popup__backdrop" data-newsletter-popup-close></div>
+
+  <div class="newsletter-popup__panel" role="document">
+    <button
+      type="button"
+      class="newsletter-popup__close"
+      aria-label="Close newsletter popup"
+      data-newsletter-popup-close
+    >
+      {%- render 'svg-icons', icon: 'close', size: 24 -%}
+    </button>
+
+    <div class="newsletter-popup__content">
+      <h2 id="NewsletterPopupTitle" class="newsletter-popup__heading">
+        {{ settings.newsletter_popup_heading }}
+      </h2>
+
+      {% if settings.newsletter_popup_text != blank %}
+        <p class="newsletter-popup__text text-body-light">
+          {{ settings.newsletter_popup_text }}
+        </p>
+      {% endif %}
+
+      {% form 'customer', id: 'NewsletterPopupForm', class: 'newsletter-popup__form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {% if form.posted_successfully? %}
+          <p class="newsletter-popup__message newsletter-popup__message--success" role="status">
+            {{ settings.newsletter_popup_success_text }}
+          </p>
+        {% else %}
+          {% if form.errors %}
+            <p class="newsletter-popup__message newsletter-popup__message--error" role="alert">
+              {{ settings.newsletter_popup_error_text }}
+            </p>
+          {% endif %}
+
+          <label class="sr-only" for="NewsletterPopupEmail">
+            {{ settings.newsletter_popup_email_placeholder }}
+          </label>
+          <input
+            type="email"
+            id="NewsletterPopupEmail"
+            name="contact[email]"
+            class="newsletter-popup__input"
+            placeholder="{{ settings.newsletter_popup_email_placeholder }}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+          >
+
+          <button type="submit" class="newsletter-popup__submit">
+            {{ settings.newsletter_popup_button_text }}
+          </button>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .newsletter-popup {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-modal) + 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-base);
+  }
+
+  .newsletter-popup.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .newsletter-popup__backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: color-mix(in srgb, var(--color-near-black) 16%, transparent);
+  }
+
+  .newsletter-popup__panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, calc(var(--space-40) * 3) + var(--space-18));
+    background-color: var(--color-deep-navy);
+    color: var(--color-white);
+    transform: scale(0.96) translateY(var(--space-2));
+    transition: transform var(--transition-slow);
+  }
+
+  .newsletter-popup.is-visible .newsletter-popup__panel {
+    transform: scale(1) translateY(0);
+  }
+
+  .newsletter-popup__close {
+    position: absolute;
+    top: var(--space-5);
+    right: var(--space-5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-5);
+    height: var(--space-5);
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-white);
+    cursor: pointer;
+    opacity: 0.9;
+    transition: opacity var(--transition-fast);
+  }
+
+  .newsletter-popup__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .newsletter-popup__close:hover {
+    opacity: 1;
+  }
+
+  .newsletter-popup__close:focus-visible,
+  .newsletter-popup__input:focus-visible,
+  .newsletter-popup__submit:focus-visible {
+    outline: var(--border-width) solid var(--color-white);
+    outline-offset: var(--space-1);
+  }
+
+  .newsletter-popup__content {
+    /* width: min(100%, calc(var(--space-40) * 2 + var(--space-30))); */
+    max-width: 100%;
+    margin-inline: auto;
+    padding: var(--space-18) var(--space-14) var(--space-18);
+  }
+
+  .newsletter-popup__heading {
+    margin: 0 0 var(--space-2-5);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--lh-tight);
+    color: var(--color-white);
+  }
+
+  .newsletter-popup__text {
+    margin: 0 0 var(--space-7);
+    color: var(--color-white);
+  }
+
+  .newsletter-popup__form {
+    /* display: flex; */
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  .newsletter-popup__input {
+    width: 100%;
+    min-height: calc(var(--space-12) + var(--border-width) * 2);
+    padding: 0 var(--space-6);
+    border: var(--border-width) solid color-mix(in srgb, var(--color-white) 22%, transparent);
+    background: transparent;
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-light);
+    line-height: var(--lh-relaxed);
+    outline: none;
+    margin: 0 0 var(--space-2);
+  }
+
+  .newsletter-popup__input::placeholder {
+    color: var(--color-white);
+    opacity: 0.4;
+  }
+
+  .newsletter-popup__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: calc(var(--space-12) + var(--border-width) * 2);
+    border: var(--border-width) solid var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-near-black);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--lh-relaxed);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+  }
+
+  .newsletter-popup__submit:hover {
+    opacity: 0.86;
+  }
+
+  .newsletter-popup__message {
+    margin: 0;
+    padding: var(--space-5) 0;
+    border-top: var(--border-width) solid color-mix(in srgb, var(--color-white) 32%, transparent);
+    border-bottom: var(--border-width) solid color-mix(in srgb, var(--color-white) 32%, transparent);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-light);
+    line-height: var(--lh-relaxed);
+    color: var(--color-white);
+  }
+
+  .newsletter-popup__message--error {
+    color: var(--color-error);
+  }
+
+  @media (max-width: 767px) {
+    .newsletter-popup {
+      align-items: center;
+      padding: var(--space-5);
+    }
+
+    .newsletter-popup__panel {
+      min-width: min(100%, calc(var(--space-40) * 2));
+      max-width: calc(var(--space-40) * 2.5);
+    }
+
+    .newsletter-popup__close {
+      top: var(--space-5);
+      right: var(--space-5);
+      width: var(--space-5);
+      height: var(--space-5);
+    }
+
+    .newsletter-popup__content {
+      width: auto;
+      padding: var(--space-14) var(--space-8);
+      text-align: center;
+    }
+
+    .newsletter-popup__heading {
+      margin-bottom: var(--space-2-5);
+    }
+
+    .newsletter-popup__text {
+      margin-bottom: var(--space-6);
+      line-height: var(--lh-relaxed);
+    }
+
+    .newsletter-popup__input,
+    .newsletter-popup__submit {
+      min-height: calc(var(--space-12) - var(--border-width) * 3);
+    }
+
+    .newsletter-popup__input {
+      padding-inline: var(--space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .newsletter-popup,
+    .newsletter-popup__panel {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    'use strict';
+
+    var STORAGE_KEY = 'metsie_newsletter_popup_hidden_until';
+    var popup = document.getElementById('NewsletterPopup');
+    if (!popup) return;
+
+    var isDesignMode = popup.dataset.designMode === 'true';
+    var delay = Number(popup.dataset.delay || 0);
+    var frequencyDays = Number(popup.dataset.frequencyDays || 0);
+    var closeButtons = popup.querySelectorAll('[data-newsletter-popup-close]');
+    var emailInput = popup.querySelector('#NewsletterPopupEmail');
+    var submitted = Boolean(popup.querySelector('.newsletter-popup__message--success'));
+    var previousFocus = null;
+
+    function shouldShow() {
+      if (isDesignMode && !submitted) return false;
+      if (submitted) return true;
+
+      try {
+        var hiddenUntil = Number(localStorage.getItem(STORAGE_KEY) || 0);
+        return !hiddenUntil || Date.now() > hiddenUntil;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    function rememberClose() {
+      try {
+        var days = frequencyDays > 0 ? frequencyDays : 1;
+        var hiddenUntil = Date.now() + days * 24 * 60 * 60 * 1000;
+        localStorage.setItem(STORAGE_KEY, String(hiddenUntil));
+      } catch (e) {}
+    }
+
+    function openPopup() {
+      previousFocus = document.activeElement;
+      popup.removeAttribute('hidden');
+      popup.setAttribute('aria-hidden', 'false');
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          popup.classList.add('is-visible');
+          if (emailInput) emailInput.focus();
+        });
+      });
+    }
+
+    function closePopup() {
+      rememberClose();
+      popup.classList.remove('is-visible');
+      popup.setAttribute('aria-hidden', 'true');
+
+      setTimeout(function () {
+        popup.setAttribute('hidden', '');
+        if (previousFocus && typeof previousFocus.focus === 'function') {
+          previousFocus.focus();
+        }
+      }, 300);
+    }
+
+    closeButtons.forEach(function (button) {
+      button.addEventListener('click', closePopup);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && popup.classList.contains('is-visible')) {
+        closePopup();
+      }
+    });
+
+    popup.addEventListener('keydown', function (event) {
+      if (event.key !== 'Tab') return;
+
+      var focusable = Array.prototype.slice.call(
+        popup.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])')
+      ).filter(function (element) {
+        return !element.disabled && element.offsetParent !== null;
+      });
+
+      if (!focusable.length) return;
+
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    if (shouldShow()) {
+      window.setTimeout(openPopup, submitted ? 0 : delay);
+    }
+  })();
+</script>

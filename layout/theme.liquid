@@ -203,6 +203,13 @@
   {%- endif -%}
 
   {%- comment -%} ============================================================
+    NEWSLETTER POPUP
+  ============================================================ {%- endcomment -%}
+  {%- if settings.enable_newsletter_popup -%}
+    {% render 'newsletter-popup' %}
+  {%- endif -%}
+
+  {%- comment -%} ============================================================
     CURRENCY / LANGUAGE SWITCHER MODAL
   ============================================================ {%- endcomment -%}
   {%- if settings.enable_currency_conversion or settings.enable_language_switcher -%}
