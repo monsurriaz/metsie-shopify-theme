@@ -21,3 +21,6 @@
 
 # Keep this file
 !.gitignore
+
+# Keep project documentation
+!README.md
