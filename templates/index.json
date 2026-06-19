@@ -52,7 +52,7 @@
         "button_LmMcyK": {
           "type": "button",
           "settings": {
-            "text": "Our philosophy",
+            "text": "Our story",
             "link": ""
           }
         }
@@ -131,8 +131,8 @@
         "feature_et3VML": {
           "type": "feature",
           "settings": {
-            "heading": "Trade & studio orders",
-            "description": "For hotels, studios, and interior projects.",
+            "heading": "For the whole household",
+            "description": "Kids, pets, adults. Different uses, different generations, one mat.",
             "label": "Inquire here",
             "url": ""
           }
