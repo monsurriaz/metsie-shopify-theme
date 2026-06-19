@@ -40,13 +40,13 @@
         "label_crThUD": {
           "type": "label",
           "settings": {
-            "text": "METSIE DESIGN STUDIOS"
+            "text": "THE BRAND"
           }
         },
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals"
+            "body_text": "Metsie makes mats that belong in the room. For every generation, every pet, every corner of the floor."
           }
         },
         "button_LmMcyK": {
@@ -71,7 +71,7 @@
       "type": "design-philosophy",
       "settings": {
         "label": "DESIGN PHILOSOPHY",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "text": "We give the mat the same consideration as any object worth keeping. Restrained, proportioned, designed to last in the room and in time.",
         "disable_margin_top": false,
         "align_center": false,
         "content_bg_style": "white",
