@@ -124,7 +124,7 @@
           "settings": {
             "heading": "Stays out",
             "description": "Designed to belong in the space, not disappear from it.",
-            "label": "Shop",
+            "label": "Shop the collection",
             "url": "shopify://collections"
           }
         },
@@ -142,7 +142,7 @@
           "settings": {
             "heading": "Built to last",
             "description": "Non-toxic, easy to clean, and made to handle real life without showing it.",
-            "label": "Get in touch",
+            "label": "Discover more",
             "url": ""
           }
         }
