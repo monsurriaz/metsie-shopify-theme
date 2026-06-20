@@ -122,10 +122,10 @@
         "feature_UGhVVx": {
           "type": "feature",
           "settings": {
-            "heading": "Free delivery",
-            "description": "Free standard delivery on orders over €200.",
-            "label": "View shipping details",
-            "url": ""
+            "heading": "Stays out",
+            "description": "Designed to belong in the space, not disappear from it.",
+            "label": "Shop",
+            "url": "shopify://collections"
           }
         },
         "feature_et3VML": {
