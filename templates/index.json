@@ -46,7 +46,7 @@
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "CHANGE - Mats that belong in the room. Created for children, pets, adults, and guests. One surface. For every kind of life."
+            "body_text": "Metsie designs the surfaces life happens on. Quiet materials, lasting form, mats made to move with you and belong where you live."
           }
         },
         "button_LmMcyK": {
@@ -123,7 +123,7 @@
           "type": "feature",
           "settings": {
             "heading": "Stays out",
-            "description": "Designed to belong in the space and not disappear from it.",
+            "description": "Designed to belong in the interior and stay in view.",
             "label": "Shop the collection",
             "url": "shopify://collections"
           }
@@ -153,7 +153,7 @@
         "feature_8QeAcc"
       ],
       "settings": {
-        "label": "METSIE - MOVEMENT MATS",
+        "label": "MOVEMENT MATS",
         "section_width": "compact",
         "style": "navy"
       }

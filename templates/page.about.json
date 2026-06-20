@@ -51,7 +51,7 @@
         "title_4dB96V": {
           "type": "title",
           "settings": {
-            "text": "The thinking behind Metsie"
+            "text": "The mat, reconsidered."
           }
         }
       },
@@ -103,8 +103,8 @@
       ],
       "name": "Multi Column",
       "settings": {
-        "label": "Design Philosophy",
-        "heading": "Our philosophy redefines the mat as part of the interior, where movement, material, and proportion coexist in quiet balance to create objects that feel essential — never excessive",
+        "label": "HOW IT STARTED",
+        "heading": "The market had one answer: a yoga mat. Same aesthetic, same logic. Nothing made to stay out, look right, and take daily life without showing it. So we designed it ourselves.",
         "heading_width": "fixed",
         "media_ratio": "aspect-slightly-tall",
         "remove_padding_bottom": true,
@@ -116,8 +116,8 @@
       "type": "design-approach",
       "name": "Design Approach",
       "settings": {
-        "label": "Design approach",
-        "heading": "Our approach blends material integrity, restrained palettes, and thoughtful proportions",
+        "label": "THE MOVEMENT MAT",
+        "heading": "We made the mat that stays out. Designed as an interior object, built for every kind of life on the floor.",
         "heading_width": "fixed",
         "image_alt": "",
         "media_ratio": "aspect-ultrawide",
