@@ -24,7 +24,7 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "section_label": "CORE COLLECTION",
+        "section_label": "THE COLLECTION",
         "heading": "Mats for movement, rest and everything in-between.",
         "subheading": "",
         "collection": "featured",
@@ -70,8 +70,8 @@
     "design-philosophy": {
       "type": "design-philosophy",
       "settings": {
-        "label": "THE THINKING",
-        "text": "We give the mat the same consideration as any object worth keeping. Restrained, proportioned, designed to last in the room and in time.",
+        "label": "THE ETHOS",
+        "text": "Movement takes many forms. The mat should too.",
         "disable_margin_top": false,
         "align_center": false,
         "content_bg_style": "white",
