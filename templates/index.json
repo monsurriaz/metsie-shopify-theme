@@ -131,8 +131,8 @@
         "feature_et3VML": {
           "type": "feature",
           "settings": {
-            "heading": "For the whole household",
-            "description": "Kids, pets, adults. Different uses, different generations, one mat.",
+            "heading": "For everyone",
+            "description": "Kids, pets, adults, guests. One mat for every kind of day.",
             "label": "Inquire here",
             "url": ""
           }
@@ -140,8 +140,8 @@
         "feature_8QeAcc": {
           "type": "feature",
           "settings": {
-            "heading": "Custom colors",
-            "description": "Interested in a specific shade? Write to us.",
+            "heading": "Built to last",
+            "description": "Non-toxic, easy to clean, and made to handle real life without showing it.",
             "label": "Get in touch",
             "url": ""
           }
