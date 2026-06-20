@@ -46,7 +46,7 @@
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "Metsie makes mats that belong in the room. For every generation, every pet, every corner of the floor."
+            "body_text": "CHANGE - Mats that belong in the room. Created for children, pets, adults, and guests. One surface. For every kind of life."
           }
         },
         "button_LmMcyK": {
@@ -123,7 +123,7 @@
           "type": "feature",
           "settings": {
             "heading": "Stays out",
-            "description": "Designed to belong in the space, not disappear from it.",
+            "description": "Designed to belong in the space and not disappear from it.",
             "label": "Shop the collection",
             "url": "shopify://collections"
           }
@@ -132,7 +132,7 @@
           "type": "feature",
           "settings": {
             "heading": "For everyone",
-            "description": "Kids, pets, adults, guests. One mat for every kind of day.",
+            "description": "From play to rest, stretch to stillness. One mat for the whole day.",
             "label": "Find yours",
             "url": ""
           }
@@ -193,8 +193,8 @@
         "image_aXtqMN"
       ],
       "settings": {
-        "label": "EDITORIAL",
-        "heading": "Moments where mats become part of the interior",
+        "label": "Life on the mat",
+        "heading": "Where daily life takes shape.",
         "heading_width": "fixed"
       }
     }
