@@ -12,8 +12,8 @@
     "contact-form": {
       "type": "contact-form",
       "settings": {
-        "heading": "How can we help you?",
-        "intro_text": "<p>We are here for you - whether you have questions, need advice or support. You can use the contact form below, or email us directly at</p>",
+        "heading": "How can we help?",
+        "intro_text": "<p>For questions, custom enquiries or partnerships, use the form below or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
         "name_placeholder": "Name*",
         "email_placeholder": "Email*",
         "message_placeholder": "Message*",
