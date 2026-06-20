@@ -13,7 +13,7 @@
       "type": "contact-form",
       "settings": {
         "heading": "How can we help?",
-        "intro_text": "<p>For questions, custom enquiries or partnerships, use the form below or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
+        "intro_text": "<p>For questions, customer or partnership enquiries, use the form below or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
         "name_placeholder": "Name*",
         "email_placeholder": "Email*",
         "message_placeholder": "Message*",
