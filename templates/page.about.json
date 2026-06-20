@@ -51,7 +51,7 @@
         "title_4dB96V": {
           "type": "title",
           "settings": {
-            "text": "The mat, reconsidered."
+            "text": "Mats for every moment"
           }
         }
       },
@@ -104,7 +104,7 @@
       "name": "Multi Column",
       "settings": {
         "label": "HOW IT STARTED",
-        "heading": "The market had one answer: a yoga mat. Same aesthetic, same logic. Nothing made to stay out, look right, and take daily life without showing it. So we designed it ourselves.",
+        "heading": "The market had one answer for every kind of movement: one mat, purely functional, made to disappear the moment you were done. So we designed the one we wanted to live with.",
         "heading_width": "fixed",
         "media_ratio": "aspect-slightly-tall",
         "remove_padding_bottom": true,
@@ -130,8 +130,8 @@
         "feature_kk839i": {
           "type": "feature",
           "settings": {
-            "heading": "Considered construction",
-            "description": "Layered composition, precise edge finishing, and controlled thickness ensure balance between comfort and support. Every proportion is intentional.",
+            "heading": "The build",
+            "description": "A dense, cushioned base finished with a clean, deliberate edge. Soft underfoot and steady under movement, made to hold its shape.",
             "label": "",
             "url": ""
           }
@@ -139,8 +139,8 @@
         "feature_E9BQcg": {
           "type": "feature",
           "settings": {
-            "heading": "Material integrity",
-            "description": "We select durable, high-density materials that provide stability, grip, and longevity — designed to perform daily while maintaining their structure over time.",
+            "heading": "The material",
+            "description": "FSC-certified natural rubber, non-toxic and low-sheen, chosen for grip and longevity. Easy to wipe clean, made to age well.",
             "label": "",
             "url": ""
           }
@@ -148,8 +148,8 @@
         "feature_YpV3yk": {
           "type": "feature",
           "settings": {
-            "heading": "Responsible production",
-            "description": "Manufactured in small batches with attention to waste reduction and material efficiency. Built to last — not to be replaced seasonally.",
+            "heading": "The making",
+            "description": "Made in small batches, with care for material and waste. Built to last well beyond a single season.",
             "label": "",
             "url": ""
           }
