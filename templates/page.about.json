@@ -51,7 +51,7 @@
         "title_4dB96V": {
           "type": "title",
           "settings": {
-            "text": "We design for the way you live"
+            "text": "Designing for the way you live"
           }
         }
       },
@@ -162,7 +162,7 @@
       ],
       "name": "Service Features",
       "settings": {
-        "label": "MADE WELL",
+        "label": "MATS MADE WELL",
         "section_width": "compact",
         "style": "light"
       }
