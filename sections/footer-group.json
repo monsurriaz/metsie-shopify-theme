@@ -25,7 +25,7 @@
           "type": "menu_link",
           "settings": {
             "heading": "EXPLORE",
-            "menu": "cart-checkout"
+            "menu": "explore"
           }
         },
         "menu_link_wJrYEV": {
