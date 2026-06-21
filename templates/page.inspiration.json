@@ -26,7 +26,7 @@
         "title_eQLgDg": {
           "type": "title",
           "settings": {
-            "text": "Ideas, places, and rituals that inspire the Metsie world"
+            "text": "Interiors, light, and the rhythm of a day"
           }
         }
       },
@@ -84,7 +84,7 @@
       "name": "Design Philosophy",
       "settings": {
         "label": "",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "text": "Neutral palettes, soft light, and the quiet corners a space keeps. A look at where the surface settles",
         "disable_margin_top": true,
         "align_center": true,
         "content_bg_style": "navy",
@@ -134,7 +134,7 @@
       "name": "Design Philosophy",
       "settings": {
         "label": "",
-        "text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals",
+        "text": "From the morning stretch to the evening wind-down, one surface keeps the rhythm of a day",
         "disable_margin_top": true,
         "align_center": true,
         "content_bg_style": "navy",
