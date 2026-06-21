@@ -93,7 +93,7 @@
     "product-recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "section_label": "Metsie — Collection",
+        "section_label": "METSIE SIGNATURE MATS",
         "heading": "Discover more pieces from the collection",
         "products_to_show": 3,
         "intent": "related"
