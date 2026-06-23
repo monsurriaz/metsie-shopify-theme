@@ -23,7 +23,7 @@
           "type": "faq",
           "settings": {
             "question": "What is it made from?",
-            "answer": "<p>FSC-certified natural rubber and PU top with non-toxic and low-sheen and a dense, cushioned base. Chosen for grip, longevity, and a surface you want to touch.</p>"
+            "answer": "<p>A natural rubber base with a PU top. The rubber is FSC-certified, the surface is non-toxic and low-sheen, and at 8 mm it stays soft and cushioned underfoot. Chosen for grip, longevity, and a surface you want to touch.</p>"
           }
         },
         "faq_E6kWeW": {
@@ -44,7 +44,7 @@
           "type": "faq",
           "settings": {
             "question": "Where do you ship, and what is your returns policy?",
-            "answer": "<p>Tracked delivery and considered packaging, with a fair window to change your mind. Full details on the Shipping & Returns page.</p>"
+            "answer": "<p>We ship worldwide. You will see shipping cost and delivery time at checkout, and the full returns policy lives on our Shipping & Returns page. Any questions, reach out and we will help.</p>"
           }
         },
         "faq_TMke94": {
@@ -52,6 +52,13 @@
           "settings": {
             "question": "Do you work with hotels, studios, or trade partners?",
             "answer": "<p>Yes. Metsie partners with hospitality and design-led spaces. Tell us about your need on the Trade & Hospitality page, or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>"
+          }
+        },
+        "faq_4DQJPe": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you work with influencers or creators?",
+            "answer": "<p>We work with a small, selected group of voices. We are selective, so we will be in touch only when there is a natural fit.</p>"
           }
         }
       },
@@ -61,7 +68,8 @@
         "faq_E6kWeW",
         "faq_9w7r4K",
         "faq_rWbEgJ",
-        "faq_TMke94"
+        "faq_TMke94",
+        "faq_4DQJPe"
       ],
       "custom_css": [],
       "settings": {
