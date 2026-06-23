@@ -12,13 +12,13 @@
     "contact-form": {
       "type": "contact-form",
       "settings": {
-        "heading": "How can we help?",
-        "intro_text": "<p>For questions, customer or partnership enquiries, use the form below or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
-        "name_placeholder": "Name*",
+        "heading": "Trade & Hospitality",
+        "intro_text": "<p>Metsie partners with hotels, studios and design-led spaces. For trade terms, volume orders, or partnership enquiries, tell us about you below, or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
+        "name_placeholder": "Company*",
         "email_placeholder": "Email*",
         "message_placeholder": "Message*",
         "submit_text": "SUBMIT INQUIRY",
-        "success_message": "Thank you for your message.",
+        "success_message": "Thank you for your message. Your enquiry is with us, and we will reply shortly.",
         "error_message": "Please check the required fields and try again."
       }
     }
