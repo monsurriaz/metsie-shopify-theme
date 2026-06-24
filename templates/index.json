@@ -12,7 +12,7 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "heading": "Mats made to be seen.",
+        "heading": "Metsie creates mats designed to stay in the space",
         "bg_color": "#2e4356",
         "overlay_opacity": 0,
         "monogram_size": 80,
@@ -24,8 +24,8 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "section_label": "THE SIGNATURE COLLECTION",
-        "heading": "Mats for movement, rest and everything in-between.",
+        "section_label": "THE COLLECTION",
+        "heading": "A curated selection of essential designs in timeless tones",
         "subheading": "",
         "collection": "featured",
         "products_to_show": 3,
@@ -40,19 +40,19 @@
         "label_crThUD": {
           "type": "label",
           "settings": {
-            "text": "THE BRAND"
+            "text": "METSIE DESIGN STUDIOS"
           }
         },
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "Metsie designs the surfaces life happens on. Quiet materials, lasting form, mats made to move with you and belong where you live."
+            "body_text": "Metsie reimagines the mat as part of the room — a quiet foundation for movement, rest, and everyday rituals"
           }
         },
         "button_LmMcyK": {
           "type": "button",
           "settings": {
-            "text": "Our story",
+            "text": "Our philosophy",
             "link": ""
           }
         }
@@ -70,8 +70,8 @@
     "design-philosophy": {
       "type": "design-philosophy",
       "settings": {
-        "label": "THE ETHOS",
-        "text": "Movement takes many forms, and mats should too. Made for every kind, beautiful enough to live with.",
+        "label": "DESIGN PHILOSOPHY",
+        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
         "disable_margin_top": false,
         "align_center": false,
         "content_bg_style": "white",
@@ -87,13 +87,13 @@
         "label_JJwFYA": {
           "type": "label",
           "settings": {
-            "text": "Beautiful spaces, active lives"
+            "text": "A piece of your space"
           }
         },
         "heading_iritVN": {
           "type": "heading",
           "settings": {
-            "text": "Designed to stay. Built to be seen."
+            "text": "Crafted by balance. Created for living, spaces, and permanence."
           }
         },
         "button_V4RBiC": {
@@ -122,27 +122,27 @@
         "feature_UGhVVx": {
           "type": "feature",
           "settings": {
-            "heading": "Stays out",
-            "description": "Designed to belong in the interior and stay in view.",
-            "label": "Shop the collection",
-            "url": "shopify://collections"
+            "heading": "Free delivery",
+            "description": "Free standard delivery on orders over €200.",
+            "label": "View shipping details",
+            "url": ""
           }
         },
         "feature_et3VML": {
           "type": "feature",
           "settings": {
-            "heading": "For everyone",
-            "description": "From play to rest, stretch to stillness at home or in a hotel. One mat for the whole day for anyone.",
-            "label": "Find yours",
+            "heading": "Trade & studio orders",
+            "description": "For hotels, studios, and interior projects.",
+            "label": "Inquire here",
             "url": ""
           }
         },
         "feature_8QeAcc": {
           "type": "feature",
           "settings": {
-            "heading": "Built to last",
-            "description": "Non-toxic, easy-to-clean mats are made to handle real life without showing it.",
-            "label": "Discover more",
+            "heading": "Build to last",
+            "description": "",
+            "label": "Get in touch",
             "url": ""
           }
         }
@@ -153,7 +153,7 @@
         "feature_8QeAcc"
       ],
       "settings": {
-        "label": "MOVEMENT MATS",
+        "label": "MAKING EXPERIENCE",
         "section_width": "compact",
         "style": "navy"
       }
@@ -193,8 +193,8 @@
         "image_aXtqMN"
       ],
       "settings": {
-        "label": "Life on the mat",
-        "heading": "Where daily life takes shape.",
+        "label": "EDITORIAL",
+        "heading": "Moments where mats become part of the interior",
         "heading_width": "fixed"
       }
     }
