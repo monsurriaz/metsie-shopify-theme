@@ -1,0 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Trade & Hospitality",
+        "intro_text": "<p>Metsie partners with hotels, studios and design-led spaces. For trade terms, volume orders, or partnership enquiries, tell us about you below, or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
+        "name_placeholder": "Company*",
+        "email_placeholder": "Email*",
+        "message_placeholder": "Message*",
+        "submit_text": "SUBMIT INQUIRY",
+        "success_message": "Thank you for your message. Your enquiry is with us, and we will reply shortly.",
+        "error_message": "Please check the required fields and try again."
+      }
+    }
+  },
+  "order": [
+    "contact-form"
+  ]
+}
