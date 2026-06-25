@@ -12,7 +12,7 @@
     "contact-form": {
       "type": "contact-form",
       "settings": {
-        "heading": "Trade & Hospitality",
+        "heading": "Contact Us",
         "intro_text": "<p>Metsie partners with hotels, studios and design-led spaces. For trade terms, volume orders, or partnership enquiries, tell us about you below, or write to <a href=\"mailto:hello@shopmetsie.com\">hello@shopmetsie.com</a>.</p>",
         "name_placeholder": "Company*",
         "email_placeholder": "Email*",
