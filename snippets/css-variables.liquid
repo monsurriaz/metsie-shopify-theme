@@ -36,8 +36,8 @@
   }
 
   @font-face {
-    font-family: "Barlow-Light";
-    src: url('https://cdn.shopify.com/s/files/1/0637/3664/3677/files/Barlow-Light.woff2?v=1718883132') format('woff2');
+    font-family: "SuisseIntl_Light";
+    src: url('https://cdn.shopify.com/s/files/1/1040/0776/2261/files/fonnts.com-SuisseIntl-Light.woff2?v=1783024351') format('woff2');
     font-weight: 300;
     font-style: normal;
   }
@@ -89,13 +89,15 @@
       --font-heading:       'Cormorant Garamond', Georgia, 'Times New Roman', serif;
       --font-heading:       'Zapf_Humanist', serif;
       --font-body:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-body:          'SuisseIntl_Light', sans-serif;
     {%- else -%}
       /* Using merchant-selected fonts from schema settings */
       --font-heading:       {{ settings.font_heading }};
       --font-body:          {{ settings.font_body }};
     {%- endif -%}
     --font-nav:           'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-menu:          'Cormorant Garamond', Georgia, serif;
+    --font-menu:          'Zapf_Humanist', Georgia, serif;
+    
     --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
     --font-body-scale:    {{ settings.font_body_scale | divided_by: 100.0 }};
     --font-weight-light:    300;
