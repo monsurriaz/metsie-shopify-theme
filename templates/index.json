@@ -12,7 +12,7 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "heading": "Metsie creates mats designed to stay in the space",
+        "heading": "Mats made to be seen",
         "bg_color": "#2e4356",
         "overlay_opacity": 0,
         "monogram_size": 80,
@@ -24,8 +24,8 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "section_label": "THE COLLECTION",
-        "heading": "A curated selection of essential designs in timeless tones",
+        "section_label": "THE SIGNATURE COLLECTION",
+        "heading": "A curated edit of elevated essentials.",
         "subheading": "",
         "collection": "featured",
         "products_to_show": 3,
