@@ -4,7 +4,7 @@
   {%- assign has_logo = true -%}
 {% endif %}
 {%- assign has_social = false -%}
-{% if section.settings.instagram_url != blank or section.settings.pinterest_url != blank %}
+{% if section.settings.instagram_url != blank or section.settings.pinterest_url != blank or section.settings.substack_url != blank %}
   {%- assign has_social = true -%}
 {% endif %}
 
@@ -40,6 +40,7 @@
                       </svg>
                     </a>
                   {% endif %}
+
                   {% if section.settings.pinterest_url != blank %}
                     <a href="{{ section.settings.pinterest_url }}" class="social-link" aria-label="Follow on Pinterest" target="_blank" rel="noopener">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -47,6 +48,13 @@
                       </svg>
                     </a>
                   {% endif %}
+
+                  {% if section.settings.substack_url != blank and section.settings.substack_logo != blank %}
+                    <a href="{{ section.settings.substack_url }}" class="social-link" aria-label="Follow on Substack" target="_blank" rel="noopener">
+                      <img src="{{ section.settings.substack_logo | image_url: width: 54 }}" alt="Substack" width="18" height="18">
+                    </a>
+                  {% endif %}
+
                 </div>
               </div>
             {% endif %}
@@ -113,11 +121,18 @@
                 </svg>
               </a>
             {% endif %}
+
             {% if section.settings.pinterest_url != blank %}
               <a href="{{ section.settings.pinterest_url }}" class="social-link" aria-label="Follow on Pinterest" target="_blank" rel="noopener">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.18-.78 1.22-5.17 1.22-5.17s-.31-.63-.31-1.56c0-1.46.85-2.55 1.9-2.55.9 0 1.33.67 1.33 1.48 0 .9-.58 2.26-.87 3.51-.25 1.05.52 1.9 1.54 1.9 1.85 0 3.09-2.38 3.09-5.2 0-2.14-1.44-3.74-4.03-3.74-2.94 0-4.76 2.2-4.76 4.65 0 .84.24 1.44.62 1.9.17.2.19.28.13.51-.04.17-.14.57-.18.73-.06.23-.24.31-.43.23-1.2-.49-1.76-1.81-1.76-3.3 0-2.44 2.06-5.37 6.16-5.37 3.31 0 5.49 2.4 5.49 4.98 0 3.41-1.89 5.96-4.66 5.96-.93 0-1.81-.5-2.11-1.07l-.58 2.2c-.21.8-.77 1.8-1.15 2.41.87.27 1.79.42 2.75.42 5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="currentColor"/>
                 </svg>
+              </a>
+            {% endif %}
+
+            {% if section.settings.substack_url != blank and section.settings.substack_logo != blank %}
+              <a href="{{ section.settings.substack_url }}" class="social-link" aria-label="Follow on Substack" target="_blank" rel="noopener">
+                <img src="{{ section.settings.substack_logo | image_url: width: 54 }}" alt="Substack" width="18" height="18">
               </a>
             {% endif %}
           </div>
@@ -552,6 +567,16 @@
       "type": "url",
       "id": "pinterest_url",
       "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "substack_url",
+      "label": "Substack URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "substack_logo",
+      "label": "Substack logo"
     }
   ],
   "blocks": [
@@ -635,7 +660,8 @@
       ],
       "settings": {
         "instagram_url": "",
-        "pinterest_url": ""
+        "pinterest_url": "",
+        "substack_url": ""
       }
     }
   ]
