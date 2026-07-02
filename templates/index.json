@@ -40,7 +40,7 @@
         "label_crThUD": {
           "type": "label",
           "settings": {
-            "text": "THE ETHOS"
+            "text": "THE BRAND"
           }
         },
         "text_RDDkgX": {
@@ -70,7 +70,7 @@
     "design-philosophy": {
       "type": "design-philosophy",
       "settings": {
-        "label": "DESIGN PHILOSOPHY",
+        "label": "THE ETHOS",
         "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
         "disable_margin_top": false,
         "align_center": false,
