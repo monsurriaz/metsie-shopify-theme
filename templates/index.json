@@ -46,7 +46,7 @@
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "Metsie makes mats for the way you live. Made to move with you and to stay in view."
+            "body_text": "Metsie makes mats for the way you live. Made to move with you, and to stay in view."
           }
         },
         "button_LmMcyK": {
@@ -71,7 +71,7 @@
       "type": "design-philosophy",
       "settings": {
         "label": "THE ETHOS",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "text": "The design comes first: a form and a finish that sit naturally in the interior, and stand up to the way you move.",
         "disable_margin_top": false,
         "align_center": false,
         "content_bg_style": "white",
@@ -93,7 +93,7 @@
         "heading_iritVN": {
           "type": "heading",
           "settings": {
-            "text": "Crafted by balance. Created for living, spaces, and permanence."
+            "text": "Designed to stay."
           }
         },
         "button_V4RBiC": {
@@ -122,9 +122,9 @@
         "feature_UGhVVx": {
           "type": "feature",
           "settings": {
-            "heading": "Free delivery",
-            "description": "Free standard delivery on orders over €200.",
-            "label": "View shipping details",
+            "heading": "Stays out",
+            "description": "Designed to belong in the interior.",
+            "label": "Link 1",
             "url": ""
           }
         },
@@ -141,7 +141,7 @@
           "type": "feature",
           "settings": {
             "heading": "Build to last",
-            "description": "Interested in a specific shade? Write to us.",
+            "description": "Non-toxic and easy to clean, made to handle real life without showing it.",
             "label": "Get in touch",
             "url": ""
           }
@@ -153,7 +153,7 @@
         "feature_8QeAcc"
       ],
       "settings": {
-        "label": "MAKING EXPERIENCE",
+        "label": "METSIE. LIVING MATS.",
         "section_width": "compact",
         "style": "navy"
       }
