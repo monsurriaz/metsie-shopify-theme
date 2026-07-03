@@ -133,7 +133,7 @@
           "settings": {
             "heading": "For everyone",
             "description": "Work out, stretch, rest, play. One mat for the whole day.",
-            "label": "Inquire here",
+            "label": "Get yours",
             "url": ""
           }
         },
@@ -193,8 +193,8 @@
         "image_aXtqMN"
       ],
       "settings": {
-        "label": "EDITORIAL",
-        "heading": "Moments where mats become part of the interior",
+        "label": "Life on the mat",
+        "heading": "Where daily life takes shape.",
         "heading_width": "fixed"
       }
     }
