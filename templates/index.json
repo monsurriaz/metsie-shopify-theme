@@ -46,7 +46,7 @@
         "text_RDDkgX": {
           "type": "text",
           "settings": {
-            "body_text": "Metsie makes mats for the way you live. Made to move with you and to stay in view."
+            "body_text": "Metsie makes mats for the way you live: Exercise, rest, and everything in between, made to stay in view."
           }
         },
         "button_LmMcyK": {
@@ -71,7 +71,7 @@
       "type": "design-philosophy",
       "settings": {
         "label": "THE ETHOS",
-        "text": "Our approach blends material quality, restrained color palettes, and thoughtful proportions to create mats that feel intentional — never intrusive",
+        "text": "A mat can hold a space and a life at the same time. Metsie exists to prove it, with neither side compromised for the other.",
         "disable_margin_top": false,
         "align_center": false,
         "content_bg_style": "white",
@@ -93,7 +93,7 @@
         "heading_iritVN": {
           "type": "heading",
           "settings": {
-            "text": "Crafted by balance. Created for living, spaces, and permanence."
+            "text": "A mat worth the space it takes."
           }
         },
         "button_V4RBiC": {
@@ -122,18 +122,18 @@
         "feature_UGhVVx": {
           "type": "feature",
           "settings": {
-            "heading": "Free delivery",
-            "description": "Free standard delivery on orders over €200.",
-            "label": "View shipping details",
+            "heading": "Stays out",
+            "description": "You chose it because it looks right in the space, like everything else you own on purpose. So it stays out, morning to night.",
+            "label": "Link 1",
             "url": ""
           }
         },
         "feature_et3VML": {
           "type": "feature",
           "settings": {
-            "heading": "Trade & studio orders",
-            "description": "For hotels, studios, and interior projects.",
-            "label": "Inquire here",
+            "heading": "For everyone",
+            "description": "One mat for the whole day, from the first stretch of the morning to the last quiet hour. Soft enough for stillness, steady enough for movement.",
+            "label": "Get yours",
             "url": ""
           }
         },
@@ -141,7 +141,7 @@
           "type": "feature",
           "settings": {
             "heading": "Build to last",
-            "description": "Interested in a specific shade? Write to us.",
+            "description": "Non-toxic and easy to clean, made to handle real life without showing it. An FSC-certified natural rubber base and a matte top that wipes clean and ages well.",
             "label": "Get in touch",
             "url": ""
           }
@@ -153,7 +153,7 @@
         "feature_8QeAcc"
       ],
       "settings": {
-        "label": "MAKING EXPERIENCE",
+        "label": "WHAT MAKES A LIVING MAT",
         "section_width": "compact",
         "style": "navy"
       }
@@ -193,8 +193,8 @@
         "image_aXtqMN"
       ],
       "settings": {
-        "label": "EDITORIAL",
-        "heading": "Moments where mats become part of the interior",
+        "label": "Life on the mat",
+        "heading": "Where daily life takes shape.",
         "heading_width": "fixed"
       }
     }

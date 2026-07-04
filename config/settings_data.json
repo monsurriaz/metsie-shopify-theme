@@ -12,6 +12,7 @@
     "page_width": 1520,
     "logo": "shopify://shop_images/Logo-white.svg",
     "logo_dark": "shopify://shop_images/Logo-Black.svg",
+    "favicon": "shopify://shop_images/PublicationIcons-01.jpg",
     "enable_newsletter_popup": true,
     "newsletter_popup_frequency_days": 1,
     "colors": {
