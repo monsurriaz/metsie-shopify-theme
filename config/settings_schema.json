@@ -144,7 +144,7 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Heading Font",
-        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Display font for headings and hero text. Default: Cormorant Garamond [cormorant_garamond_n4]",
+        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Display font for headings and hero text. Default: Zapf Humanist",
         "default": "assistant_n6"
       },
       {
@@ -171,7 +171,7 @@
         "type": "font_picker",
         "id": "font_body",
         "label": "Body Font",
-        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Used for navigation, labels, and body text. Default: Inter [inter_n4]",
+        "info": "⚠ Only used when 'Load Google Fonts' is DISABLED above. Used for navigation, labels, and body text. Default: SuisseIntl_Light",
         "default": "inter_n4"
       },
       {
@@ -191,8 +191,8 @@
       {
         "type": "checkbox",
         "id": "use_google_fonts",
-        "label": "Load Cormorant Garamond & Inter from Google Fonts",
-        "info": "✓ ENABLED (recommended): Uses brand fonts (Cormorant Garamond for headings, Inter for body). Ignores font picker settings below.\n✗ DISABLED: Uses fonts selected below via font picker. Useful for custom typography.",
+        "label": "Load Zapf Humanist & SuisseIntl Light from Shopify's content delivery network (CDN)",
+        "info": "✓ ENABLED (recommended): Uses brand fonts (Zapf Humanist for headings, SuisseIntl Light for body). Ignores font picker settings below.\n✗ DISABLED: Uses fonts selected below via font picker. Useful for custom typography.",
         "default": true
       }
     ]
