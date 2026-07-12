@@ -110,6 +110,15 @@
         <a href="/pages/inspiration" class="mobile-menu__link" @click="close()">INSPIRATION</a>
         <a href="/blogs/news" class="mobile-menu__link" @click="close()">BLOG</a>
       {% endif %}
+
+      {%- comment -%} Account link — logged in goes to account, logged out goes to login {%- endcomment -%}
+      <a
+        href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+        class="mobile-menu__link"
+        @click="close()"
+      >
+        ACCOUNT
+      </a>
     </nav>
 
     {%- comment -%} Divider {%- endcomment -%}
