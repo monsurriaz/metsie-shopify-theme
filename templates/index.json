@@ -13,6 +13,7 @@
       "type": "hero-banner",
       "settings": {
         "heading": "Mats made to be seen",
+        "video": "shopify://files/videos/WhatsApp Video 2026-07-23 at 20.22.30.mp4",
         "bg_color": "#2e4356",
         "overlay_opacity": 0,
         "monogram_size": 80,
